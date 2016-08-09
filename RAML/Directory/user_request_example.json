@@ -1,0 +1,7 @@
+{
+  "name": "Bob Smith",
+  "account": {
+    "currency": "USD",
+    "address": "http://ledger.com/USD/accounts/bob"
+  }
+}
