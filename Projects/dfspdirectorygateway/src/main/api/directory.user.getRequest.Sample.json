@@ -1,0 +1,8 @@
+{
+  "jsonrpc": "2.0",
+  "id": "incididunt eiusmod ut ex",
+  "method": "directory.user.get",
+  "params": {
+    "userURI": "http://userdata.com/user"
+  }
+}

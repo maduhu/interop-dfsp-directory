@@ -1,0 +1,18 @@
+#%RAML 0.8
+title: DFSP Directory Gateway
+version: 0.1
+baseUri: https://api.leveloneproject.org/rpc
+/director/use/get:
+      displayName: directory.user.get
+      post:
+        description: Lookup name, default account and currency of end user, given an end user URI.
+        body:
+          application/json:
+            schema: !include directory.user.getRequest.Schema.json
+            example: !include directory.user.getRequest.Sample.json
+        responses:
+          200:
+            body:
+              application/json:
+                schema: !include directory.user.getRequest.Schema.json                
+                example: !include directory.user.getResponse.Sample.json
