@@ -6,14 +6,14 @@
       "type": "object",
       "properties": {
         "jsonrpc": {
-          "type": "object"
+          "type": "string"
         },
         "id": {
           "type": "string"
         },
         "method": {
           "description": "Method names follow the standard microservice.entity.action",
-          "type": "object"
+          "type": "string"
         },
         "params": {
           "id": "Params",
