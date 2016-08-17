@@ -20,20 +20,14 @@
           "title": "Params",
           "type": "object",
           "properties": {
-            "userURI": {
-              "description": "URI identifying the user uniquely. It may support various schemes, nut as minimum it MUST support the number: scheme, which represents the user as number using E.164 alike numbering plan.",
-              "type": "string"
+            "users": {
+              "description": "List of maps of users to add",
+              "type": "object"
             }
           },
           "required": [
-            "userURI"
+            "users"
           ]
         }
-      },
-      "required": [
-        "jsonrpc",
-        "id",
-        "method",
-        "params"
-      ]
+      }
     }

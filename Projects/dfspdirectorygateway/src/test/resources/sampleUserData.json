@@ -1,0 +1,22 @@
+{"users": [
+{
+"centralURI": "http://userdata.com/bryan",
+"dfspURI": "http://receivingdfsp.com/bryan",
+"currency": "USD"
+},
+{
+"centralURI": "http://userdata.com/joe",
+"dfspURI": "http://receivingdfsp.com/joe",
+"currency": "USD"
+},
+{
+"centralURI": "http://userdata.com/sam",
+"dfspURI": "http://receivingdfsp.com/sam",
+"currency": "INR"
+},
+{
+"centralURI": "http://userdata.com/walter",
+"dfspURI": "http://receivingdfsp.com/walter",
+"currency": "ARS"
+}
+]}

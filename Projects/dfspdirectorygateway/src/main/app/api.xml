@@ -4,9 +4,11 @@ http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/htt
 http://www.mulesoft.org/schema/mule/apikit http://www.mulesoft.org/schema/mule/apikit/current/mule-apikit.xsd
 http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.1.xsd">
     <http:listener-config name="api-httpListenerConfig" host="0.0.0.0" port="8081" doc:name="HTTP Listener Configuration"/>
-    <apikit:config name="api-config" raml="directory.user.raml" consoleEnabled="false" doc:name="Router"/>
+    <apikit:config name="api-config" raml="directory.user.raml" consoleEnabled="true" doc:name="Router"/>
     <flow name="api-main">
         <http:listener config-ref="api-httpListenerConfig" path="/api/*" doc:name="HTTP"/>
+        <logger level="INFO" message="Received request: payload=#[payload]"/>
+        <logger level="INFO" message=""/>
         <apikit:router config-ref="api-config" doc:name="APIkit Router"/>
         <exception-strategy ref="api-apiKitGlobalExceptionMapping" doc:name="Reference Exception Strategy"/>
     </flow>
@@ -14,8 +16,13 @@ http://www.springframework.org/schema/beans http://www.springframework.org/schem
         <http:listener config-ref="api-httpListenerConfig" path="/console/*" doc:name="HTTP"/>
         <apikit:console config-ref="api-config" doc:name="APIkit Console"/>
     </flow>
-    <flow name="post:/director/use/get:application/json:api-config">
+    <flow name="post:/directory/user/add:application/json:api-config">
+        <set-payload value="{ &quot;response&quot;: {&quot;message&quot;: &quot;updated 3 entities&quot;+} }" doc:name="Set Payload"/>
+        <logger message="received request to add users: #[payload]" level="INFO" doc:name="Logger"/>
+    </flow>
+    <flow name="post:/directory/user/get:application/json:api-config">
         <set-payload value="{&#xA;  &quot;jsonrpc&quot;: &quot;2.0&quot;,&#xA;  &quot;id&quot;: &quot;...&quot;,&#xA;  &quot;result&quot;: {&#xA;    &quot;name&quot;: &quot;Name&quot;,&#xA;    &quot;account&quot;: &quot;223232323&quot;,&#xA;    &quot;currency&quot;: &quot;USD&quot;&#xA;  }&#xA;}" doc:name="Set Payload"/>
+        <logger message="payload: #[payload]" level="INFO" doc:name="Logger"/>
     </flow>
     <apikit:mapping-exception-strategy name="api-apiKitGlobalExceptionMapping">
         <apikit:mapping statusCode="404">
