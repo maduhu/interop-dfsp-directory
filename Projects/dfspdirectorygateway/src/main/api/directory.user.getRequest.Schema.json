@@ -1,39 +1,39 @@
- {
-      "$schema": "http://json-schema.org/draft-04/schema#",
-      "id": "body",
-      "title": "body",
-      "description": "JSON-RPC compatible request object",
+{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "id": "body",
+  "title": "body",
+  "description": "JSON-RPC compatible request object",
+  "type": "object",
+  "properties": {
+    "jsonrpc": {
+      "type": "string"
+    },
+    "id": {
+      "type": "string"
+    },
+    "method": {
+      "description": "Method names follow the standard microservice.entity.action",
+      "type": "string"
+    },
+    "params": {
+      "id": "Params",
+      "title": "Params",
       "type": "object",
       "properties": {
-        "jsonrpc": {
+        "userURI": {
+          "description": "URI identifying the user uniquely. It may support various schemes, nut as minimum it MUST support the number: scheme, which represents the user as number using E.164 alike numbering plan.",
           "type": "string"
-        },
-        "id": {
-          "type": "string"
-        },
-        "method": {
-          "description": "Method names follow the standard microservice.entity.action",
-          "type": "string"
-        },
-        "params": {
-          "id": "Params",
-          "title": "Params",
-          "type": "object",
-          "properties": {
-            "userURI": {
-              "description": "URI identifying the user uniquely. It may support various schemes, nut as minimum it MUST support the number: scheme, which represents the user as number using E.164 alike numbering plan.",
-              "type": "string"
-            }
-          },
-          "required": [
-            "userURI"
-          ]
         }
       },
       "required": [
-        "jsonrpc",
-        "id",
-        "method",
-        "params"
+        "userURI"
       ]
     }
+  },
+  "required": [
+    "jsonrpc",
+    "id",
+    "method",
+    "params"
+  ]
+}

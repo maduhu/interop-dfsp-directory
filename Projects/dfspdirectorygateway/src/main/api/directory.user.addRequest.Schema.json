@@ -1,33 +1,31 @@
- {
-      "$schema": "http://json-schema.org/draft-04/schema#",
-      "id": "body",
-      "title": "body",
-      "description": "JSON-RPC compatible request object",
-      "type": "object",
-      "properties": {
-        "jsonrpc": {
+{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "properties": {
+      "jsonrpc": {
+          "enum": ["2.0"],
           "type": "string"
-        },
-        "id": {
+      },
+      "id": {
           "type": "string"
-        },
-        "method": {
-          "description": "Method names follow the standard microservice.entity.action",
-          "type": "string"
-        },
-        "params": {
-          "id": "Params",
-          "title": "Params",
-          "type": "object",
+      },
+      "result": {
           "properties": {
-            "users": {
-              "description": "List of maps of users to add",
-              "type": "object"
-            }
+              "name": {
+                  "type": "string",
+                  "description":"Name of end user"
+              },
+              "account": {
+                  "type": "string",
+                  "description": "ILP address of user's default account"
+              },
+              "currency": {
+                  "type": "string",
+                  "description": "Currency of user's default account"
+              }
           },
-          "required": [
-            "users"
-          ]
-        }
+          "required": ["name", "account", "currency"],
+          "type": "object",
+          "description": "Presence of this property indicates successful operation"
       }
-    }
+  }
+}
