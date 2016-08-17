@@ -1,20 +1,102 @@
-#%RAML 0.8
+#%RAML 1.0
 title: DFSP Directory Gateway
 version: 0.1
 baseUri: https://api.leveloneproject.org/rpc
-/directory/user/get:
+/director/use/get:
       displayName: directory.user.get
       post:
         description: Lookup name, default account and currency of end user, given an end user URI.
         body:
           application/json:
-            schema: !include directory.user.getRequest.Schema.json
+            schema:  {
+                        "$schema": "http://json-schema.org/draft-04/schema#",
+                        "id": "body",
+                        "title": "body",
+                        "description": "JSON-RPC compatible request object",
+                        "type": "object",
+                        "properties": {
+                          "jsonrpc": {
+                            "type": "string"
+                          },
+                          "id": {
+                            "type": "string"
+                          },
+                          "method": {
+                            "description": "Method names follow the standard microservice.entity.action",
+                            "type": "object"
+                          },
+                          "params": {
+                            "id": "Params",
+                            "title": "Params",
+                            "type": "object",
+                            "properties": {
+                              "userURI": {
+                                "description": "URI identifying the user uniquely. It may support various schemes, nut as minimum it MUST support the number: scheme, which represents the user as number using E.164 alike numbering plan.",
+                                "type": "string"
+                              }
+                            },
+                            "required": [
+                              "userURI"
+                            ]
+                          }
+                        },
+                        "required": [
+                          "jsonrpc",
+                          "id",
+                          "method",
+                          "params"
+                        ]
+                      }
             example: !include directory.user.getRequest.Sample.json
         responses:
           200:
             body:
               application/json:
-                schema: !include directory.user.getResponse.Schema.json
+                schema: {
+                          "$schema": "http://json-schema.org/draft-04/schema#",
+                          "id": "directory.user.getResponse",
+                          "title": "directory.user.getResponse",
+                          "description": "JSON-RPC compatible response object for success",
+                          "type": "object",
+                          "properties": {
+                            "jsonrpc": {
+                              "type": "object"
+                            },
+                            "id": {
+                              "type": "string"
+                            },
+                            "result": {
+                              "id": "Result",
+                              "title": "Result",
+                              "description": "Presence of this property indicates successful operation",
+                              "type": "object",
+                              "properties": {
+                                "name": {
+                                  "description": "Name of end user",
+                                  "type": "string"
+                                },
+                                "account": {
+                                  "description": "ILP address of user's default account",
+                                  "type": "string"
+                                },
+                                "currency": {
+                                  "description": "Currency of user's default account",
+                                  "type": "string"
+                                }
+                              },
+                              "required": [
+                                "name",
+                                "account",
+                                "currency"
+                              ]
+                            }
+                          },
+                          "required": [
+                            "jsonrpc",
+                            "id",
+                            "result"
+                          ]
+                        }                
                 example: !include directory.user.getResponse.Sample.json
 /directory/user/add:
       displayName: directory.user.get
@@ -22,11 +104,87 @@ baseUri: https://api.leveloneproject.org/rpc
         description: Lookup name, default account and currency of end user, given an end user URI.
         body:
           application/json:
-            schema: !include directory.user.addRequest.Schema.json
+            schema: {
+                      "$schema": "http://json-schema.org/draft-04/schema#",
+                      "id": "body",
+                      "title": "body",
+                      "description": "JSON-RPC compatible request object",
+                      "type": "object",
+                      "properties": {
+                        "jsonrpc": {
+                          "type": "string"
+                        },
+                        "id": {
+                          "type": "string"
+                        },
+                        "method": {
+                          "description": "Method names follow the standard microservice.entity.action",
+                          "type": "string"
+                        },
+                        "params": {
+                          "id": "Params",
+                          "title": "Params",
+                          "type": "object",
+                          "properties": {
+                            "users": {
+                              "description": "List of maps of users to add",
+                              "type": "object"
+                            }
+                          },
+                          "required": [
+                            "users"
+                          ]
+                        }
+                      }
+                    }
             example: !include directory.user.addRequest.Sample.json
         responses:
           200:
             body:
               application/json:
-                schema: !include directory.user.getResponse.Schema.json
-                example: !include directory.user.getResponse.Sample.json
+                schema: {
+                          "$schema": "http://json-schema.org/draft-04/schema#",
+                          "id": "directory.user.getResponse",
+                          "title": "directory.user.getResponse",
+                          "description": "JSON-RPC compatible response object for success",
+                          "type": "object",
+                          "properties": {
+                            "jsonrpc": {
+                              "type": "object"
+                            },
+                            "id": {
+                              "type": "string"
+                            },
+                            "result": {
+                              "id": "Result",
+                              "title": "Result",
+                              "description": "Presence of this property indicates successful operation",
+                              "type": "object",
+                              "properties": {
+                                "name": {
+                                  "description": "Name of end user",
+                                  "type": "string"
+                                },
+                                "account": {
+                                  "description": "ILP address of user's default account",
+                                  "type": "string"
+                                },
+                                "currency": {
+                                  "description": "Currency of user's default account",
+                                  "type": "string"
+                                }
+                              },
+                              "required": [
+                                "name",
+                                "account",
+                                "currency"
+                              ]
+                            }
+                          },
+                          "required": [
+                            "jsonrpc",
+                            "id",
+                            "result"
+                          ]
+                        }
+                example: !include directory.user.addRequest.Sample.json
