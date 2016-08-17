@@ -7,6 +7,8 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+
+import java.io.IOException;
 import java.security.KeyManagementException;
 import java.security.KeyStoreException;
 import java.security.NoSuchAlgorithmException;
@@ -26,7 +28,6 @@ import com.sun.jersey.api.client.config.DefaultClientConfig;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-
 public class DFSPDirectoryGatewayTest extends FunctionalTestCase {
 
 	protected Logger logger = LoggerFactory.getLogger(getClass());
@@ -44,17 +45,22 @@ public class DFSPDirectoryGatewayTest extends FunctionalTestCase {
 		System.setProperty("MULE_ENV", "test");
 		System.setProperty("spring.profiles.active", "test");
 	}
+//	@BeforeClass
+//	public static void initEnv() {
+//		System.setProperty("MULE_ENV", "test");
+//		System.setProperty("spring.profiles.active", "test");
+//	}
 
 	@Before
 	public void initSslClient() throws NoSuchAlgorithmException, KeyStoreException, CertificateException, IOException,
 			KeyManagementException {
 		ClientConfig config = new DefaultClientConfig();
-		webService = Client.create(config).resource( validHost );
+		webService = Client.create(config).resource(validHost);
 	}
 
 	@Test(timeout = 100000)
 	public void testInvalidPathShouldReturn404() throws Exception {
-		final String invalidPath="/path/shouldnt/exist";
+		final String invalidPath = "path/shouldnt/exist";
 		final String notJSON = "<BadRequest>This is not JSON</BadRequest>";
 
 		logger.info("Posting event to web services");
