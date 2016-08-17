@@ -6,7 +6,7 @@
   "type": "object",
   "properties": {
     "jsonrpc": {
-      "type": "object"
+      "enum": ["2.0"]
     },
     "id": {
       "type": "string"
