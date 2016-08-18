@@ -14,13 +14,20 @@ public class JSONRPCResponse {
 
     final String responseJSON;
 
-    public JSONRPCResponse( final String id, final Map result ) {
+    public JSONRPCResponse( String id, Map result ) {
         Map header = new HashMap();
+
+        if ( result == null )
+            result = new HashMap();
+
+        if ( id == null )
+            id = "";
+
         header.put( "jsonrpc", "2.0" );
         header.put( ID_FIELD, id );
         header.put( RESULT_FIELD, result );
 
-        responseJSON = JSONUtil.mapToJSONString( header );
+        responseJSON = JSONUtil.mapToString( header );
     }
 
     @Override

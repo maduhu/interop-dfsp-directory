@@ -26,6 +26,6 @@ public class JSONRPCRequest {
     }
 
     public String toJSONString() {
-        return JSONUtil.mapToJSONString( requestData );
+        return JSONUtil.mapToString( requestData );
     }
 }
