@@ -6,7 +6,7 @@ import java.util.List;
 import java.util.Map;
 
 /**
- *
+ * Provides a custom exception specific to the L1P project
  *
  * Created by Bryan on 8/17/2016.
  */
