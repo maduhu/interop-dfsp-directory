@@ -14,11 +14,11 @@ http://www.springframework.org/schema/beans http://www.springframework.org/schem
     <http:listener-config name="api-httpListenerConfig" host="0.0.0.0" port="8081" doc:name="HTTP Listener Configuration"/>
     <apikit:config name="api-config" raml="directory.user.raml" consoleEnabled="true" doc:name="Router"/>
 
-    <spring:bean id="AccountDataStore" name="AccountDataStore" scope="singleton" class="com.l1p.interop.dfsp.dg.AccountDataStore"/>
-    <spring:bean id="AddAccountsProcessor" name="AddAccountsProcessor" class="com.l1p.interop.dfsp.dg.AddAccountsProcessor">
+    <spring:bean id="AccountDataStore" name="AccountDataStore" scope="singleton" class="com.l1p.interop.dfsp.directory.AccountDataStore"/>
+    <spring:bean id="AddAccountsProcessor" name="AddAccountsProcessor" class="com.l1p.interop.dfsp.directory.AddAccountsProcessor">
         <spring:constructor-arg index="0" ref="AccountDataStore" />
     </spring:bean>
-    <spring:bean id="getAccountTransformer" name="getAccountTransformer" class="com.l1p.interop.dfsp.dg.GetAccountTransformer">
+    <spring:bean id="getAccountTransformer" name="getAccountTransformer" class="com.l1p.interop.dfsp.directory.GetAccountTransformer">
         <spring:constructor-arg index="0" ref="AccountDataStore" />
     </spring:bean>
 
@@ -36,10 +36,10 @@ http://www.springframework.org/schema/beans http://www.springframework.org/schem
     </flow>
 
     <flow name="post:/directory/user/add:application/json:api-config">
-        <logger message="received request to add users: #[payload]" level="INFO" category="com.l1p.interop.dfsp.dg" doc:name="Logger"/>
+        <logger message="received request to add users: #[payload]" level="INFO" category="com.l1p.interop.dfsp.directory" doc:name="Logger"/>
         <json:json-to-object-transformer returnClass="java.util.Map" doc:name="JSON to Object"/>
         <component doc:name="Java"><spring-object bean="AddAccountsProcessor" /></component>
-        <logger message="processing complete: #[payload]" level="INFO" category="com.l1p.interop.dfsp.dg" doc:name="Logger"/>
+        <logger message="processing complete: #[payload]" level="INFO" category="com.l1p.interop.dfsp.directory" doc:name="Logger"/>
     </flow>
 
     <flow name="post:/directory/user/get:application/json:api-config">

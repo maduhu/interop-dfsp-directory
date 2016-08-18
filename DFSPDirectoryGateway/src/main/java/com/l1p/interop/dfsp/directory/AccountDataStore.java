@@ -1,4 +1,4 @@
-package com.l1p.interop.dfsp.dg;
+package com.l1p.interop.dfsp.directory;
 
 import java.util.HashMap;
 import java.util.List;

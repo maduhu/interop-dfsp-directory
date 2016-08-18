@@ -1,4 +1,4 @@
-package com.l1p.interop.dfsp.dg;
+package com.l1p.interop.dfsp.directory;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
