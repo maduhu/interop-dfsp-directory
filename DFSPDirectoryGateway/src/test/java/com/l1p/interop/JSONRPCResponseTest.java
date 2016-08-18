@@ -27,7 +27,7 @@ public class JSONRPCResponseTest {
         JSONRPCResponse response = new JSONRPCResponse( "12345", resultData );
 
         // convert JSON string to Map
-        Map header = JSONUtil.stringToMap( response.toString() );
+        Map header = JsonMapStringTransformer.stringToMap( response.toString() );
         //validate contents
         assertTrue( "Header map was null", header != null );
         assertTrue( "Size of header map was incorrect, expected 3, received " + header.size(), header.size() == 3 );
@@ -48,7 +48,7 @@ public class JSONRPCResponseTest {
         JSONRPCResponse response = new JSONRPCResponse( null, null );
 
         // convert JSON string to Map
-        Map header = JSONUtil.stringToMap( response.toString() );
+        Map header = JsonMapStringTransformer.stringToMap( response.toString() );
         //validate contents
         assertTrue( "Header map was null", header != null );
         assertTrue( "Size of header map was incorrect, expected 3, received " + header.size(), header.size() == 3 );

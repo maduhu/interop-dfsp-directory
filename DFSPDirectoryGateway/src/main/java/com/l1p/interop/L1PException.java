@@ -31,7 +31,7 @@ public class L1PException {
         result.put( "error", errorMap );
         result.put( "debug", debug );
 
-        jsonString = JSONUtil.mapToString( result );
+        jsonString = JsonMapStringTransformer.mapToString( result );
     }
 
     private List<String> parseStackTrace( StackTraceElement[] stackTrace ) {

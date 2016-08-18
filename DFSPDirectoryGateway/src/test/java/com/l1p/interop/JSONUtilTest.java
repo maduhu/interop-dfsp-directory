@@ -10,7 +10,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * JUNit Test for JSONUtil.
+ * JUNit Test for JsonMapStringTransformer.
  *
  * Created by Bryan on 8/18/2016.
  */
@@ -21,7 +21,7 @@ public class JSONUtilTest {
         final String jsonInput = "{\"key1\":\"value1\",\"Key2\":\"Value2\",\"key3\":null,\"key4\":{\"nestedKey2\":null,\"nestedKey1\":\"nestedValue1\"}}";
         //verify output converts back to its source
         try {
-            Map target = JSONUtil.stringToMap(jsonInput);
+            Map target = JsonMapStringTransformer.stringToMap(jsonInput);
             assertTrue( "Output map not of expected size, expected = 4, actual = " + target.size(), target.size() == 4 );
             assertEquals( "Value for key1 did not match expected", "value1", target.get( "key1" ) );
             assertEquals( "Value for Key2 did not match expected", "Value2", target.get( "Key2" ) );
@@ -38,7 +38,7 @@ public class JSONUtilTest {
 
         //test map creation from non-json input
         try {
-            JSONUtil.stringToMap( "<NotJSON/>" );
+            JsonMapStringTransformer.stringToMap( "<NotJSON/>" );
         } catch( NullPointerException e ) {
             fail( "Conversion of invalid data to map produced a NullPointerException" );
         } catch( RuntimeException e ) {
@@ -49,7 +49,7 @@ public class JSONUtilTest {
 
         //test map creation from null input - should return empty Map
         try {
-            Map<String,Object> map = JSONUtil.stringToMap( null );
+            Map<String,Object> map = JsonMapStringTransformer.stringToMap( null );
             assertTrue("Map produced from null input was not empty", map.isEmpty());
         } catch( Exception e ) {
             fail( "Creation of a map from null input produced an unexpected exception: " + e.getMessage() );
@@ -73,14 +73,14 @@ public class JSONUtilTest {
 
         String jsonResult = null;
         try {
-            jsonResult = JSONUtil.mapToString(source);
+            jsonResult = JsonMapStringTransformer.mapToString(source);
         } catch( Exception e ) {
             fail( "Conversion of a valid map to a JSON string produced an unexpected exception: " + e.getMessage() );
         }
 
         //verify output converts back to its source
         try {
-            Map target = JSONUtil.stringToMap(jsonResult);
+            Map target = JsonMapStringTransformer.stringToMap(jsonResult);
             assertTrue( "Output map not of expected size, expected = 4, actual = " + target.size(), target.size() == 4 );
             assertEquals( "Value for key1 did not match expected", "value1", target.get( "key1" ) );
             assertEquals( "Value for Key2 did not match expected", "Value2", target.get( "Key2" ) );
@@ -99,7 +99,7 @@ public class JSONUtilTest {
         Map badDataMap = new HashMap();
         badDataMap.put( "key", System.err );    //map contains an object that is not serializable as JSON
         try {
-            JSONUtil.mapToString( badDataMap );
+            JsonMapStringTransformer.mapToString( badDataMap );
         } catch( NullPointerException e ) {
             fail( "Conversion of invalid map data to string produced a NullPointerException" );
         } catch( RuntimeException e ) {
@@ -110,7 +110,7 @@ public class JSONUtilTest {
 
         //test string creation from null input
         try {
-            assertEquals("Conversion of null data to string produced unexpected result", JSONUtil.mapToString(null), "{}");
+            assertEquals("Conversion of null data to string produced unexpected result", JsonMapStringTransformer.mapToString(null), "{}");
         } catch( Exception e ) {
             fail( "Conversion of null data to a string produced an unexpected exception: " + e.getMessage() );
         }

@@ -30,7 +30,7 @@ public class JSONRPCResponse {
 		header.put(ID_FIELD, id);
 		header.put(RESULT_FIELD, result);
 
-		responseJSON = JSONUtil.mapToString(header);
+		responseJSON = JsonMapStringTransformer.mapToString(header);
 	}
 
 	@Override
