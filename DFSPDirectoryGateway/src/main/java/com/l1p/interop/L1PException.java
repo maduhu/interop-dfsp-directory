@@ -14,8 +14,8 @@ public class L1PException {
 
     private final String jsonString;
 
-    public L1PException( final String code, final String message, final String type, Exception e ) {
-        final Map<String, String> errorMap = new HashMap<String, String>();
+    public L1PException( final int code, final String message, final String type, Exception e ) {
+        final Map<String, Object> errorMap = new HashMap<String, Object>();
         errorMap.put( "code", code );
         errorMap.put( "message", message );
         errorMap.put( "errorPrint", e.getMessage() );
