@@ -9,7 +9,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * JUnit Test for JSONRPCResponse.
+ * JUnit Test for JsonRpcResponse.
  *
  * Created by Bryan on 8/17/2016.
  */
@@ -24,10 +24,10 @@ public class JSONRPCResponseTest {
         Map resultData = new HashMap();
         resultData.put( "key1", "value1" );
         resultData.put( "Key2", "Value2" );
-        JSONRPCResponse response = new JSONRPCResponse( "12345", resultData );
+        JsonRpcResponse response = new JsonRpcResponse( "12345", resultData );
 
         // convert JSON string to Map
-        Map header = JSONUtil.stringToMap( response.toString() );
+        Map header = JsonMapStringTransformer.stringToMap( response.toString() );
         //validate contents
         assertTrue( "Header map was null", header != null );
         assertTrue( "Size of header map was incorrect, expected 3, received " + header.size(), header.size() == 3 );
@@ -45,10 +45,10 @@ public class JSONRPCResponseTest {
      * We expect null values to produce an empry string for id, and an empty map for result.
      */
     public void nullValuesShouldNotThrowException() throws Exception {
-        JSONRPCResponse response = new JSONRPCResponse( null, null );
+        JsonRpcResponse response = new JsonRpcResponse( null, null );
 
         // convert JSON string to Map
-        Map header = JSONUtil.stringToMap( response.toString() );
+        Map header = JsonMapStringTransformer.stringToMap( response.toString() );
         //validate contents
         assertTrue( "Header map was null", header != null );
         assertTrue( "Size of header map was incorrect, expected 3, received " + header.size(), header.size() == 3 );

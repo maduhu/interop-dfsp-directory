@@ -1,9 +1,0 @@
-{
-  "user_number": 11122233333333,
-  "name": "Bob Smith",
-  "account": {
-    "currency": "USD",
-    "address": "http://ledger.com/USD/accounts/bob"
-  },
-  "status": "Active"
-}

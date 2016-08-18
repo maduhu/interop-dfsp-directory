@@ -1,6 +1,6 @@
 package com.l1p.interop.dfsp.directory;
 
-import com.l1p.interop.JSONRPCResponse;
+import com.l1p.interop.JsonRpcResponse;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.codehaus.jackson.map.ObjectMapper;
@@ -45,6 +45,6 @@ public class GetAccountTransformer extends AbstractMessageTransformer {
             throw new TransformerException(MessageFactory.createStaticMessage( "Account not found for userURI=" + userURI ) );
         }
 
-        return new JSONRPCResponse( id, account ).toString();
+        return new JsonRpcResponse( id, account ).toString();
     }
 }

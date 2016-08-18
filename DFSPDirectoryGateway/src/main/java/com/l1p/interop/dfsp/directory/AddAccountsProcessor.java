@@ -1,6 +1,6 @@
 package com.l1p.interop.dfsp.directory;
 
-import com.l1p.interop.JSONRPCResponse;
+import com.l1p.interop.JsonRpcResponse;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.mule.api.MuleEventContext;
@@ -40,6 +40,6 @@ public class AddAccountsProcessor implements Callable {
         Map resultMap = new HashMap();
         resultMap.put( "message", message );
 
-        return new JSONRPCResponse( id, resultMap ).toString();
+        return new JsonRpcResponse( id, resultMap ).toString();
     }
 }
