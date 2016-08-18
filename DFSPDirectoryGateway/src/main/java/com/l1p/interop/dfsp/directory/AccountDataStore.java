@@ -44,12 +44,6 @@ public class AccountDataStore {
      * @return
      */
     public synchronized Map<String,String> getAccount( String uri ) {
-        Map<String,String> account = cache.get( uri );
-
-        if ( account == null ) {
-            //throw smart sounding exception here
-        }
-
-        return account;
+        return cache.get( uri );
     }
 }

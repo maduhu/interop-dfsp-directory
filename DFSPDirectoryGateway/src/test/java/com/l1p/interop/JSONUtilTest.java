@@ -48,8 +48,8 @@ public class JSONUtilTest {
         }
 
         //test map creation from null input - should return empty Map
-        Map<String,Object> map = JSONUtil.stringToMap( null );
         try {
+            Map<String,Object> map = JSONUtil.stringToMap( null );
             assertTrue("Map produced from null input was not empty", map.isEmpty());
         } catch( Exception e ) {
             fail( "Creation of a map from null input produced an unexpected exception: " + e.getMessage() );

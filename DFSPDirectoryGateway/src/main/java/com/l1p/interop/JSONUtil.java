@@ -11,6 +11,8 @@ import java.util.Map;
  * Utility class to convert a Map into a JSON String.  The instance of ObjectMapper used to perform conversion is
  * stored as a ThreadLocal.
  *
+ * TODO: - look at using JSON native map of some sort
+ *
  * Created by Bryan on 8/17/2016.
  */
 public class JSONUtil {
