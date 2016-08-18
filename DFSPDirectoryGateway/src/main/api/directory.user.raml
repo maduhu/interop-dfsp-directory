@@ -1,0 +1,33 @@
+#%RAML 1.0
+title: DFSP Directory Gateway
+version: 0.2
+#baseUri: https://api.leveloneproject.org/rpc
+baseUri: https://mocksvc.mulesoft.com/mocks/163c52f0-3ecb-44fd-8b37-6790ca104c99/rpc
+/directory/user/get:
+      displayName: directory.user.get
+      post:
+        description: Lookup name, default account and currency of end user, given an end user URI.
+        body:
+          application/json:
+            type:  !include directory.user.getRequest.Schema.json
+            example: !include directory.user.getRequest.Sample.json
+        responses:
+          200:
+            body:
+              application/json:
+                type: !include directory.user.getResponse.Schema.json
+                example: !include directory.user.getResponse.Sample.json
+/directory/user/add:
+      displayName: directory.user.add
+      post:
+        description: Add new user in memory so it can be used to test the application.
+        body:
+          application/json:
+            type: !include directory.user.addRequest.Schema.json
+            example: !include directory.user.addRequest.Sample.json
+        responses:
+          200:
+            body:
+              application/json:
+                type: !include directory.user.addResponse.Schema.json
+                example: !include directory.user.addResponse.Sample.json

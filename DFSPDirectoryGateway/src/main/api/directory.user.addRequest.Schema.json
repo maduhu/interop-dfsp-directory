@@ -1,0 +1,35 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "properties": {
+      "jsonrpc": {
+          "enum": ["2.0"],
+          "type": "string"
+      },
+      "id": {
+          "type": "string"
+      },
+      "result": {
+          "properties": {
+              "uri": {
+                  "type": "string",
+                  "description":"URI of end user registered with central service"
+              },
+              "name": {
+                  "type": "string",
+                  "description":"Name of end user"
+              },
+              "account": {
+                  "type": "string",
+                  "description": "ILP address of user's default account"
+              },
+              "currency": {
+                  "type": "string",
+                  "description": "Currency of user's default account"
+              }
+          },
+          "required": ["uri", "name", "account", "currency"],
+          "type": "object",
+          "description": "Presence of this property indicates successful operation"
+      }
+  }
+}

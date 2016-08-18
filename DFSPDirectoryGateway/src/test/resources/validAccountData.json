@@ -1,0 +1,26 @@
+{"users": [
+{
+"uri": "userdata.com/chrisg",
+"name": "chrisg",
+"account": "chrisg_12345",
+"currency": "USD"
+},
+{
+"uri": "userdata.com/magoo",
+"name": "magoo",
+"account": "magoo_12345",
+"currency": "USD"
+},
+{
+"uri": "userdata.com/sonof",
+"name": "sonof",
+"account": "sonof_12345",
+"currency": "INR"
+},
+{
+"uri": "userdata.com/mitty",
+"name": "mitty",
+"account": "mitty_12345",
+"currency": "ARS"
+}
+]}
