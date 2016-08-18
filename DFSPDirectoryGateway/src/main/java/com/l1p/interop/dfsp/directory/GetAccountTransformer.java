@@ -39,7 +39,7 @@ public class GetAccountTransformer extends AbstractMessageTransformer {
             throw new TransformerException(MessageFactory.createStaticMessage( "Missing required request parameter 'userURI'" ) );
         }
 
-        Map<String,String> account = accountStore.getAccount( userURI );
+        Map<String, String> account = accountStore.getAccount( userURI );
 
         if ( account == null ) {
             throw new TransformerException(MessageFactory.createStaticMessage( "Account not found for userURI=" + userURI ) );
