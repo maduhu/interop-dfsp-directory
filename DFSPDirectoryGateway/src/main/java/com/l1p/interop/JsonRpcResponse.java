@@ -9,14 +9,14 @@ import java.util.Map;
  * 
  * Created by Bryan on 8/17/2016.
  */
-public class JSONRPCResponse {
+public class JsonRpcResponse {
 
 	public static final String ID_FIELD = "id";
 	public static final String RESULT_FIELD = "result";
 
 	final String responseJSON;
 
-	public JSONRPCResponse(String id, Map result) {
+	public JsonRpcResponse(String id, Map result) {
 		Map header = new HashMap();
 
 		// makes sure a Map is always returned
