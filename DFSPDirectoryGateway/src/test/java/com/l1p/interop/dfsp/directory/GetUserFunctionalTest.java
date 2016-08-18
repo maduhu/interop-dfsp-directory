@@ -29,7 +29,7 @@ import com.sun.jersey.api.client.config.DefaultClientConfig;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class DFSPDirectoryGatewayTest extends FunctionalTestCase {
+public class GetUserFunctionalTest extends FunctionalTestCase {
 
 	private final String getUserPath="/directory/user/get";
 	private final String addUserPath="/directory/user/add";
@@ -73,41 +73,46 @@ public class DFSPDirectoryGatewayTest extends FunctionalTestCase {
 
 	@Test
 	public void testValidGetUserRequestShouldReturnValidResponse() throws Exception {
-		final String addUsersJSON = loadResourceAsString("testData/validAccountData.json");
-		ClientResponse addUsersResponse = webService.path( addUserPath ).type( "application/json").post(ClientResponse.class, addUsersJSON);
-		assertEquals("Server did not respond with status 200 for addUsers when presented with path " + addUserPath, 200, addUsersResponse.getStatus() );
+		//populate DFSPDirectoryGateway with test data
+		try {
+			final String addUsersJSON = loadResourceAsString("testData/validAccountData.json");
+			ClientResponse addUsersResponse = webService.path(addUserPath).type("application/json").post(ClientResponse.class, addUsersJSON);
+			assertEquals("Server did not respond with status 200 for addUsers when presented with path " + addUserPath, 200, addUsersResponse.getStatus());
+		} catch( Exception e ) {
+			fail( "Loading test account data to DFSPDirectoryGateway via " + addUserPath + " produced an unexpected exception: " + e.getMessage() );
+		}
 
 		Map<String,String> paramMap = new HashMap<String,String>();
-		paramMap.put( "userURI", "userdata.com/chrisg" );
-		final String validRequest1 = new JSONRPCRequest( "id1", "directory.user.get", paramMap ).toJSONString();
-		paramMap.put( "userURI", "userdata.com/magoo" );
-		final String validRequest2 = new JSONRPCRequest( "id2", "directory.user.get", paramMap ).toJSONString();
-		paramMap.put( "userURI", "userdata.com/sonof" );
-		final String validRequest3 = new JSONRPCRequest( "id3", "directory.user.get", paramMap ).toJSONString();
-		paramMap.put( "userURI", "userdata.com/mitty" );
-		final String validRequest4 = new JSONRPCRequest( "id4", "directory.user.get", paramMap ).toJSONString();
-		paramMap.put( "userURI", "userdata.com/missing" );
-		final String missingAccountRequest = new JSONRPCRequest( "id5", "directory.user.get", paramMap ).toJSONString();
 
 		logger.info("Posting events to web services");
 
 		//test retrieving info for chrisg
+		paramMap.put( "userURI", "userdata.com/chrisg" );
+		final String validRequest1 = new JSONRPCRequest( "id1", "directory.user.get", paramMap ).toJSONString();
 		ClientResponse clientResponse = postRequest( getUserPath, validRequest1);
-		verifyGetUserResponse( "account1", clientResponse, 200, "id1", "chrisg", "chrisg_12345", "USD" );
+		verifyGetUserResponse( "validRequest1", clientResponse, 200, "id1", "chrisg", "chrisg_12345", "USD" );
 
 		//test retrieving info for magoo
+		paramMap.put( "userURI", "userdata.com/magoo" );
+		final String validRequest2 = new JSONRPCRequest( "id2", "directory.user.get", paramMap ).toJSONString();
 		clientResponse = postRequest( getUserPath, validRequest2);
-		verifyGetUserResponse( "account2", clientResponse, 200, "id2", "magoo", "magoo_12345", "USD" );
+		verifyGetUserResponse( "validRequest2", clientResponse, 200, "id2", "magoo", "magoo_12345", "USD" );
 
 		//test retrieving info for sonof
+		paramMap.put( "userURI", "userdata.com/sonof" );
+		final String validRequest3 = new JSONRPCRequest( "id3", "directory.user.get", paramMap ).toJSONString();
 		clientResponse = postRequest( getUserPath, validRequest3);
-		verifyGetUserResponse( "account3", clientResponse, 200, "id3", "sonof", "sonof_12345", "INR" );
+		verifyGetUserResponse( "validRequest3", clientResponse, 200, "id3", "sonof", "sonof_12345", "INR" );
 
 		//test retrieving info for mitty
+		paramMap.put( "userURI", "userdata.com/mitty" );
+		final String validRequest4 = new JSONRPCRequest( "id4", "directory.user.get", paramMap ).toJSONString();
 		clientResponse = postRequest( getUserPath, validRequest4);
-		verifyGetUserResponse( "account4", clientResponse, 200, "id4", "mitty", "mitty_12345", "ARS" );
+		verifyGetUserResponse( "validRequest4", clientResponse, 200, "id4", "mitty", "mitty_12345", "ARS" );
 
 		//test retrieving info for a missing account
+		paramMap.put( "userURI", "userdata.com/missing" );
+		final String missingAccountRequest = new JSONRPCRequest( "id5", "directory.user.get", paramMap ).toJSONString();
 		ClientResponse missingAccountResponse = postRequest( getUserPath, missingAccountRequest);
 		assertEquals("Server did not respond with status 500 for missingAccount when presented with path " + getUserPath, 500, missingAccountResponse.getStatus() );
 		String expectedMissingAccountContent = "Account not found for userURI=userdata.com/missing";
@@ -115,10 +120,23 @@ public class DFSPDirectoryGatewayTest extends FunctionalTestCase {
 		assertTrue( "Response for missingAccount did not contain expected text '" + expectedMissingAccountContent + "': " + missingAccountResponseContent, missingAccountResponseContent != null && missingAccountResponseContent.contains( expectedMissingAccountContent ));
 	}
 
+	/**
+	 * Utility method to verify the content of a response from a call to /directory/user/get
+	 *
+	 * @param testIdentidier - phrase than identifies the test for debugging purposes
+	 * @param clientResponse - ClientResponse instance to validate
+	 * @param expectedStatus - expected status code
+	 * @param expectedId - expected id value
+	 * @param expectedName - expected name value
+	 * @param expectedAccount - expected account value
+	 * @param expectedCurrency - expected currency value
+     * @throws Exception
+     */
 	private void verifyGetUserResponse( String testIdentidier, ClientResponse clientResponse, int expectedStatus, String expectedId, String expectedName, String expectedAccount, String expectedCurrency ) throws Exception {
-
+		//verify status
 		assertEquals( testIdentidier + ": Server did not respond with status " + expectedStatus, expectedStatus, clientResponse.getStatus() );
 
+		//read response content as string
 		String responseContent = null;
 		try {
 			responseContent = clientResponse.getEntity(String.class);
@@ -126,6 +144,7 @@ public class DFSPDirectoryGatewayTest extends FunctionalTestCase {
 			fail( testIdentidier + ": parsing client response content produced an unexpected exception: " + e.getMessage() );
 		}
 
+		//convert response content from JSON string to Map
 		Map header = null;
 		try {
 			// convert JSON string to Map
@@ -134,7 +153,7 @@ public class DFSPDirectoryGatewayTest extends FunctionalTestCase {
 			fail( testIdentidier + ": conversion of client response content to a map produced an unexpected exception: " + e.getMessage() );
 		}
 
-		//validate contents
+		//validate content of map
 		assertTrue( testIdentidier + ": Header map was null", header != null );
 		assertTrue( testIdentidier + ": Size of header map was incorrect, expected 3, received " + header.size(), header.size() == 3 );
 		assertEquals( testIdentidier + ": Header map did not contain correct data for jsonrpc element", "2.0", header.get( "jsonrpc" ) );
