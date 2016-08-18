@@ -14,20 +14,20 @@ public class L1PException {
 
     private final String jsonString;
 
-    public L1PException( final String code, final String message, final String type, Exception e ) {
-        final Map errorMap = new HashMap();
+    public L1PException( final int code, final String message, final String type, Exception e ) {
+        final Map<String, Object> errorMap = new HashMap<String, Object>();
         errorMap.put( "code", code );
         errorMap.put( "message", message );
         errorMap.put( "errorPrint", e.getMessage() );
         errorMap.put( "type", type );
 
-        final Map debug = new HashMap();
-        List stackMessages = parseStackTrace( e.getStackTrace() );
+        final Map<String, Object> debug = new HashMap<String, Object>();
+        List<String> stackMessages = parseStackTrace( e.getStackTrace() );
 
         debug.put( "stackInfo", stackMessages );
         debug.put( "cause", e.getCause() != null ? e.getCause().getMessage() : "" );   //not sure what should go in cause
 
-        final Map result = new HashMap();
+        final Map<String, Object> result = new HashMap<String, Object>();
         result.put( "error", errorMap );
         result.put( "debug", debug );
 
@@ -35,7 +35,7 @@ public class L1PException {
     }
 
     private List<String> parseStackTrace( StackTraceElement[] stackTrace ) {
-        List<String> result = new ArrayList();
+        List<String> result = new ArrayList<String>();
 
         if ( stackTrace != null && stackTrace.length > 0 ) {
             for ( int i = 0; i < stackTrace.length; i++ ) {
