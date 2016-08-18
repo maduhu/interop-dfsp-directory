@@ -1,5 +1,6 @@
 package com.l1p.interop.dfsp.directory;
 
+import com.l1p.interop.JSONRPCResponse;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.codehaus.jackson.map.ObjectMapper;
@@ -30,6 +31,7 @@ public class GetAccountTransformer extends AbstractMessageTransformer {
 
     public Object transformMessage(MuleMessage muleMessage, String s) throws TransformerException {
         final Map payload = (Map)muleMessage.getPayload();
+        final String id = (String)payload.get( "id" );
 
         String userURI = (String)((Map)payload.get( "params" )).get( "userURI" );
 
@@ -43,17 +45,6 @@ public class GetAccountTransformer extends AbstractMessageTransformer {
             throw new TransformerException(MessageFactory.createStaticMessage( "Account not found for userURI=" + userURI ) );
         }
 
-        logger.info( "Returning account for userURI=" + userURI + ": " + account );
-
-        Map<String,Object> getUserResponse = new HashMap<String,Object>();
-        getUserResponse.put( "jsonrpc", "2.0" );
-        getUserResponse.put( "id", "ullamco eiusmod" );
-        getUserResponse.put( "result", account );
-
-        try {
-            return new ObjectMapper().writeValueAsString(getUserResponse);
-        } catch( IOException e ) {
-            throw new TransformerException(MessageFactory.createStaticMessage( "Failed to convert user account data to JSON: " + e.getMessage() ) );
-        }
+        return new JSONRPCResponse( id, account ).toString();
     }
 }

@@ -1,10 +1,12 @@
 package com.l1p.interop.dfsp.directory;
 
+import com.l1p.interop.JSONRPCResponse;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.mule.api.MuleEventContext;
 import org.mule.api.lifecycle.Callable;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -25,16 +27,19 @@ public class AddAccountsProcessor implements Callable {
 
     public Object onCall(MuleEventContext muleEventContext) throws Exception {
 
-        Object payload = muleEventContext.getMessage().getPayload();
+        Map payload = (Map)muleEventContext.getMessage().getPayload();
 
-        //make sure payload 1) isnt null 2) is a map and throw smart exception if not
-
-        List<Map<String,String>> accountsToAdd = (List<Map<String,String>>)((Map)payload).get("users");
-        logger.info( "Received request to add " + accountsToAdd.size() + " accounts" );
+        final String id = (String)payload.get( "id" );
+        List<Map<String,String>> accountsToAdd = (List<Map<String,String>>)payload.get("users");
+        logger.info( "Received request id=" + id + " to add " + accountsToAdd.size() + " accounts" );
 
         accountStore.addAccounts( accountsToAdd );
-        logger.info( "Added " + accountsToAdd.size() + " accounts" );
+        String message = "updated " + accountsToAdd.size() + " entities for request id=" + id;
+        logger.info( message );
 
-        return "{\"response\": {\"message\": \"updated " + accountsToAdd.size() + " entities\"}}";
+        Map resultMap = new HashMap();
+        resultMap.put( "message", message );
+
+        return new JSONRPCResponse( id, resultMap ).toString();
     }
 }

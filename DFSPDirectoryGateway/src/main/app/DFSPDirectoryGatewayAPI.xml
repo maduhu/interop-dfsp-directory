@@ -7,24 +7,21 @@
     xmlns:json="http://www.mulesoft.org/schema/mule/json"
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
-http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd
-http://www.mulesoft.org/schema/mule/json  http://www.mulesoft.org/schema/mule/json/current/mule-json.xsd
-http://www.mulesoft.org/schema/mule/apikit http://www.mulesoft.org/schema/mule/apikit/current/mule-apikit.xsd
-http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.1.xsd">
+                        http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd
+                        http://www.mulesoft.org/schema/mule/json  http://www.mulesoft.org/schema/mule/json/current/mule-json.xsd
+                        http://www.mulesoft.org/schema/mule/apikit http://www.mulesoft.org/schema/mule/apikit/current/mule-apikit.xsd
+                        http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.1.xsd">
+
+    <description>
+        - Receives and routes DFSP Directory Gateway API requests
+        - Base http listener received all requests sent to /directory/*
+    </description>
+
     <http:listener-config name="api-httpListenerConfig" host="0.0.0.0" port="8081" doc:name="HTTP Listener Configuration"/>
     <apikit:config name="api-config" raml="directory.user.raml" consoleEnabled="true" doc:name="Router"/>
 
-    <spring:bean id="AccountDataStore" name="AccountDataStore" scope="singleton" class="com.l1p.interop.dfsp.directory.AccountDataStore"/>
-    <spring:bean id="AddAccountsProcessor" name="AddAccountsProcessor" class="com.l1p.interop.dfsp.directory.AddAccountsProcessor">
-        <spring:constructor-arg index="0" ref="AccountDataStore" />
-    </spring:bean>
-    <spring:bean id="getAccountTransformer" name="getAccountTransformer" class="com.l1p.interop.dfsp.directory.GetAccountTransformer">
-        <spring:constructor-arg index="0" ref="AccountDataStore" />
-    </spring:bean>
-
-
     <flow name="api-main">
-        <http:listener config-ref="api-httpListenerConfig" path="/api/*" doc:name="HTTP"/>
+        <http:listener config-ref="api-httpListenerConfig" path="/directory/*" doc:name="HTTP"/>
         <!--<logger level="INFO" message="Received request: payload=#[payload]"/>-->
         <!--<logger level="INFO" message=""/>-->
         <apikit:router config-ref="api-config" doc:name="APIkit Router"/>
@@ -35,20 +32,6 @@ http://www.springframework.org/schema/beans http://www.springframework.org/schem
         <apikit:console config-ref="api-config" doc:name="APIkit Console"/>
     </flow>
 
-    <flow name="post:/directory/user/add:application/json:api-config">
-        <logger message="received request to add users: #[payload]" level="INFO" category="com.l1p.interop.dfsp.directory" doc:name="Logger"/>
-        <json:json-to-object-transformer returnClass="java.util.Map" doc:name="JSON to Object"/>
-        <component doc:name="Java"><spring-object bean="AddAccountsProcessor" /></component>
-        <logger message="processing complete: #[payload]" level="INFO" category="com.l1p.interop.dfsp.directory" doc:name="Logger"/>
-    </flow>
-
-    <flow name="post:/directory/user/get:application/json:api-config">
-        <logger message="received request to get user: #[payload]" level="INFO" doc:name="Logger"/>
-        <json:json-to-object-transformer returnClass="java.util.Map" doc:name="JSON to Object"/>
-        <transformer ref="getAccountTransformer" doc:name="getAccountTransformer"/>
-
-        <logger message="payload: #[payload]" level="INFO" doc:name="Logger"/>
-    </flow>
     <apikit:mapping-exception-strategy name="api-apiKitGlobalExceptionMapping">
         <apikit:mapping statusCode="404">
             <apikit:exception value="org.mule.module.apikit.exception.NotFoundException" />
