@@ -3,8 +3,6 @@ package com.l1p.interop;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
-import org.codehaus.jackson.map.ObjectMapper;
-import org.codehaus.jackson.type.TypeReference;
 import org.junit.Test;
 
 import java.util.HashMap;
@@ -28,7 +26,6 @@ public class JSONRPCResponseTest {
         resultData.put( "Key2", "Value2" );
         JSONRPCResponse response = new JSONRPCResponse( "12345", resultData );
 
-        ObjectMapper mapper = new ObjectMapper();
         // convert JSON string to Map
         Map header = JSONUtil.stringToMap( response.toString() );
         //validate contents
@@ -50,7 +47,6 @@ public class JSONRPCResponseTest {
     public void nullValuesShouldNotThrowException() throws Exception {
         JSONRPCResponse response = new JSONRPCResponse( null, null );
 
-        ObjectMapper mapper = new ObjectMapper();
         // convert JSON string to Map
         Map header = JSONUtil.stringToMap( response.toString() );
         //validate contents

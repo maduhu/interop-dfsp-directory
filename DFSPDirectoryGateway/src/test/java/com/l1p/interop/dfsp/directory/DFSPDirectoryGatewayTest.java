@@ -13,6 +13,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import com.l1p.interop.JSONRPCRequest;
+import com.l1p.interop.JSONUtil;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -94,25 +95,25 @@ public class DFSPDirectoryGatewayTest extends FunctionalTestCase {
 		ClientResponse account1Response = postRequest( getUserPath, validRequest1);
 		assertEquals("Server did not respond with status 200 for account1 when presented with path " + getUserPath, 200, account1Response.getStatus() );
 		String account1ResponseContent = account1Response.getEntity( String.class );
-		assertTrue( "Response for account1 did not contain expected name chrisg: " + account1ResponseContent, account1ResponseContent != null && account1ResponseContent.contains( "chrisg" ));
+		verifyGetUserResponse( account1ResponseContent, "id1", "chrisg", "chrisg_12345", "USD" );
 
 		//test retrieving info for magoo
 		ClientResponse account2Response = postRequest( getUserPath, validRequest2);
 		assertEquals("Server did not respond with status 200 for account2 when presented with path " + getUserPath, 200, account2Response.getStatus() );
 		String account2ResponseContent = account2Response.getEntity( String.class );
-		assertTrue( "Response for account2 did not contain expected name magoo: " + account2ResponseContent, account2ResponseContent != null && account2ResponseContent.contains( "magoo" ));
+		verifyGetUserResponse( account2ResponseContent, "id2", "magoo", "magoo_12345", "USD" );
 
 		//test retrieving info for sonof
 		ClientResponse account3Response = postRequest( getUserPath, validRequest3);
 		assertEquals("Server did not respond with status 200 for account3 when presented with path " + getUserPath, 200, account3Response.getStatus() );
 		String account3ResponseContent = account3Response.getEntity( String.class );
-		assertTrue( "Response for account3 did not contain expected name sonof: " + account3ResponseContent, account3ResponseContent != null && account3ResponseContent.contains( "sonof" ));
+		verifyGetUserResponse( account3ResponseContent, "id3", "sonof", "sonof_12345", "INR" );
 
 		//test retrieving info for mitty
 		ClientResponse account4Response = postRequest( getUserPath, validRequest4);
 		assertEquals("Server did not respond with status 200 for account4 when presented with path " + getUserPath, 200, account4Response.getStatus() );
 		String account4ResponseContent = account4Response.getEntity( String.class );
-		assertTrue( "Response for account4 did not contain expected name mitty: " + account4ResponseContent, account4ResponseContent != null && account4ResponseContent.contains( "mitty" ));
+		verifyGetUserResponse( account4ResponseContent, "id4", "mitty", "mitty_12345", "ARS" );
 
 		//test retrieving info for a missing account
 		ClientResponse missingAccountResponse = postRequest( getUserPath, missingAccountRequest);
@@ -120,6 +121,22 @@ public class DFSPDirectoryGatewayTest extends FunctionalTestCase {
 		String expectedMissingAccountContent = "Account not found for userURI=userdata.com/missing";
 		String missingAccountResponseContent = missingAccountResponse.getEntity( String.class );
 		assertTrue( "Response for missingAccount did not contain expected text '" + expectedMissingAccountContent + "': " + missingAccountResponseContent, missingAccountResponseContent != null && missingAccountResponseContent.contains( expectedMissingAccountContent ));
+	}
+
+	private void verifyGetUserResponse( String responseContent, String expectedId, String expectedName, String expectedAccount, String expectedCurrency ) throws Exception {
+		// convert JSON string to Map
+		Map header = JSONUtil.stringToMap( responseContent );
+		//validate contents
+		assertTrue( "Header map was null", header != null );
+		assertTrue( "Size of header map was incorrect, expected 3, received " + header.size(), header.size() == 3 );
+		assertEquals( "Header map did not contain correct data for jsonrpc element", "2.0", header.get( "jsonrpc" ) );
+		assertEquals( "Header map did not contain correct data for id element", expectedId, header.get( "id" ) );
+		Map result = (Map)header.get( "result" );
+		assertTrue( "Result map was null", result != null );
+		assertTrue( "Size of result map was incorrect, expected 3, received " + result.size(), result.size() == 3 );
+		assertEquals( "Result map did not contain correct data for name element", expectedName, result.get( "name" ) );
+		assertEquals( "Result map did not contain correct data for account element", expectedAccount, result.get( "account" ) );
+		assertEquals( "Result map did not contain correct data for currency element", expectedCurrency, result.get( "currency" ) );
 	}
 
 	@Test
