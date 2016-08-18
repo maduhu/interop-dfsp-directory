@@ -1,31 +1,51 @@
 {
   "$schema": "http://json-schema.org/draft-04/schema#",
+  "type": "object",
   "properties": {
-      "jsonrpc": {
-          "enum": ["2.0"],
-          "type": "string"
-      },
-      "id": {
-          "type": "string"
-      },
-      "result": {
-          "properties": {
-              "name": {
-                  "type": "string",
-                  "description":"Name of end user"
+    "jsonrpc": {
+      "enum": ["2.0"]
+    },
+    "id": {
+      "type": "string"
+    },
+    "method": {
+      "type": "string"
+    },
+    "params": {
+      "type": "object",
+      "properties": {
+        "users": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "centralURI": {
+                "type": "string"
               },
-              "account": {
-                  "type": "string",
-                  "description": "ILP address of user's default account"
+              "dfspURI": {
+                "type": "string"
               },
               "currency": {
-                  "type": "string",
-                  "description": "Currency of user's default account"
+                "type": "string"
               }
-          },
-          "required": ["name", "account", "currency"],
-          "type": "object",
-          "description": "Presence of this property indicates successful operation"
-      }
-  }
+            },
+            "required": [
+              "centralURI",
+              "dfspURI",
+              "currency"
+            ]
+          }
+        }
+      },
+      "required": [
+        "users"
+      ]
+    }
+  },
+  "required": [
+    "jsonrpc",
+    "id",
+    "method",
+    "params"
+  ]
 }
