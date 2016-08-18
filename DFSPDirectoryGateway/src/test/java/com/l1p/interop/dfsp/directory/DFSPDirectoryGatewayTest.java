@@ -55,7 +55,7 @@ public class DFSPDirectoryGatewayTest extends FunctionalTestCase {
 		webService = Client.create(config).resource(serviceHost);
 	}
 
-	@Test(timeout = 20000)
+	@Test
 	public void testInvalidPathShouldReturn404() throws Exception {
 		final String invalidPath = "path/shouldnt/exist";
 		final String notJSON = "<BadRequest>This is not JSON</BadRequest>";
@@ -69,7 +69,7 @@ public class DFSPDirectoryGatewayTest extends FunctionalTestCase {
 
 	}
 
-	@Test(timeout = 20000)
+	@Test
 	public void testValidGetUserRequestShouldReturnValidResponse() throws Exception {
 		//todo - load in account data
 		final String addUsersJSON = loadResourceAsString("testData/validAccountData.json");
@@ -122,7 +122,7 @@ public class DFSPDirectoryGatewayTest extends FunctionalTestCase {
 		assertTrue( "Response for missingAccount did not contain expected text '" + expectedMissingAccountContent + "': " + missingAccountResponseContent, missingAccountResponseContent != null && missingAccountResponseContent.contains( expectedMissingAccountContent ));
 	}
 
-	@Test(timeout = 20000)
+	@Test
 	public void testValidAddUserRequestShouldReturnValidResponse() throws Exception {
 		final String addUsersJSON = loadResourceAsString("testData/validAccountData.json");
 		logger.info("Posting request to path " + addUserPath );
