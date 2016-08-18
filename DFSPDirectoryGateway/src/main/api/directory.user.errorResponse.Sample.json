@@ -1,0 +1,32 @@
+{
+  "jsonrpc": "2.0",
+  "error": {
+    "type": "parsingerror",
+    "code": 400,
+    "errorPrint": "The request could not be read by our software.",
+    "message": "Parsing error"
+  },
+  "id": null,
+  "debug": {
+    "cause": {
+      "error": {
+        "type": "parsingerror",
+        "code": 400,
+        "errorPrint": "One of the values provided has invalid characters",
+        "message": "One of the properties contained illegal characters"
+      },
+      "id": null,
+      "debug": {
+        "stackInfo": [
+          "Callnumber1",
+          "Callnumber2"
+        ]
+      }
+    },
+    "stackInfo": [
+        "Callnumber1",
+        "Callnumber2",
+        "Callnumber3"
+    ]
+  }
+}
