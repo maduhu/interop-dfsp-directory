@@ -32,3 +32,8 @@ baseUri: https://localhost:8081/directory
               application/json:
                 type: !include directory.user.addResponse.Schema.json
                 example: !include directory.user.addResponse.Sample.json
+          500:
+            body:
+              application/json:
+                type: !include directory.user.errorResponse.Schema.json
+                example: !include directory.user.errorResponse.Sample.json

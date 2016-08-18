@@ -15,7 +15,7 @@
       "properties": {
         "code": {
           "description": "Standard code as defined by JSON-RPC. These codes usually are not application errors, but more on protocol or network level.",
-          "type": "string"
+          "type": "integer"
         },
         "message": {
           "description": "Technical error message suitable to be logged in application logs. This message is supposed to aid for audit / debug purposes and is visible to system admins",
