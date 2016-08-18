@@ -1,9 +1,0 @@
-{
-  "jsonrpc": "2.0",
-  "id": "...",
-  "result": {
-    "name": "Name",
-    "account": "223232323",
-    "currency": "USD"
-  }
-}
