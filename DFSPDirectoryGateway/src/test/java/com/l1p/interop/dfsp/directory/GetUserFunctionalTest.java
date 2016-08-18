@@ -104,11 +104,11 @@ public class GetUserFunctionalTest extends FunctionalTestCase {
 		clientResponse = postRequest( getUserPath, validRequest3);
 		verifyGetUserResponse( "validRequest3", clientResponse, 200, "id3", "sonof", "sonof_12345", "INR" );
 
-		//test retrieving info for mitty
-		paramMap.put( "userURI", "userdata.com/mitty" );
+		//test retrieving info for walt
+		paramMap.put( "userURI", "userdata.com/walt" );
 		final String validRequest4 = new JSONRPCRequest( "id4", "directory.user.get", paramMap ).toJSONString();
 		clientResponse = postRequest( getUserPath, validRequest4);
-		verifyGetUserResponse( "validRequest4", clientResponse, 200, "id4", "mitty", "mitty_12345", "ARS" );
+		verifyGetUserResponse( "validRequest4", clientResponse, 200, "id4", "walt", "walt_12345", "ARS" );
 
 		//test retrieving info for a missing account
 		paramMap.put( "userURI", "userdata.com/missing" );
