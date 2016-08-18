@@ -28,4 +28,12 @@ public class JSONRPCRequest {
     public String toJSONString() {
         return JSONUtil.mapToString( requestData );
     }
+
+    @Override
+    public String toString() {
+        return "JSONRPCRequest{" +
+                "requestData=" + requestData +
+                ", params=" + params +
+                '}';
+    }
 }
