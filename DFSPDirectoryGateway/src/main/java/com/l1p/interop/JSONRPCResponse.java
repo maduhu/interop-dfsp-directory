@@ -19,6 +19,7 @@ public class JSONRPCResponse {
 	public JSONRPCResponse(String id, Map result) {
 		Map header = new HashMap();
 
+		// makes sure a Map is always returned
 		if (result == null)
 			result = new HashMap();
 
