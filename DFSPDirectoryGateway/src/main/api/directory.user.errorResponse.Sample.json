@@ -6,7 +6,7 @@
     "errorPrint": "The request could not be read by our software.",
     "message": "Parsing error"
   },
-  "id": null,
+  "id": "sampleid",
   "debug": {
     "cause": {
       "error": {
@@ -15,7 +15,7 @@
         "errorPrint": "One of the values provided has invalid characters",
         "message": "One of the properties contained illegal characters"
       },
-      "id": null,
+      "id": "sampleid",
       "debug": {
         "stackInfo": [
           "Callnumber1",
