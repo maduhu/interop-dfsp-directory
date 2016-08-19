@@ -4,7 +4,7 @@
     "users": {
       "type": "array",
       "minItems": 1,
-      "items": {
+      "users": {
         "type": "object",
         "properties": {
           "uri": {
@@ -17,7 +17,7 @@
           },
           "account": {
             "type": "string",
-            "description": "User name"
+            "description": "Account #"
           },
           "currency": {
             "type": "string",
