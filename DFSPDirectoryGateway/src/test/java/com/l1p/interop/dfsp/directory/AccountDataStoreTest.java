@@ -167,4 +167,25 @@ public class AccountDataStoreTest {
 		//Then
 		assertTrue("With no account property accountdatastore should have returned a RuntimeException saying there is a missing field.", exception != null && exception.getMessage().contains("Required field"));
 	}
+	
+	@Test
+	public void testAddAccountFailsWhenPressentedWithMoreFields() throws Exception{
+		//Given
+		RuntimeException exception = null;
+		String userName1 = "user9";
+		String userName1URI = getTestURI(userName1);
+		Map<String, String> accountData1 = buildTestAccount(userName1);
+		accountData1.put("addedProperty", "addedValue");
+		
+		//When
+		try{
+			accountDataStore.addAccount(userName1URI, accountData1);
+		}catch(RuntimeException ex){
+			exception = ex;
+		}
+		
+		//Then
+		assertTrue("Accountdatastore didnt fail when presented with extra properties", exception != null && exception.getMessage().contains("Account data contains unexpected number of fields"));
+			
+	}
 }
