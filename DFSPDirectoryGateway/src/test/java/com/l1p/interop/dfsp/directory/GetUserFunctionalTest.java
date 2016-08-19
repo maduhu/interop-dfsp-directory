@@ -114,7 +114,7 @@ public class GetUserFunctionalTest extends FunctionalTestCase {
 		paramMap.put( "userURI", "userdata.com/missing" );
 		final String missingAccountRequest = new JSONRPCRequest( "id5", "directory.user.get", paramMap ).toJSONString();
 		ClientResponse missingAccountResponse = postRequest( getUserPath, missingAccountRequest);
-		assertEquals("Server did not respond with status 500 for missingAccount when presented with path " + getUserPath, 500, missingAccountResponse.getStatus() );
+		assertEquals("Server did not respond with status 200 for missingAccount when presented with path " + getUserPath, 200, missingAccountResponse.getStatus() );
 		String expectedMissingAccountContent = "Account not found for userURI=userdata.com/missing";
 		String missingAccountResponseContent = missingAccountResponse.getEntity( String.class );
 		assertTrue( "Response for missingAccount did not contain expected text '" + expectedMissingAccountContent + "': " + missingAccountResponseContent, missingAccountResponseContent != null && missingAccountResponseContent.contains( expectedMissingAccountContent ));

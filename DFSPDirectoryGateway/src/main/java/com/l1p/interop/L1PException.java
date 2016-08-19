@@ -28,6 +28,10 @@ public class L1PException {
         debug.put( "cause", e.getCause() != null ? e.getCause().getMessage() : "" );   //not sure what should go in cause
 
         final Map<String, Object> result = new HashMap<String, Object>();
+        
+        result.put( "jsonrpc", "2.0" );
+        result.put( "id", "1234" );
+        
         result.put( "error", errorMap );
         result.put( "debug", debug );
 
