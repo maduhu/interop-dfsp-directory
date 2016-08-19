@@ -22,6 +22,7 @@
 
     <flow name="api-main">
         <http:listener config-ref="api-httpListenerConfig" path="/directory/*" doc:name="HTTP"/>
+        <set-session-variable variableName="id" value="undefined" doc:name="initialize id"/>
         <!--<logger level="INFO" message="Received request: payload=#[payload]"/>-->
         <!--<logger level="INFO" message=""/>-->
         <apikit:router config-ref="api-config" doc:name="APIkit Router"/>

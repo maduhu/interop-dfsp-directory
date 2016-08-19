@@ -13,7 +13,7 @@ import java.security.cert.CertificateException;
 import java.util.HashMap;
 import java.util.Map;
 
-import com.l1p.interop.JSONRPCRequest;
+import com.l1p.interop.JsonRpcRequest;
 import com.l1p.interop.JsonMapStringTransformer;
 import org.junit.Before;
 import org.junit.BeforeClass;
@@ -88,31 +88,34 @@ public class GetUserFunctionalTest extends FunctionalTestCase {
 
 		//test retrieving info for chrisg
 		paramMap.put( "userURI", "userdata.com/chrisg" );
-		final String validRequest1 = new JSONRPCRequest( "id1", "directory.user.get", paramMap ).toJSONString();
+		final String validRequest1 = new JsonRpcRequest( "id1", "directory.user.get", paramMap ).toJSONString();
 		ClientResponse clientResponse = postRequest( getUserPath, validRequest1);
 		verifyGetUserResponse( "validRequest1", clientResponse, 200, "id1", "chrisg", "chrisg_12345", "USD" );
 
 		//test retrieving info for magoo
 		paramMap.put( "userURI", "userdata.com/magoo" );
-		final String validRequest2 = new JSONRPCRequest( "id2", "directory.user.get", paramMap ).toJSONString();
+		final String validRequest2 = new JsonRpcRequest( "id2", "directory.user.get", paramMap ).toJSONString();
 		clientResponse = postRequest( getUserPath, validRequest2);
 		verifyGetUserResponse( "validRequest2", clientResponse, 200, "id2", "magoo", "magoo_12345", "USD" );
 
 		//test retrieving info for sonof
 		paramMap.put( "userURI", "userdata.com/sonof" );
-		final String validRequest3 = new JSONRPCRequest( "id3", "directory.user.get", paramMap ).toJSONString();
+		final String validRequest3 = new JsonRpcRequest( "id3", "directory.user.get", paramMap ).toJSONString();
 		clientResponse = postRequest( getUserPath, validRequest3);
 		verifyGetUserResponse( "validRequest3", clientResponse, 200, "id3", "sonof", "sonof_12345", "INR" );
 
 		//test retrieving info for walt
 		paramMap.put( "userURI", "userdata.com/walt" );
-		final String validRequest4 = new JSONRPCRequest( "id4", "directory.user.get", paramMap ).toJSONString();
+		final String validRequest4 = new JsonRpcRequest( "id4", "directory.user.get", paramMap ).toJSONString();
 		clientResponse = postRequest( getUserPath, validRequest4);
 		verifyGetUserResponse( "validRequest4", clientResponse, 200, "id4", "walt", "walt_12345", "ARS" );
 
+
+		//TODO: make the code below use verifyL1PErrorResponse and finish implementing that method
+
 		//test retrieving info for a missing account
 		paramMap.put( "userURI", "userdata.com/missing" );
-		final String missingAccountRequest = new JSONRPCRequest( "id5", "directory.user.get", paramMap ).toJSONString();
+		final String missingAccountRequest = new JsonRpcRequest( "id5", "directory.user.get", paramMap ).toJSONString();
 		ClientResponse missingAccountResponse = postRequest( getUserPath, missingAccountRequest);
 		assertEquals("Server did not respond with status 200 for missingAccount when presented with path " + getUserPath, 200, missingAccountResponse.getStatus() );
 		String expectedMissingAccountContent = "Account not found for userURI=userdata.com/missing";
@@ -164,6 +167,10 @@ public class GetUserFunctionalTest extends FunctionalTestCase {
 		assertEquals( testIdentidier + ": Result map did not contain correct data for name element", expectedName, result.get( "name" ) );
 		assertEquals( testIdentidier + ": Result map did not contain correct data for account element", expectedAccount, result.get( "account" ) );
 		assertEquals( testIdentidier + ": Result map did not contain correct data for currency element", expectedCurrency, result.get( "currency" ) );
+	}
+
+	private void verifyL1PErrorResponse( String testIdentifier, ClientResponse clientResponse, int expectedStatus, String expectedCode, String expectedMessage ) {
+
 	}
 
 	@Test

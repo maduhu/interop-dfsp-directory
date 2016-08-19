@@ -10,11 +10,11 @@ import java.util.Map;
  *
  * Created by Bryan on 8/17/2016.
  */
-public class L1PException {
+public class L1PErrorResponse {
 
     private final String jsonString;
 
-    public L1PException( final String id, final int code, final String message, final String type, Exception e ) {
+    public L1PErrorResponse(final String id, final int code, final String message, final String type, Exception e ) {
         final Map<String, Object> errorMap = new HashMap<String, Object>();
         errorMap.put( "code", code );
         errorMap.put( "message", message );
