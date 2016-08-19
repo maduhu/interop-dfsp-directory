@@ -2,7 +2,9 @@ package com.l1p.interop.dfsp.directory;
 
 import static org.junit.Assert.*;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.junit.Before;
@@ -11,7 +13,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * Created by Bryan on 8/17/2016.
+ * Created by Walter on 8/18/2016.
  */
 public class AccountDataStoreTest {
 	private AccountDataStore accountDataStore = null;
@@ -21,16 +23,13 @@ public class AccountDataStoreTest {
 	public void InitAccountDataStore(){
 		accountDataStore = new AccountDataStore();
 	}
-	
-	private void addNewTestAccount(final String name){
-		String actualName = name;
-		
+
+	private Map<String, String> buildTestAccount(final String name) {
 		Map<String,String> accountData = new HashMap<String, String>();
 		accountData.put("name",name);
-		accountData.put("account",actualName);
+		accountData.put("account",name);
 		accountData.put("currency","USD");
-		
-		accountDataStore.addAccount(getTestURI(actualName), accountData);
+		return accountData;
 	}
 	
 	private String getTestURI(final String name){
@@ -40,11 +39,12 @@ public class AccountDataStoreTest {
 	@Test
 	public void testAddValidAccountAndRetrievesIt() throws Exception {
 		//Given
-		String userName = "walt";
+		String userName = "user1";
 		String URI = getTestURI(userName);
+		Map<String, String> accountData = buildTestAccount(userName);
 		
 		//When
-		addNewTestAccount(userName);
+		accountDataStore.addAccount(URI, accountData);
 		Map<String,String> account = accountDataStore.getAccount(URI);
 		
 		//Then
@@ -54,21 +54,117 @@ public class AccountDataStoreTest {
 
 	@Test
 	public void testaddAccountWithoutCurrencyFails() throws Exception {
-		//TODO implement test
+		//Given
+		String userName = "user2";
+		String URI = getTestURI(userName);
+		RuntimeException exception = null;
+		Map<String, String> accountData = buildTestAccount(userName);
+		accountData.remove("currency");
+		
+		//When
+		try{
+			accountDataStore.addAccount(URI, accountData);
+		}catch(RuntimeException ex){
+			exception = ex;
+		}
+		
+		//Then
+		assertTrue("With no currency property accountdatastore should have returned a RuntimeException saying there is a missing field.", exception != null && exception.getMessage().contains("Required field"));
 	}
 	
 	@Test
 	public void testaddAccountWithoutNameFails() throws Exception {
-		//TODO implement test
+		//Given
+		String userName = "user3";
+		String URI = getTestURI(userName);
+		RuntimeException exception = null;
+		Map<String, String> accountData = buildTestAccount(userName);
+		accountData.remove("name");
+		
+		//When
+		try{
+			accountDataStore.addAccount(URI, accountData);
+		}catch(RuntimeException ex){
+			exception = ex;
+		}
+		
+		//Then
+		assertTrue("With no name property accountdatastore should have returned a RuntimeException saying there is a missing field.", exception != null && exception.getMessage().contains("Required field"));
 	}
 	
 	@Test
 	public void testaddAccountWithoutAccountFails() throws Exception {
-		//TODO implement test
+		//Given
+		String userName = "user4";
+		String URI = getTestURI(userName);
+		RuntimeException exception = null;
+		Map<String, String> accountData = buildTestAccount(userName);
+		accountData.remove("account");
+		
+		//When
+		try{
+			accountDataStore.addAccount(URI, accountData);
+		}catch(RuntimeException ex){
+			exception = ex;
+		}
+		
+		//Then
+		assertTrue("With no account property accountdatastore should have returned a RuntimeException saying there is a missing field.", exception != null && exception.getMessage().contains("Required field"));
 	}
 	
 	@Test
 	public void testAddAccountsWithValidData() throws Exception{
-		//TODO implement test
+		//Given
+		String userName1 = "user5";
+		String userName1URI = getTestURI(userName1);
+		Map<String, String> accountData1 = buildTestAccount(userName1);
+		accountData1.put("uri", userName1URI);
+		
+		String userName2 = "user6";
+		String userName2URI = getTestURI(userName2);
+		Map<String, String> accountData2 = buildTestAccount(userName2);
+		accountData2.put("uri", getTestURI(userName2));
+		
+		List<Map<String, String>> listOfAccounts = new ArrayList<Map<String,String>>();
+		listOfAccounts.add(accountData1);
+		listOfAccounts.add(accountData2);
+		
+		//When
+		accountDataStore.addAccounts(listOfAccounts);
+		Map<String, String> account1 = accountDataStore.getAccount(userName1URI);
+		Map<String, String> account2 = accountDataStore.getAccount(userName2URI);
+		
+		//Then
+		assertTrue("The getAccount method returned null for " + userName1URI, account1 != null);
+		assertEquals("The account inserted name was not returned",userName1, account1.get("name"));
+		
+
+		assertTrue("The getAccount method returned null for " + userName2URI, account2 != null);
+		assertEquals("The account inserted name was not returned",userName2, account2.get("name"));
+	}
+	
+	@Test
+	public void testAddAccountsWithInvalidDataFails() throws Exception{
+		//Given
+		String userName1 = "user7";
+		String userName1URI = getTestURI(userName1);
+		Map<String, String> accountData1 = buildTestAccount(userName1);
+		accountData1.put("uri", userName1URI);
+		accountData1.remove("account");
+		
+		List<Map<String, String>> listOfAccounts = new ArrayList<Map<String,String>>();
+		listOfAccounts.add(accountData1);
+		
+		RuntimeException exception = null;
+		
+		//When
+		try{
+			accountDataStore.addAccounts(listOfAccounts);
+		}catch(RuntimeException ex){
+			exception = ex;
+		}
+		
+		//Then
+		assertTrue("With no account property accountdatastore should have returned a RuntimeException saying there is a missing field.", exception != null && exception.getMessage().contains("Required field"));
 	}
 }

@@ -19,8 +19,7 @@ public class AccountDataStore {
 	public synchronized void addAccounts(final List<Map<String, String>> accounts) {
 		for (Map<String, String> nextAccount : accounts) {
 			String uri = nextAccount.remove("uri");
-			validateAccountFields(nextAccount);
-			cache.put(uri, nextAccount);
+			addAccount(uri, nextAccount);
 		}
 	}
 
