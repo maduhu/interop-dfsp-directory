@@ -38,23 +38,15 @@ public class GetAccountTransformer extends AbstractMessageTransformer {
         final int code = 500;
 
         String userURI = (String)((Map<String, Object>)payload.get( "params" )).get( "userURI" );
-        String accountMessage = "Account not found for userURI=" + userURI;
-        String userURIMessage = "Missing required request parameter 'userURI' ";
-        String type = "TransformerException";
-        
 
         if ( userURI == null ) {
-        	Exception ex = new TransformerException(MessageFactory.createStaticMessage( "Missing required request parameter 'userURI'" ) );
-            //throw new TransformerException(MessageFactory.createStaticMessage( "Missing required request parameter 'userURI'" ) );
-        	return new L1PException (code, userURIMessage, type, ex).toString();
+            return new L1PException ( id, 500, "Missing required request parameter 'userURI' ", "directory.user.get", null).toString();
         }
 
         Map<String, String> account = accountStore.getAccount( userURI );
 
         if ( account == null ) {
-        	Exception ex = new TransformerException(MessageFactory.createStaticMessage( "Account not found for userURI=" + userURI) );
-            //throw new TransformerException(MessageFactory.createStaticMessage( "Account not found for userURI=" + userURI ) );
-        	return new L1PException (code, accountMessage, type, ex).toString();
+        	return new L1PException ( id, code, "Account not found for userURI=" + userURI, "directory.user.get", null).toString();
         }
 
         return new JsonRpcResponse( id, account ).toString();
