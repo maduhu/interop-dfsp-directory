@@ -22,6 +22,7 @@
 
     <flow name="api-main">
         <http:listener config-ref="api-httpListenerConfig" path="/directory/*" doc:name="HTTP"/>
+        <set-session-variable variableName="id" value="undefined" doc:name="initialize id"/>
         <!--<logger level="INFO" message="Received request: payload=#[payload]"/>-->
         <!--<logger level="INFO" message=""/>-->
         <apikit:router config-ref="api-config" doc:name="APIkit Router"/>
@@ -55,6 +56,11 @@
         </apikit:mapping>
         <apikit:mapping statusCode="400">
             <apikit:exception value="org.mule.module.apikit.exception.BadRequestException" />
+            <set-property propertyName="Content-Type" value="application/json" doc:name="Property"/>
+            <set-payload value="{ &quot;message&quot;: &quot;Bad request&quot; }" doc:name="Set Payload"/>
+        </apikit:mapping>
+        <apikit:mapping statusCode="500">
+            <apikit:exception value="org.mule.api.transformer.TransformerMessagingException" />
             <set-property propertyName="Content-Type" value="application/json" doc:name="Property"/>
             <set-payload value="{ &quot;message&quot;: &quot;Bad request&quot; }" doc:name="Set Payload"/>
         </apikit:mapping>

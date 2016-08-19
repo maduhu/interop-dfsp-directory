@@ -33,17 +33,18 @@
 
 
     <flow name="post:/user/add:application/json:api-config">
-        <logger message="received request to add users: #[payload]" level="INFO" category="com.l1p.interop.dfsp.directory" doc:name="Logger"/>
         <json:json-to-object-transformer returnClass="java.util.Map" doc:name="JSON to Object"/>
+        <logger message="Received request id=#[id] to add users: #[payload]" level="INFO" category="com.l1p.interop.dfsp.directory.userAdd" doc:name="Logger"/>
         <component doc:name="Java"><spring-object bean="AddAccountsProcessor" /></component>
-        <logger message="processing complete: #[payload]" level="INFO" category="com.l1p.interop.dfsp.directory" doc:name="Logger"/>
+        <logger message="Processing complete for id=#[id]: #[payload]" level="INFO" category="com.l1p.interop.dfsp.directory.userAdd" doc:name="Logger"/>
     </flow>
 
     <flow name="post:/user/get:application/json:api-config">
-        <logger message="received request to get user: #[payload]" level="INFO" doc:name="Logger"/>
         <json:json-to-object-transformer returnClass="java.util.Map" doc:name="JSON to Object"/>
+        <set-session-variable variableName="id" value="#[payload.id]" doc:name="set id" />
+        <logger message="received request id=#[id] to get user: #[payload]" category="com.l1p.interop.dfsp.directory.userGet" level="INFO" doc:name="Logger"/>
         <transformer ref="getAccountTransformer" doc:name="getAccountTransformer"/>
-        <logger message="payload: #[payload]" level="INFO" doc:name="Logger"/>
+        <logger message="Processing complete for id=#[id]: #[payload]" category="com.l1p.interop.dfsp.directory.userGet" level="INFO" doc:name="Logger"/>
     </flow>
 
 </mule>
