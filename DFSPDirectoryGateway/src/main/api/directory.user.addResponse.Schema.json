@@ -17,23 +17,12 @@
       "description": "Presence of this property indicates successful operation",
       "type": "object",
       "properties": {
-        "name": {
-          "description": "Name of end user",
+        "message": {
+          "description": "Response message",
           "type": "string"
         },
-        "account": {
-          "description": "ILP address of user's default account",
-          "type": "string"
-        },
-        "currency": {
-          "description": "Currency of user's default account",
-          "type": "string"
-        }
-      },
       "required": [
-        "name",
-        "account",
-        "currency"
+        "message"
       ]
     }
   },

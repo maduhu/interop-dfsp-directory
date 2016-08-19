@@ -1,9 +1,7 @@
 {
-  "jsonrpc": "2.0",
-  "id": "12345",
-  "result": {
-    "name": "ut sed cupidatat laborum in",
-    "account": "consectetur pariatur cupidatat",
-    "currency": "Excepteur Ut dolore ex"
+  "jsonrpc":"2.0",
+  "id":"12345",
+  "result":{
+    "message":"updated 4 entities for request id=12345"
   }
 }
