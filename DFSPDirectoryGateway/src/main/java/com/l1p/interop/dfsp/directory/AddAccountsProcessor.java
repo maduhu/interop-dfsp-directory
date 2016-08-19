@@ -37,7 +37,7 @@ public class AddAccountsProcessor implements Callable {
         String message = "updated " + accountsToAdd.size() + " entities for request id=" + id;
         logger.info( message );
 
-        Map resultMap = new HashMap();
+        Map<String, Object> resultMap = new HashMap<String, Object>();
         resultMap.put( "message", message );
 
         return new JsonRpcResponse( id, resultMap ).toString();

@@ -30,10 +30,12 @@ public class GetAccountTransformer extends AbstractMessageTransformer {
     }
 
     public Object transformMessage(MuleMessage muleMessage, String s) throws TransformerException {
-        final Map payload = (Map)muleMessage.getPayload();
+    	
+        final Map<String, Object> payload = (Map<String, Object>)muleMessage.getPayload();
         final String id = (String)payload.get( "id" );
 
-        String userURI = (String)((Map)payload.get( "params" )).get( "userURI" );
+        
+        String userURI = (String)((Map<String, Object>)payload.get( "params" )).get( "userURI" );
 
         if ( userURI == null ) {
             throw new TransformerException(MessageFactory.createStaticMessage( "Missing required request parameter 'userURI'" ) );

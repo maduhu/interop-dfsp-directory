@@ -14,20 +14,20 @@ import java.util.Map;
  *
  * Created by Bryan on 8/18/2016.
  */
-public class JSONUtilTest {
+public class JsonMapStringTransformerTest {
 
     @Test
     public void testStringToMap() throws Exception {
         final String jsonInput = "{\"key1\":\"value1\",\"Key2\":\"Value2\",\"key3\":null,\"key4\":{\"nestedKey2\":null,\"nestedKey1\":\"nestedValue1\"}}";
         //verify output converts back to its source
         try {
-            Map target = JsonMapStringTransformer.stringToMap(jsonInput);
+            Map<String, Object> target = JsonMapStringTransformer.stringToMap(jsonInput);
             assertTrue( "Output map not of expected size, expected = 4, actual = " + target.size(), target.size() == 4 );
             assertEquals( "Value for key1 did not match expected", "value1", target.get( "key1" ) );
             assertEquals( "Value for Key2 did not match expected", "Value2", target.get( "Key2" ) );
             assertEquals( "Value for key3 did not match expected", null, target.get( "key3" ) );
 
-            Map nestedMap = (Map)target.get( "key4" );
+            Map<String, Object> nestedMap = (Map<String, Object>)target.get( "key4" );
             assertTrue( "Nested map not of expected size, expected = 2, actual = " + nestedMap.size(), nestedMap.size() == 2 );
             assertEquals( "Value for nestedKey1 did not match expected", "nestedValue1", nestedMap.get( "nestedKey1" ) );
             assertEquals( "Value for nestedKey2 did not match expected", null, nestedMap.get( "nestedKey2" ) );
