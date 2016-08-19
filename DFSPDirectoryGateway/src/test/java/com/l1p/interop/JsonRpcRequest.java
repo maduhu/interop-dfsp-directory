@@ -8,11 +8,11 @@ import java.util.Map;
  *
  * Created by Bryan on 8/17/2016.
  */
-public class JSONRPCRequest {
+public class JsonRpcRequest {
     private final Map<String,Object> requestData = new HashMap<String,Object>();
     private final Map<String,String> params;
 
-    public JSONRPCRequest( final String id, final String method, final Map<String,String> params ) {
+    public JsonRpcRequest( final String id, final String method, final Map<String,String> params ) {
         this.params = params;
 
         requestData.put( "jsonrpc", "2.0" );
@@ -31,7 +31,7 @@ public class JSONRPCRequest {
 
     @Override
     public String toString() {
-        return "JSONRPCRequest{" +
+        return "JsonRpcRequest{" +
                 "requestData=" + requestData +
                 ", params=" + params +
                 '}';

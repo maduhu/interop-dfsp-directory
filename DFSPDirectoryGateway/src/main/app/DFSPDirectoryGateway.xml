@@ -34,8 +34,9 @@
 
     <flow name="post:/user/add:application/json:api-config">
         <json:json-to-object-transformer returnClass="java.util.Map" doc:name="JSON to Object"/>
+        <logger message="Received request id=#[id] to add users: #[payload]" level="INFO" category="com.l1p.interop.dfsp.directory.userAdd" doc:name="Logger"/>
         <component doc:name="Java"><spring-object bean="AddAccountsProcessor" /></component>
-        <logger message="processing complete: #[payload]" level="INFO" category="com.l1p.interop.dfsp.directory" doc:name="Logger"/>
+        <logger message="Processing complete for id=#[id]: #[payload]" level="INFO" category="com.l1p.interop.dfsp.directory.userAdd" doc:name="Logger"/>
     </flow>
 
     <flow name="post:/user/get:application/json:api-config">
