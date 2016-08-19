@@ -10,6 +10,8 @@ import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.mchange.util.AssertException;
+
 /**
  * Created by Bryan on 8/17/2016.
  */
@@ -37,9 +39,8 @@ public class AccountDataStoreTest {
 		return "userdata.com/" + name;
 	}
 
-
 	@Test
-	public void testaddAccountSetsANewAccountAndRetrievesIt() throws Exception {
+	public void testAddValidAccountAndRetrievesIt() throws Exception {
 		//Given
 		String userName = "walt";
 		String URI = getTestURI(userName);
@@ -53,4 +54,23 @@ public class AccountDataStoreTest {
 		assertEquals("The account inserted name was not returned",userName, account.get("name"));
 	}
 
+	@Test
+	public void testaddAccountWithoutCurrencyFails() throws Exception {
+		//TODO implement test
+	}
+	
+	@Test
+	public void testaddAccountWithoutNameFails() throws Exception {
+		//TODO implement test
+	}
+	
+	@Test
+	public void testaddAccountWithoutAccountFails() throws Exception {
+		//TODO implement test
+	}
+	
+	@Test
+	public void testAddAccountsWithValidData() throws Exception{
+		//TODO implement test
+	}
 }
