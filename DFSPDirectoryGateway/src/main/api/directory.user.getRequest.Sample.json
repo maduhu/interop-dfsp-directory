@@ -1,8 +1,8 @@
 {
   "jsonrpc": "2.0",
   "id": "45567",
-  "method": "commodo dolore labore Ut",
+  "method": "directory.user.get",
   "params": {
-    "userURI": "userdata.com/testuser1"
+    "userURI": "http://centraldirectory.com/griffin"
   }
 }

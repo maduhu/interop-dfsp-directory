@@ -1,26 +1,26 @@
 {"users": [
 {
-"uri": "userdata.com/chrisg",
-"name": "chrisg",
-"account": "chrisg_12345",
+"uri": "http://centraldirectory.com/griffin",
+"name": "Chris Griffin",
+"account": "http://receivingdfsp.com/griffin_12345",
 "currency": "USD"
 },
 {
-"uri": "userdata.com/magoo",
-"name": "magoo",
-"account": "magoo_12345",
+"uri": "http://centraldirectory.com/magoo",
+"name": "Mr. Magoo",
+"account": "http://receivingdfsp.com/magoo_12345",
 "currency": "USD"
 },
 {
-"uri": "userdata.com/sonof",
-"name": "sonof",
-"account": "sonof_12345",
+"uri": "http://centraldirectory.com/yosemite",
+"name": "Yosemite Sam",
+"account": "http://receivingdfsp.com/yosemite_12345",
 "currency": "INR"
 },
 {
-"uri": "userdata.com/walt",
-"name": "walt",
-"account": "walt_12345",
+"uri": "http://centraldirectory.com/mitty",
+"name": "Walter Mitty",
+"account": "http://receivingdfsp.com/mitty_12345",
 "currency": "ARS"
 }
 ]}

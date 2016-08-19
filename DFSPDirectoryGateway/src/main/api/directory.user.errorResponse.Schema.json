@@ -4,9 +4,7 @@
   "description": "JSON-RPC compatible response object for error",
   "properties": {
     "jsonrpc": {
-      "enum": [
-        "2.0"
-      ]
+      "type": "string"
     },
     "id": {
       "type": "string"

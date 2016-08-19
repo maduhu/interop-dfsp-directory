@@ -11,8 +11,8 @@
     "cause": {
       "error": {
         "code": 400,
-        "message": "One of the properties contained illegal characters",
-        "errorPrint": "One of the values provided has invalid characters",
+        "message": "An application generated message related to the error",
+        "errorPrint": "This is the exception message from the top level exception",
         "type": "parsingerror"
       },
       "id": "sampleid",

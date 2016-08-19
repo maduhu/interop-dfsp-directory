@@ -87,28 +87,28 @@ public class GetUserFunctionalTest extends FunctionalTestCase {
 		logger.info("Posting events to web services");
 
 		//test retrieving info for chrisg
-		paramMap.put( "userURI", "userdata.com/chrisg" );
+		paramMap.put( "userURI", "http://centraldirectory.com/griffin" );
 		final String validRequest1 = new JsonRpcRequest( "id1", "directory.user.get", paramMap ).toJSONString();
 		ClientResponse clientResponse = postRequest( getUserPath, validRequest1);
-		verifyGetUserResponse( "validRequest1", clientResponse, 200, "id1", "chrisg", "chrisg_12345", "USD" );
+		verifyGetUserResponse( "validRequest1", clientResponse, 200, "id1", "Chris Griffin", "http://receivingdfsp.com/griffin_12345", "USD" );
 
 		//test retrieving info for magoo
-		paramMap.put( "userURI", "userdata.com/magoo" );
+		paramMap.put( "userURI", "http://centraldirectory.com/magoo" );
 		final String validRequest2 = new JsonRpcRequest( "id2", "directory.user.get", paramMap ).toJSONString();
 		clientResponse = postRequest( getUserPath, validRequest2);
-		verifyGetUserResponse( "validRequest2", clientResponse, 200, "id2", "magoo", "magoo_12345", "USD" );
+		verifyGetUserResponse( "validRequest2", clientResponse, 200, "id2", "Mr. Magoo", "http://receivingdfsp.com/magoo_12345", "USD" );
 
 		//test retrieving info for sonof
-		paramMap.put( "userURI", "userdata.com/sonof" );
+		paramMap.put( "userURI", "http://centraldirectory.com/yosemite" );
 		final String validRequest3 = new JsonRpcRequest( "id3", "directory.user.get", paramMap ).toJSONString();
 		clientResponse = postRequest( getUserPath, validRequest3);
-		verifyGetUserResponse( "validRequest3", clientResponse, 200, "id3", "sonof", "sonof_12345", "INR" );
+		verifyGetUserResponse( "validRequest3", clientResponse, 200, "id3", "Yosemite Sam", "http://receivingdfsp.com/yosemite_12345", "INR" );
 
 		//test retrieving info for walt
-		paramMap.put( "userURI", "userdata.com/walt" );
+		paramMap.put( "userURI", "http://centraldirectory.com/mitty" );
 		final String validRequest4 = new JsonRpcRequest( "id4", "directory.user.get", paramMap ).toJSONString();
 		clientResponse = postRequest( getUserPath, validRequest4);
-		verifyGetUserResponse( "validRequest4", clientResponse, 200, "id4", "walt", "walt_12345", "ARS" );
+		verifyGetUserResponse( "validRequest4", clientResponse, 200, "id4", "Walter Mitty", "http://receivingdfsp.com/mitty_12345", "ARS" );
 
 
 		//TODO: make the code below use verifyL1PErrorResponse and finish implementing that method
