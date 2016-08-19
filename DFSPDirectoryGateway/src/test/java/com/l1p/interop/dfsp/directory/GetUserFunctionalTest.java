@@ -117,7 +117,7 @@ public class GetUserFunctionalTest extends FunctionalTestCase {
 		paramMap.put( "userURI", "userdata.com/missing" );
 		final String missingAccountRequest = new JsonRpcRequest( "id5", "directory.user.get", paramMap ).toJSONString();
 		ClientResponse missingAccountResponse = postRequest( getUserPath, missingAccountRequest);
-		assertEquals("Server did not respond with status 500 for missingAccount when presented with path " + getUserPath, 500, missingAccountResponse.getStatus() );
+		assertEquals("Server did not respond with status 200 for missingAccount when presented with path " + getUserPath, 200, missingAccountResponse.getStatus() );
 		String expectedMissingAccountContent = "Account not found for userURI=userdata.com/missing";
 		String missingAccountResponseContent = missingAccountResponse.getEntity( String.class );
 		assertTrue( "Response for missingAccount did not contain expected text '" + expectedMissingAccountContent + "': " + missingAccountResponseContent, missingAccountResponseContent != null && missingAccountResponseContent.contains( expectedMissingAccountContent ));
@@ -167,6 +167,10 @@ public class GetUserFunctionalTest extends FunctionalTestCase {
 		assertEquals( testIdentidier + ": Result map did not contain correct data for name element", expectedName, result.get( "name" ) );
 		assertEquals( testIdentidier + ": Result map did not contain correct data for account element", expectedAccount, result.get( "account" ) );
 		assertEquals( testIdentidier + ": Result map did not contain correct data for currency element", expectedCurrency, result.get( "currency" ) );
+	}
+
+	private void verifyL1PErrorResponse( String testIdentifier, ClientResponse clientResponse, int expectedStatus, String expectedCode, String expectedMessage ) {
+
 	}
 
 	@Test

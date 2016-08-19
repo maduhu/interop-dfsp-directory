@@ -40,10 +40,11 @@
     </flow>
 
     <flow name="post:/user/get:application/json:api-config">
-        <logger message="received request to get user: #[payload]" level="INFO" doc:name="Logger"/>
         <json:json-to-object-transformer returnClass="java.util.Map" doc:name="JSON to Object"/>
+        <set-session-variable variableName="id" value="#[payload.id]" doc:name="set id" />
+        <logger message="received request id=#[id] to get user: #[payload]" category="com.l1p.interop.dfsp.directory.userGet" level="INFO" doc:name="Logger"/>
         <transformer ref="getAccountTransformer" doc:name="getAccountTransformer"/>
-        <logger message="payload: #[payload]" level="INFO" doc:name="Logger"/>
+        <logger message="Processing complete for id=#[id]: #[payload]" category="com.l1p.interop.dfsp.directory.userGet" level="INFO" doc:name="Logger"/>
     </flow>
 
 </mule>

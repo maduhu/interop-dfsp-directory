@@ -12,7 +12,7 @@ public class JsonRpcRequest {
     private final Map<String,Object> requestData = new HashMap<String,Object>();
     private final Map<String,String> params;
 
-    public JsonRpcRequest( final String id, final String method, final Map<String,String> params ) {
+    public JsonRpcRequest(final String id, final String method, final Map<String,String> params ) {
         this.params = params;
 
         requestData.put( "jsonrpc", "2.0" );
