@@ -41,7 +41,7 @@ public class GetUserFunctionalTest extends FunctionalTestCase {
 
 	@Override
 	protected String getConfigResources() {
-		return "DFSPDirectoryGatewayAPI.xml,DFSPDirectoryGateway.xml";
+		return "interop-dfsp-directory-api.xml,interop-dfsp-directory.xml";
 	}
 
 	@BeforeClass
@@ -79,7 +79,7 @@ public class GetUserFunctionalTest extends FunctionalTestCase {
 			ClientResponse addUsersResponse = webService.path(addUserPath).type("application/json").post(ClientResponse.class, addUsersJSON);
 			assertEquals("Server did not respond with status 200 for addUsers when presented with path " + addUserPath, 200, addUsersResponse.getStatus());
 		} catch( Exception e ) {
-			fail( "Loading test account data to DFSPDirectoryGateway via " + addUserPath + " produced an unexpected exception: " + e.getMessage() );
+			fail( "Loading test account data to interop-dfsp-directory via " + addUserPath + " produced an unexpected exception: " + e.getMessage() );
 		}
 
 		Map<String,String> paramMap = new HashMap<String,String>();
