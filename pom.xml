@@ -14,8 +14,8 @@
 
 		<mule.version>3.8.0</mule.version>
 		<mule.tools.version>1.2</mule.tools.version>
-		<munit.version>1.2.0-SNAPSHOT</munit.version>
-		<mule.munit.support.version>3.8.0-SNAPSHOT</mule.munit.support.version>
+		<munit.version>1.2.0</munit.version>
+		<mule.munit.support.version>3.8.0</mule.munit.support.version>
 		<apikit.version>3.8.0</apikit.version>
 	</properties>
 
