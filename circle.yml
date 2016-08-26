@@ -1,7 +1,13 @@
 --- 
+machine:
+  services:
+    - docker
 dependencies:
   override:
     - "mvn clean"
+  post:
+    - cp target/*.zip docker/
+    - docker build -t test/interop-dfsp-directory docker/
 test:
   post:
     - mkdir -p $CIRCLE_TEST_REPORTS/junit/
