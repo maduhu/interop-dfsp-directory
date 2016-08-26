@@ -1,7 +1,7 @@
 --- 
 dependencies:
   override:
-    - "mvn clean"
+    - "mvn dependency:resolve"
 test:
   post:
     - mkdir -p $CIRCLE_TEST_REPORTS/junit/
