@@ -13,7 +13,7 @@ test:
 
 deployment:
   staging:
-    branch: master
+    branch: Circle_CI
     commands:
       - cp target/*.zip docker/
       - docker build -t test/interop-dfsp-directory docker/
