@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<settings xsi:schemaLocation="http://maven.apache.org/SETTINGS/1.1.0 http://maven.apache.org/xsd/settings-1.1.0.xsd" xmlns="http://maven.apache.org/SETTINGS/1.1.0"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <servers>
+	<server>
+	   <id>git</id>  
+	   <username>${env.GIT_USERNAME}</username>  
+	   <password>${env.GIT_PASSWORD}</password>  
+	</server> 
+    <server>
+      <username>${env.JFROG_USERNAME}</username>
+      <password>${env.JFROG_PASSWORD}</password>
+      <id>modusbox-release-local</id>
+    </server>
+    <server>
+      <username>${env.JFROG_USERNAME}</username>
+      <password>${env.JFROG_PASSWORD}</password>
+      <id>modusbox-snapshot-local</id>
+    </server>
+  </servers>
+  <profiles>
+    <profile>
+      <repositories>
+		<repository>
+			<id>mulesoft-releases</id>
+			<name>MuleSoft Repository</name>
+			<url>http://repository.mulesoft.org/releases/</url>
+			<layout>default</layout>
+		</repository>
+		<repository>
+			<id>mulesoft-snapshots</id>
+			<name>MuleSoft Snapshot Repository</name>
+			<url>http://repository.mulesoft.org/snapshots/</url>
+			<layout>default</layout>
+		</repository>
+		<repository>
+			<id>central</id>
+			<name>Central Repository</name>
+			<url>http://repo.maven.apache.org/maven2</url>
+			<layout>default</layout>
+			<snapshots>
+			<enabled>false</enabled>
+			</snapshots>
+		</repository>
+		<repository>
+			<snapshots><enabled>false</enabled></snapshots>
+			<id>modusbox-release-local</id>
+			<name>libs-release</name>
+			<url>https://modusbox.jfrog.io/modusbox/libs-release</url>
+		</repository>
+		<repository>
+			<snapshots />
+			<id>modusbox-snapshot-local</id>
+			<name>libs-snapshot</name>
+			<url>https://modusbox.jfrog.io/modusbox/libs-snapshot</url>
+		</repository>
+      </repositories>
+      <pluginRepositories>
+		<pluginRepository>
+			<id>mule-public</id>
+			<layout>default</layout>
+			<url>https://repository.mulesoft.org/nexus/content/repositories/releases</url>
+			<snapshots>
+				<enabled>false</enabled>
+			</snapshots>
+		</pluginRepository>
+		<pluginRepository>
+			<id>mulesoft-release</id>
+			<name>mulesoft release repository</name>
+			<layout>default</layout>
+			<url>https://repository.mulesoft.org/nexus/content/groups/public</url>
+			<snapshots>
+				<enabled>false</enabled>
+			</snapshots>
+		</pluginRepository>
+		<pluginRepository>
+			<id>central</id>
+			<name>Central Repository</name>
+			<url>http://repo.maven.apache.org/maven2</url>
+			<layout>default</layout>
+			<snapshots>
+			<enabled>false</enabled>
+			</snapshots>
+			<releases>
+			<updatePolicy>never</updatePolicy>
+			</releases>
+		</pluginRepository>		
+		<pluginRepository>
+			<snapshots><enabled>false</enabled></snapshots>
+			<id>modusbox-plugin-release</id>
+			<name>plugins-release</name>
+			<url>https://modusbox.jfrog.io/modusbox/plugins-release</url>
+		</pluginRepository>
+		<pluginRepository>
+			<snapshots />
+			<id>modusbox-plugin-snapshot</id>
+			<name>plugins-snapshot</name>
+			<url>https://modusbox.jfrog.io/modusbox/plugins-snapshot</url>
+		</pluginRepository>
+      </pluginRepositories>
+      <id>artifactory</id>
+    </profile>
+  </profiles>
+  <activeProfiles>
+    <activeProfile>artifactory</activeProfile>
+  </activeProfiles>
+</settings>

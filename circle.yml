@@ -1,8 +1,10 @@
 --- 
 dependencies:
   override:
-    - "mvn dependency:resolve"
+    - "mvn dependency:resolve -s conf/settings.xml"
 test:
+  override:
+    - "mvn integration-test -s conf/settings.xml"
   post:
     - mkdir -p $CIRCLE_TEST_REPORTS/junit/
     - find . -type f -regex ".*/target/surefire-reports/.*xml" -exec cp {} $CIRCLE_TEST_REPORTS/junit/ \;
