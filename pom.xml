@@ -7,6 +7,9 @@
 	<version>1.0.0-SNAPSHOT</version>
 	<packaging>mule</packaging>
 	<name>Mule DFSP Directory Gateway</name>
+	<scm>
+		<connection>scm:git:https://github.com/LevelOneProject/interop-dfsp-directory</connection>
+	</scm>
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -22,12 +25,17 @@
 	<build>
 		<plugins>
 			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-release-plugin</artifactId>
+				<version>2.5.3</version>
+			</plugin>
+			<plugin>
 				<groupId>org.mule.tools.maven</groupId>
 				<artifactId>mule-app-maven-plugin</artifactId>
 				<version>${mule.tools.version}</version>
 				<extensions>true</extensions>
 				<configuration>
-					<copyToAppsDirectory>true</copyToAppsDirectory>
+					<copyToAppsDirectory>false</copyToAppsDirectory>
 				</configuration>
 			</plugin>
 			<plugin>
@@ -159,41 +167,42 @@
 			<version>${mule.version}</version>
 			<scope>test</scope>
 		</dependency>
-	<dependency>
+		<dependency>
             <groupId>cglib</groupId>
             <artifactId>cglib</artifactId>
             <version>3.2.2</version>
             <scope>provided</scope>
         </dependency>
-    <dependency>
+    	<dependency>
             <groupId>org.mule.modules</groupId>
             <artifactId>mule-module-json</artifactId>
             <version>${mule.version}</version>
             <scope>provided</scope>
         </dependency>
-    <dependency>
+    	<dependency>
             <groupId>com.mulesoft.munit</groupId>
             <artifactId>mule-munit-support</artifactId>
             <version>${mule.munit.support.version}</version>
             <scope>test</scope>
         </dependency>
-    <dependency>
+    	<dependency>
             <groupId>com.mulesoft.munit</groupId>
             <artifactId>munit-runner</artifactId>
             <version>${munit.version}</version>
             <scope>test</scope>
         </dependency>
-	<!-- https://mvnrepository.com/artifact/com.sun.jersey/jersey-client -->
-	<dependency>
-		<groupId>com.sun.jersey</groupId>
-		<artifactId>jersey-client</artifactId>
-		<version>1.19.1</version>
-	</dependency>
-                <dependency>
-	            <groupId>org.mule.modules</groupId>
-	            <artifactId>mule-module-apikit</artifactId>
-	            <version>${apikit.version}</version>
-        </dependency>
+		<!-- https://mvnrepository.com/artifact/com.sun.jersey/jersey-client -->
+		<dependency>
+			<groupId>com.sun.jersey</groupId>
+			<artifactId>jersey-client</artifactId>
+			<version>1.19.1</version>
+			<scope>test</scope>
+		</dependency>
+            <dependency>
+            <groupId>org.mule.modules</groupId>
+            <artifactId>mule-module-apikit</artifactId>
+            <version>${apikit.version}</version>
+	    </dependency>
     </dependencies>
 	<repositories>
 	    <repository>
@@ -226,5 +235,11 @@
 		    </snapshots>
 		</pluginRepository>
 	</pluginRepositories>
-
+	<distributionManagement>
+		<repository>
+			<id>central</id>
+			<name>modusbox-releases</name>
+			<url>https://modusbox.jfrog.io/modusbox/libs-release-local</url>
+		</repository>
+	</distributionManagement>
 </project>
