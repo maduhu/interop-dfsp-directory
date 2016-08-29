@@ -52,9 +52,8 @@ public class JsonMapStringTransformer {
 	 *
 	 * @param jsonString
 	 *            - string to convert
-	 * @return Map<String,Object>
-	 * @throws RuntimeException
-	 *             if the string cannot be converted to a map
+	 * @return Map
+	 * @throws RuntimeException if the string cannot be converted to a map
 	 */
 	public static Map<String, Object> stringToMap(final String jsonString) {
 
