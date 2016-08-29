@@ -1,7 +1,7 @@
 --- 
 dependencies:
   override:
-    - "mvn dependency:resolve"
+    - "mvn dependency:resolve -s conf/settings.xml"
 test:
   post:
     - mkdir -p $CIRCLE_TEST_REPORTS/junit/
