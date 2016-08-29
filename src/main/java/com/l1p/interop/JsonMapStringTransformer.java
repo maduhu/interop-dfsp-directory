@@ -47,11 +47,10 @@ public class JsonMapStringTransformer {
 	}
 
 	/**
-	 * Converts a JSON String representing a Map to an instance of Map
-	 * <String,Object>. If null input is provided an empty map will be returned.
+	 * Converts a JSON String representing a Map to an instance of Map.
+	 * If null input is provided an empty map will be returned.
 	 *
-	 * @param jsonString
-	 *            - string to convert
+	 * @param jsonString - string to convert
 	 * @return Map
 	 * @throws RuntimeException if the string cannot be converted to a map
 	 */
