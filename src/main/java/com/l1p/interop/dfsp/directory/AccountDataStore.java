@@ -43,10 +43,8 @@ public class AccountDataStore {
 
 	/**
 	 *
-	 * @param uri
-	 *            // this is refered to as userURI in the Transformer due to
-	 *            inconsistency with naming conflict Account/User
-	 * @return
+	 * @param uri - userUri to look up
+	 * @return Map containing account or null if the provided uri is not mapped
 	 */
 	public synchronized Map<String, String> getAccount(String uri) {
 		return cache.get(uri);
