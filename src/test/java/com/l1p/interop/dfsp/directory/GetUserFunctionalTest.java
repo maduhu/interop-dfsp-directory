@@ -31,9 +31,9 @@ import org.slf4j.LoggerFactory;
 
 public class GetUserFunctionalTest extends FunctionalTestCase {
 
-	private final String getUserPath="/directory/user/get";
-	private final String addUserPath="/directory/user/add";
-	private final String serviceHost = "http://localhost:8081";
+	private final String getUserPath="/directory/v1/user/get";
+	private final String addUserPath="/directory/v1/user/add";
+	private final String serviceHost = "http://localhost:8083";
 
 	protected Logger logger = LoggerFactory.getLogger(getClass());
 

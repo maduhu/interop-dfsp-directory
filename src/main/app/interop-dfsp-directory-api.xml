@@ -17,11 +17,15 @@
         - Base http listener received all requests sent to /directory/*
     </description>
 
-    <http:listener-config name="api-httpListenerConfig" host="0.0.0.0" port="8081" doc:name="HTTP Listener Configuration"/>
+    <spring:beans>
+        <spring:import resource="classpath:services-common.xml" />
+    </spring:beans>
+
+    <http:listener-config name="api-httpListenerConfig" host="${proxy-service.host}" port="${proxy-service.port}" doc:name="HTTP Listener Configuration"/>
     <apikit:config name="api-config" raml="directory.user.raml" consoleEnabled="true" doc:name="Router"/>
 
     <flow name="api-main">
-        <http:listener config-ref="api-httpListenerConfig" path="/directory/*" doc:name="HTTP"/>
+        <http:listener config-ref="api-httpListenerConfig" path="${proxy-service.basePath}*" doc:name="HTTP"/>
         <set-session-variable variableName="id" value="undefined" doc:name="initialize id"/>
         <!--<logger level="INFO" message="Received request: payload=#[payload]"/>-->
         <!--<logger level="INFO" message=""/>-->
