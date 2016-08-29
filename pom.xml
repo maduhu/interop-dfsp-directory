@@ -2,229 +2,33 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 
 	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<groupId>com.l1p.interop</groupId>
+		<artifactId>interop-parent</artifactId>
+		<version>1.0.2</version>
+	</parent>
+
 	<groupId>com.l1p.interop.dfsp</groupId>
 	<artifactId>interop-dfsp-directory</artifactId>
-	<version>1.0.0-SNAPSHOT</version>
+	<version>0.1.0-SNAPSHOT</version>
 	<packaging>mule</packaging>
 	<name>Mule DFSP Directory Gateway</name>
 
-	<properties>
-		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+	<scm>
+		<connection>scm:git:https://github.com/LevelOneProject/interop-dfsp-directory</connection>
+		<tag>HEAD</tag>
+	</scm>
 
-		<mule.version>3.8.0</mule.version>
-		<mule.tools.version>1.2</mule.tools.version>
-		<munit.version>1.2.0</munit.version>
-		<mule.munit.support.version>3.8.0</mule.munit.support.version>
-		<apikit.version>3.8.0</apikit.version>
+	<properties>
+		<interop-common-version>1.0.1</interop-common-version>
 	</properties>
 
-	<build>
-		<plugins>
-			<plugin>
-				<groupId>org.mule.tools.maven</groupId>
-				<artifactId>mule-app-maven-plugin</artifactId>
-				<version>${mule.tools.version}</version>
-				<extensions>true</extensions>
-				<configuration>
-					<copyToAppsDirectory>true</copyToAppsDirectory>
-				</configuration>
-			</plugin>
-			<plugin>
-				<artifactId>maven-assembly-plugin</artifactId>
-				<version>2.2.1</version>
-				<configuration>
-					<descriptorRefs>
-						<descriptorRef>project</descriptorRef>
-					</descriptorRefs>
-				</configuration>
-			</plugin>
-			<plugin>
-				<groupId>org.codehaus.mojo</groupId>
-				<artifactId>build-helper-maven-plugin</artifactId>
-				<version>1.7</version>
-				<executions>
-					<execution>
-						<id>add-resource</id>
-						<phase>generate-resources</phase>
-						<goals>
-							<goal>add-resource</goal>
-						</goals>
-						<configuration>
-							<resources>
-								<resource>
-									<directory>src/main/app/</directory>
-								</resource>
-								<resource>
-									<directory>mappings/</directory>
-								</resource>
-								<resource>
-									<directory>src/main/api/</directory>
-								</resource>
-							</resources>
-						</configuration>
-					</execution>
-				</executions>
-			</plugin>
-		<plugin>
-                <groupId>com.mulesoft.munit.tools</groupId>
-                <artifactId>munit-maven-plugin</artifactId>
-                <version>${munit.version}</version>
-                <executions>
-                    <execution>
-                        <id>test</id>
-                        <phase>test</phase>
-                        <goals>
-                            <goal>test</goal>
-                        </goals>
-                    </execution>
-                </executions>
-                <configuration>
-                    <coverage>
-                        <runCoverage>true</runCoverage>
-                        <formats>
-                            <format>html</format>
-                        </formats>
-                    </coverage>
-                </configuration>
-            </plugin>
-        </plugins>
-	<testResources>
-            <testResource>
-                <directory>src/test/munit</directory>
-            </testResource>
-        <testResource>
-                <directory>src/test/resources</directory>
-            </testResource>
-        </testResources>
-    </build>
-
-	<!-- Mule Dependencies -->
 	<dependencies>
-		<!-- Xml configuration -->
 		<dependency>
-			<groupId>org.mule.modules</groupId>
-			<artifactId>mule-module-spring-config</artifactId>
-			<version>${mule.version}</version>
-			<scope>provided</scope>
+			<groupId>com.l1p.interop</groupId>
+			<artifactId>interop-common</artifactId>
+			<version>${interop-common-version}</version>
 		</dependency>
-		<!-- Mule Transports -->
-		<dependency>
-			<groupId>org.mule.transports</groupId>
-			<artifactId>mule-transport-file</artifactId>
-			<version>${mule.version}</version>
-			<scope>provided</scope>
-		</dependency>
-		<dependency>
-			<groupId>org.mule.transports</groupId>
-			<artifactId>mule-transport-http</artifactId>
-			<version>${mule.version}</version>
-			<scope>provided</scope>
-		</dependency>
-		<dependency>
-			<groupId>org.mule.transports</groupId>
-			<artifactId>mule-transport-jdbc</artifactId>
-			<version>${mule.version}</version>
-			<scope>provided</scope>
-		</dependency>
-		<dependency>
-			<groupId>org.mule.transports</groupId>
-			<artifactId>mule-transport-jms</artifactId>
-			<version>${mule.version}</version>
-			<scope>provided</scope>
-		</dependency>
-		<dependency>
-			<groupId>org.mule.transports</groupId>
-			<artifactId>mule-transport-vm</artifactId>
-			<version>${mule.version}</version>
-			<scope>provided</scope>
-		</dependency>
-		<!-- Mule Modules -->
-		<dependency>
-			<groupId>org.mule.modules</groupId>
-			<artifactId>mule-module-scripting</artifactId>
-			<version>${mule.version}</version>
-			<scope>provided</scope>
-		</dependency>
-		<dependency>
-			<groupId>org.mule.modules</groupId>
-			<artifactId>mule-module-xml</artifactId>
-			<version>${mule.version}</version>
-			<scope>provided</scope>
-		</dependency>
-		<!-- for testing -->
-		<dependency>
-			<groupId>org.mule.tests</groupId>
-			<artifactId>mule-tests-functional</artifactId>
-			<version>${mule.version}</version>
-			<scope>test</scope>
-		</dependency>
-	<dependency>
-            <groupId>cglib</groupId>
-            <artifactId>cglib</artifactId>
-            <version>3.2.2</version>
-            <scope>provided</scope>
-        </dependency>
-    <dependency>
-            <groupId>org.mule.modules</groupId>
-            <artifactId>mule-module-json</artifactId>
-            <version>${mule.version}</version>
-            <scope>provided</scope>
-        </dependency>
-    <dependency>
-            <groupId>com.mulesoft.munit</groupId>
-            <artifactId>mule-munit-support</artifactId>
-            <version>${mule.munit.support.version}</version>
-            <scope>test</scope>
-        </dependency>
-    <dependency>
-            <groupId>com.mulesoft.munit</groupId>
-            <artifactId>munit-runner</artifactId>
-            <version>${munit.version}</version>
-            <scope>test</scope>
-        </dependency>
-	<!-- https://mvnrepository.com/artifact/com.sun.jersey/jersey-client -->
-	<dependency>
-		<groupId>com.sun.jersey</groupId>
-		<artifactId>jersey-client</artifactId>
-		<version>1.19.1</version>
-	</dependency>
-                <dependency>
-	            <groupId>org.mule.modules</groupId>
-	            <artifactId>mule-module-apikit</artifactId>
-	            <version>${apikit.version}</version>
-        </dependency>
-    </dependencies>
-	<repositories>
-	    <repository>
-		<id>mulesoft-releases</id>
-		<name>MuleSoft Releases Repository</name>
-		<url>http://repository.mulesoft.org/releases/</url>
-		<layout>default</layout>
-	    </repository>
-	    <repository>
-		<id>mulesoft-snapshots</id>
-		<name>MuleSoft Snapshot Repository</name>
-		<url>http://repository.mulesoft.org/snapshots/</url>
-		<layout>default</layout>
-	    </repository>
-	    <repository>
-		<id>Central</id>
-		<name>Central</name>
-		<url>http://repo1.maven.org/maven2/</url>
-		<layout>default</layout>
-	    </repository>
-	</repositories>
-	<pluginRepositories>
-		<pluginRepository>
-		    <id>mulesoft-release</id>
-		    <name>mulesoft release repository</name>
-		    <layout>default</layout>
-		    <url>http://repository.mulesoft.org/releases/</url>
-		    <snapshots>
-			<enabled>false</enabled>
-		    </snapshots>
-		</pluginRepository>
-	</pluginRepositories>
+	</dependencies>
 
 </project>
