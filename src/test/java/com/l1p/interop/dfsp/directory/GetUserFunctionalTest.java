@@ -186,7 +186,7 @@ public class GetUserFunctionalTest extends FunctionalTestCase {
 
 		//validate response content
 		String responseContent = response.getEntity( String.class );
-		assertTrue( "Expected number of entities were not updated", responseContent != null && responseContent.contains( "updated 4 entities") );
+		assertTrue( "Expected number of entities were not updated", responseContent != null && responseContent.contains( "Updated 4 entities") );
 	}
 
 	/**

@@ -4,7 +4,9 @@ import com.l1p.interop.JsonRpcResponse;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.mule.api.MuleEventContext;
+import org.mule.api.MuleMessage;
 import org.mule.api.lifecycle.Callable;
+import org.mule.api.transport.PropertyScope;
 
 import java.util.HashMap;
 import java.util.List;
@@ -30,11 +32,14 @@ public class AddAccountsProcessor implements Callable {
         Map payload = (Map)muleEventContext.getMessage().getPayload();
 
         final String id = (String)payload.get( "id" );
+        MuleMessage muleMessage = muleEventContext.getMessage();
+        String interopID = muleMessage.getProperty("interopID", PropertyScope.SESSION).toString();
+        
         List<Map<String,String>> accountsToAdd = (List<Map<String,String>>)payload.get("users");
-        logger.info( "Received request id=" + id + " to add " + accountsToAdd.size() + " accounts" );
+        logger.info( "Received request to add " + accountsToAdd.size() + " accounts, interopID=" + interopID);
 
         accountStore.addAccounts( accountsToAdd );
-        String message = "updated " + accountsToAdd.size() + " entities for request id=" + id;
+        String message = "Updated " + accountsToAdd.size() + " entities for request with interopID=" + interopID;
         logger.info( message );
 
         Map<String, Object> resultMap = new HashMap<String, Object>();
