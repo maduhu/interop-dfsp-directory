@@ -14,7 +14,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import com.l1p.interop.JsonRpcRequest;
-import com.l1p.interop.JsonMapStringTransformer;
+import com.l1p.interop.JsonTransformer;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -151,7 +151,7 @@ public class GetUserFunctionalTest extends FunctionalTestCase {
 		Map header = null;
 		try {
 			// convert JSON string to Map
-			header = JsonMapStringTransformer.stringToMap(responseContent);
+			header = JsonTransformer.stringToMap(responseContent);
 		} catch( Exception e ) {
 			fail( testIdentidier + ": conversion of client response content to a map produced an unexpected exception: " + e.getMessage() );
 		}

@@ -26,7 +26,7 @@ public class JsonRpcRequest {
     }
 
     public String toJSONString() {
-        return JsonMapStringTransformer.mapToString( requestData );
+        return JsonTransformer.mapToString( requestData );
     }
 
     @Override
