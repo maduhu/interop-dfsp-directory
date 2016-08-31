@@ -29,11 +29,6 @@ http://www.springframework.org/schema/beans http://www.springframework.org/schem
         <apikit:router config-ref="mock-api-config" doc:name="APIkit Router"/>
         <exception-strategy ref="mock-api-apiKitGlobalExceptionMapping" doc:name="Reference Exception Strategy"/>
     </flow>
-    
-	<!--     <flow name="api-console">
-        <http:listener config-ref="api-httpListenerConfig" path="/console/*" doc:name="HTTP"/>
-        <apikit:console config-ref="api-config" doc:name="APIkit Console"/>
-    </flow> -->
 
     <apikit:mapping-exception-strategy name="mock-api-apiKitGlobalExceptionMapping">
         <apikit:mapping statusCode="404">

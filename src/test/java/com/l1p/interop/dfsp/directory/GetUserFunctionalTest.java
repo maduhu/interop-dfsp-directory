@@ -160,6 +160,7 @@ public class GetUserFunctionalTest extends FunctionalTestCase {
 		assertTrue( testIdentidier + ": Header map was null", header != null );
 		assertTrue( testIdentidier + ": Size of header map was incorrect, expected 3, received " + header.size(), header.size() == 3 );
 		assertEquals( testIdentidier + ": Header map did not contain correct data for jsonrpc element", "2.0", header.get( "jsonrpc" ) );
+		//This needs discussion - there is no ID in the input, if we are arbitrarily generating it then we need to verify against that
 		//assertEquals( testIdentidier + ": Header map did not contain correct data for id element", expectedId, header.get( "id" ) );
 		Map result = (Map)header.get( "result" );
 		assertTrue( testIdentidier + ": Result map was null", result != null );

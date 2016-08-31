@@ -42,7 +42,7 @@ http://www.springframework.org/schema/beans http://www.springframework.org/schem
 
     <flow name="post:/user/get:application/json:mock-api-config">
         <json:json-to-object-transformer returnClass="java.util.Map" doc:name="json-to-object"/>
-        <set-session-variable variableName="id" value="#[payload.id]" doc:name="set-id" />
+        <!-- <set-session-variable variableName="id" value="#[payload.id]" doc:name="set-id" /> -->
         <logger level="INFO"
         		message="Processing request in mock for post:/user/get"
         		category="com.l1p.interop.dfsp.directory.mock-userGet" doc:name="logger"/>
