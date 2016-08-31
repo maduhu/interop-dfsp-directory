@@ -11,7 +11,15 @@ http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/htt
 http://www.mulesoft.org/schema/mule/json http://www.mulesoft.org/schema/mule/json/current/mule-json.xsd
 http://www.mulesoft.org/schema/mule/apikit http://www.mulesoft.org/schema/mule/apikit/current/mule-apikit.xsd
 http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.1.xsd">
-    <http:request-config name="DFSP_Gateway_Configuration" host="${client-service.host}" port="${client-service.port}" basePath="${client-service.basePath}" doc:name="HTTP Request Configuration"/>
+    <spring:beans>
+        <spring:bean id="AccountDataStore" name="AccountDataStore" class="com.l1p.interop.dfsp.directory.AccountDataStore" scope="singleton"/>
+        <spring:bean id="AddAccountsProcessor" name="AddAccountsProcessor" class="com.l1p.interop.dfsp.directory.AddAccountsProcessor">
+            <spring:constructor-arg index="0" ref="AccountDataStore"/>
+        </spring:bean>
+        <spring:bean id="getAccountTransformer" name="getAccountTransformer" class="com.l1p.interop.dfsp.directory.GetAccountTransformer">
+            <spring:constructor-arg index="0" ref="AccountDataStore"/>
+        </spring:bean>
+    </spring:beans>
 
 	<!--<description>
         - Contains flows for handling the following api messages
@@ -24,31 +32,21 @@ http://www.springframework.org/schema/beans http://www.springframework.org/schem
                 of the DFSPDirectoryGateway API
     </description> -->
 
-    <flow name="post:/user/add:application/json:api-config">
+    <flow name="post:/user/add:application/json:mock-api-config">
+        <json:json-to-object-transformer returnClass="java.util.Map" doc:name="json-to-object"/>
         <logger level="INFO"
-	        	message="Processing request for post:/user/add, interopID=#[sessionVars.interopID] payload=#[payload]"
-	        	category="com.l1p.interop.dfsp.directory.userAdd" doc:name="logger"/>
-        <http:request config-ref="DFSP_Gateway_Configuration" path="${addUserPath}" method="POST" doc:name="HTTP"/>
-        <logger level="INFO"
-		        message="Processing complete for post:/user/add, interopID=#[sessionVars.interopID], payload=#[payload]"
-		        category="com.l1p.interop.dfsp.directory.userAdd" doc:name="logger"/>
-        <logger level="INFO"
-                message="----------------------------------------"
-                category="com.l1p.interop.dfsp.directory.userAdd" doc:name="Logger"/>
+	        	message="Processing request in mock for post:/user/add"
+	        	category="com.l1p.interop.dfsp.directory.mock-userAdd" doc:name="logger"/>
+        <component doc:name="java-add-accounts"><spring-object bean="AddAccountsProcessor" /></component>
     </flow>
 
-    <flow name="post:/user/get:application/json:api-config">
+    <flow name="post:/user/get:application/json:mock-api-config">
+        <json:json-to-object-transformer returnClass="java.util.Map" doc:name="json-to-object"/>
         <set-session-variable variableName="id" value="#[payload.id]" doc:name="set-id" />
         <logger level="INFO"
-        		message="Processing request for post:/user/get, interopID=#[sessionVars.interopID], payload=#[payload]"
-        		category="com.l1p.interop.dfsp.directory.userGet" doc:name="logger"/>
-        <http:request config-ref="DFSP_Gateway_Configuration" path="${getUserPath}" method="POST" doc:name="HTTP"/>
-        <logger level="INFO"
-        		message="Processing complete for post:/user/get, interopID=#[sessionVars.interopID], payload=#[payload]"
-        		category="com.l1p.interop.dfsp.directory.userGet" doc:name="logger"/>
-        <logger level="INFO"
-                message="----------------------------------------"
-                category="com.l1p.interop.dfsp.directory.userGet" doc:name="Logger"/>
+        		message="Processing request in mock for post:/user/get"
+        		category="com.l1p.interop.dfsp.directory.mock-userGet" doc:name="logger"/>
+        <transformer ref="getAccountTransformer" doc:name="java-get-account-transformer"/>
     </flow>
 
 </mule>

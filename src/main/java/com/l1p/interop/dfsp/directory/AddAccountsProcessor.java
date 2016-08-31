@@ -31,15 +31,20 @@ public class AddAccountsProcessor implements Callable {
 
         Map payload = (Map)muleEventContext.getMessage().getPayload();
 
-        final String id = (String)payload.get( "id" );
+        //final String id = (String)payload.get( "id" );
+        //clarify this - No id present in the user add request so how is it coming from payload?
+        //Until then, generating a random id and assigning it
+        final String id = java.util.UUID.randomUUID().toString();
+       
         MuleMessage muleMessage = muleEventContext.getMessage();
-        String interopID = muleMessage.getProperty("interopID", PropertyScope.SESSION).toString();
+        //String interopID = muleMessage.getProperty("interopID", PropertyScope.SESSION).toString();
         
         List<Map<String,String>> accountsToAdd = (List<Map<String,String>>)payload.get("users");
-        logger.info( "Received request to add " + accountsToAdd.size() + " accounts, interopID=" + interopID);
-
+        //logger.info( "Received request to add " + accountsToAdd.size() + " accounts, interopID=" + interopID);
+        logger.info( "Received request to add " + accountsToAdd.size() + " accounts");
+        
         accountStore.addAccounts( accountsToAdd );
-        String message = "Updated " + accountsToAdd.size() + " entities for request with interopID=" + interopID;
+        String message = "Updated " + accountsToAdd.size() + " entities based on request";
         logger.info( message );
 
         Map<String, Object> resultMap = new HashMap<String, Object>();

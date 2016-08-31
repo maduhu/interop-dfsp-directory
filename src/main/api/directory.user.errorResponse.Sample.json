@@ -1,27 +1,21 @@
 {
-  "jsonrpc": "2.0",
-  "id": "sampleid",
-  "error": {
-    "type": "parsingerror",
-    "code": 400,
-    "errorPrint": "The request could not be read by our software.",
-    "message": "Parsing error"
-  },
-  "debug": {
-    "cause": {
-      "error": {
-        "code": 400,
-        "message": "An application generated message related to the error",
-        "errorPrint": "This is the exception message from the top level exception",
-        "type": "parsingerror"
-      },
-      "id": "sampleid",
-      "debug": {
-        "stackInfo": [
-          "Callnumber1",
-          "Callnumber2"
-        ]
-      }
-    }
-  }
+	"jsonrpc": "2.0",
+	"id": "sampleid",
+	"error": {
+		"type": "parsingerror",
+		"code": 400,
+		"errorPrint": "The request could not be read by our software.",
+		"message": "Parsing error"
+	},
+	"debug": {
+		"cause": {
+			"error": {
+				"code": 400,
+				"message": "An application generated message related to the error",
+				"errorPrint": "This is the exception message from the top level exception",
+				"type": "parsingerror"
+			}
+		},
+		"stackInfo": ["Callnumber1", "Callnumber2"]
+	}
 }
