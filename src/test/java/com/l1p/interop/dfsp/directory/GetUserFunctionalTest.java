@@ -144,7 +144,7 @@ public class GetUserFunctionalTest extends FunctionalTestCase {
 		}
 
 		//convert response content from JSON string to Map
-		Map header = null;
+		Map<String,Object> header = null;
 		try {
 			// convert JSON string to Map
 			header = JsonTransformer.stringToMap(responseContent);

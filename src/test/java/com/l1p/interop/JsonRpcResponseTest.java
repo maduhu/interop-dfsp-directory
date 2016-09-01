@@ -21,13 +21,13 @@ public class JsonRpcResponseTest {
      * the correct data.
      */
     public void responseShouldBeConvertableToJSON() throws Exception {
-        Map resultData = new HashMap();
+        Map<String,Object> resultData = new HashMap<String,Object>();
         resultData.put( "key1", "value1" );
         resultData.put( "Key2", "Value2" );
         JsonRpcResponse response = new JsonRpcResponse( "12345", resultData );
 
         // convert JSON string to Map
-        Map header = JsonTransformer.stringToMap( response.toString() );
+        Map<String,Object> header = JsonTransformer.stringToMap( response.toString() );
         //validate contents
         assertTrue( "Header map was null", header != null );
         assertTrue( "Size of header map was incorrect, expected 3, received " + header.size(), header.size() == 3 );
@@ -42,13 +42,13 @@ public class JsonRpcResponseTest {
 
     @Test
     /**
-     * We expect null values to produce an empry string for id, and an empty map for result.
+     * We expect null values to produce an empty string for id, and an empty map for result.
      */
     public void nullValuesShouldNotThrowException() throws Exception {
         JsonRpcResponse response = new JsonRpcResponse( null, null );
 
         // convert JSON string to Map
-        Map header = JsonTransformer.stringToMap( response.toString() );
+        Map<String,Object> header = JsonTransformer.stringToMap( response.toString() );
         //validate contents
         assertTrue( "Header map was null", header != null );
         assertTrue( "Size of header map was incorrect, expected 3, received " + header.size(), header.size() == 3 );

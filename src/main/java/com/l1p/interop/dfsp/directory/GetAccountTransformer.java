@@ -3,8 +3,6 @@ package com.l1p.interop.dfsp.directory;
 import com.l1p.interop.JsonRpcResponse;
 import com.l1p.interop.L1PErrorResponse;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import org.mule.api.MuleMessage;
 import org.mule.api.transformer.TransformerException;
 import org.mule.api.transport.PropertyScope;

@@ -4,9 +4,7 @@ import com.l1p.interop.JsonRpcResponse;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.mule.api.MuleEventContext;
-import org.mule.api.MuleMessage;
 import org.mule.api.lifecycle.Callable;
-import org.mule.api.transport.PropertyScope;
 
 import java.util.HashMap;
 import java.util.List;
@@ -29,7 +27,7 @@ public class AddAccountsProcessor implements Callable {
 
     public Object onCall(MuleEventContext muleEventContext) throws Exception {
 
-        Map payload = (Map)muleEventContext.getMessage().getPayload();
+        Map<String,Object> payload = (Map<String,Object>)muleEventContext.getMessage().getPayload();
 
         //final String id = (String)payload.get( "id" );
         //clarify this - No id present in the user add request so how is it coming from payload?

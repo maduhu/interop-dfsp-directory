@@ -5,9 +5,6 @@ import com.l1p.interop.L1PErrorResponse;
 import java.util.Map;
 import java.util.HashMap;
 
-import org.apache.commons.lang.exception.ExceptionUtils;
-import org.codehaus.groovy.control.messages.ExceptionMessage;
-import org.mule.api.ExceptionPayload;
 import org.mule.api.MuleMessage;
 import org.mule.api.transformer.TransformerException;
 import org.mule.api.transport.PropertyScope;
