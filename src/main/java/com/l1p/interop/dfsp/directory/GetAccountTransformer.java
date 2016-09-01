@@ -18,7 +18,7 @@ import java.util.Map;
  */
 public class GetAccountTransformer extends AbstractMessageTransformer {
 
-    private static final Logger logger = LogManager.getLogger(GetAccountTransformer.class);
+    //private static final Logger logger = LogManager.getLogger(GetAccountTransformer.class);
     private final AccountDataStore accountStore;
 
     public GetAccountTransformer(AccountDataStore accountStore) {
@@ -31,17 +31,18 @@ public class GetAccountTransformer extends AbstractMessageTransformer {
     public Object transformMessage(MuleMessage muleMessage, String s) throws TransformerException {
         final Map<String, Object> payload = (Map<String, Object>)muleMessage.getPayload();
         final String id = muleMessage.getProperty( "id", PropertyScope.SESSION );
+        Throwable t = null;
         
         String userURI = (String)((Map<String, Object>)payload.get( "params" )).get( "userURI" );
 
         if ( userURI == null ) {
-            return new L1PErrorResponse( id, 500, "Missing required request parameter 'userURI' ", "directory.user.get", null).toString();
+            return new L1PErrorResponse( id, "Missing required request parameter 'userURI' ", t).toString();
         }
 
         Map<String, String> account = accountStore.getAccount( userURI );
 
         if ( account == null ) {
-        	return new L1PErrorResponse( id, 500, "Account not found for userURI=" + userURI, "directory.user.get", null).toString();
+        	return new L1PErrorResponse( id, "Account not found for userURI=" + userURI, t).toString();
         }
 
         return new JsonRpcResponse( id, account ).toString();

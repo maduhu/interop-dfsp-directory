@@ -20,6 +20,10 @@ http://www.springframework.org/schema/beans http://www.springframework.org/schem
     <spring:beans>
         <spring:import resource="classpath:services-common.xml" />
     </spring:beans>
+    
+    <spring:beans>
+        <spring:bean id="ExceptionTransformer" name="ExceptionTransformer" class="com.l1p.interop.dfsp.directory.ExceptionTransformer"/>
+    </spring:beans>
 
     <http:listener-config name="api-httpListenerConfig" host="${proxy-service.host}" port="${proxy-service.port}" doc:name="HTTP Listener Configuration"/>
     <apikit:config name="api-config" raml="directory.user.raml" consoleEnabled="true" doc:name="Router"/>
@@ -42,33 +46,45 @@ http://www.springframework.org/schema/beans http://www.springframework.org/schem
     <apikit:mapping-exception-strategy name="api-apiKitGlobalExceptionMapping">
         <apikit:mapping statusCode="404">
             <apikit:exception value="org.mule.module.apikit.exception.NotFoundException" />
-            <set-property propertyName="Content-Type" value="application/json" doc:name="Property"/>
-            <set-payload value="{ &quot;message&quot;: &quot;Resource not found&quot; }" doc:name="Set Payload"/>
+            <set-session-variable variableName="errorMessageId" value="Resource not found"/>
+            <set-session-variable variableName="errorMessage" value="Failed to process request for interopID=#[interopID]: #[groovy:message.getExceptionPayload().getRootException().getMessage()]" />
+            <logger level="WARN" message="#[errorMessageId]: #[errorMessage]" category="com.l1p.interop.spsp.api-main"/>
+            <transformer ref="ExceptionTransformer" doc:name="ExceptionTransformer"/>
         </apikit:mapping>
         <apikit:mapping statusCode="405">
             <apikit:exception value="org.mule.module.apikit.exception.MethodNotAllowedException" />
-            <set-property propertyName="Content-Type" value="application/json" doc:name="Property"/>
-            <set-payload value="{ &quot;message&quot;: &quot;Method not allowed&quot; }" doc:name="Set Payload"/>
+            <set-session-variable variableName="errorMessageId" value="Method Not Allowed"/>
+            <set-session-variable variableName="errorMessage" value="Failed to process request for interopID=#[interopID]: #[groovy:message.getExceptionPayload().getRootException().getMessage()]" />
+            <logger level="WARN" message="#[errorMessageId]: #[errorMessage]" category="com.l1p.interop.spsp.api-main"/>
+            <transformer ref="ExceptionTransformer" doc:name="ExceptionTransformer"/>
         </apikit:mapping>
         <apikit:mapping statusCode="415">
             <apikit:exception value="org.mule.module.apikit.exception.UnsupportedMediaTypeException" />
-            <set-property propertyName="Content-Type" value="application/json" doc:name="Property"/>
-            <set-payload value="{ &quot;message&quot;: &quot;Unsupported media type&quot; }" doc:name="Set Payload"/>
+            <set-session-variable variableName="errorMessageId" value="Unsupported MediaType"/>
+            <set-session-variable variableName="errorMessage" value="Failed to process request for interopID=#[interopID]: #[groovy:message.getExceptionPayload().getRootException().getMessage()]" />
+            <logger level="WARN" message="#[errorMessageId]: #[errorMessage]" category="com.l1p.interop.spsp.api-main"/>
+            <transformer ref="ExceptionTransformer" doc:name="ExceptionTransformer"/>
         </apikit:mapping>
         <apikit:mapping statusCode="406">
             <apikit:exception value="org.mule.module.apikit.exception.NotAcceptableException" />
-            <set-property propertyName="Content-Type" value="application/json" doc:name="Property"/>
-            <set-payload value="{ &quot;message&quot;: &quot;Not acceptable&quot; }" doc:name="Set Payload"/>
+            <set-session-variable variableName="errorMessageId" value="Not Acceptable"/>
+            <set-session-variable variableName="errorMessage" value="Failed to process request for interopID=#[interopID]: #[groovy:message.getExceptionPayload().getRootException().getMessage()]" />
+            <logger level="WARN" message="#[errorMessageId]: #[errorMessage]" category="com.l1p.interop.spsp.api-main"/>
+            <transformer ref="ExceptionTransformer" doc:name="ExceptionTransformer"/>
         </apikit:mapping>
         <apikit:mapping statusCode="400">
             <apikit:exception value="org.mule.module.apikit.exception.BadRequestException" />
-            <set-property propertyName="Content-Type" value="application/json" doc:name="Property"/>
-            <set-payload value="{ &quot;message&quot;: &quot;Bad request&quot; }" doc:name="Set Payload"/>
+            <set-session-variable variableName="errorMessageId" value="Bad request"/>
+            <set-session-variable variableName="errorMessage" value="Failed to process request for interopID=#[interopID]: #[groovy:message.getExceptionPayload().getRootException().getMessage()]" />
+            <logger level="WARN" message="#[errorMessageId]: #[errorMessage]" category="com.l1p.interop.spsp.api-main"/>
+            <transformer ref="ExceptionTransformer" doc:name="ExceptionTransformer"/>
         </apikit:mapping>
         <apikit:mapping statusCode="500">
             <apikit:exception value="org.mule.api.transformer.TransformerMessagingException" />
-            <set-property propertyName="Content-Type" value="application/json" doc:name="Property"/>
-            <set-payload value="{ &quot;message&quot;: &quot;Bad request&quot; }" doc:name="Set Payload"/>
+            <set-session-variable variableName="errorMessageId" value="Transformer Messaging Exception"/>
+            <set-session-variable variableName="errorMessage" value="Failed to process request for interopID=#[interopID]: #[groovy:message.getExceptionPayload().getRootException().getMessage()]" />
+            <logger level="WARN" message="#[errorMessageId]: #[errorMessage]" category="com.l1p.interop.spsp.api-main"/>
+            <transformer ref="ExceptionTransformer" doc:name="ExceptionTransformer"/>
         </apikit:mapping>
     </apikit:mapping-exception-strategy>
 

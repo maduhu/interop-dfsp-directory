@@ -36,7 +36,7 @@ public class AddAccountsProcessor implements Callable {
         //Until then, generating a random id and assigning it
         final String id = java.util.UUID.randomUUID().toString();
        
-        MuleMessage muleMessage = muleEventContext.getMessage();
+        //MuleMessage muleMessage = muleEventContext.getMessage();
         //String interopID = muleMessage.getProperty("interopID", PropertyScope.SESSION).toString();
         
         List<Map<String,String>> accountsToAdd = (List<Map<String,String>>)payload.get("users");

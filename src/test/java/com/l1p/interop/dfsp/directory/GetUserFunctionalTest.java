@@ -61,14 +61,10 @@ public class GetUserFunctionalTest extends FunctionalTestCase {
 	public void testInvalidPathShouldReturn404() throws Exception {
 		final String invalidPath = "path/shouldnt/exist";
 		final String notJSON = "<BadRequest>This is not JSON</BadRequest>";
-
 		logger.info("Posting event to web services");
 
-		ClientResponse response = postRequest(invalidPath, notJSON);
-		logger.info( "Received response from web service: " + response );
-
-		assertEquals("Server did not respond with status 404 when presented with path " + invalidPath + " on port ", 404, response.getStatus() );
-
+		ClientResponse clientResponse = postRequest(invalidPath, notJSON);
+		validateResponse( "InvalidPathShouldReturn404", clientResponse, 404, "Resource not found");
 	}
 
 	@Test
@@ -188,6 +184,20 @@ public class GetUserFunctionalTest extends FunctionalTestCase {
 		//validate response content
 		String responseContent = response.getEntity( String.class );
 		assertTrue( "Expected number of entities were not updated", responseContent != null && responseContent.contains( "Updated 4 entities") );
+	}
+	
+	private void validateResponse( String testName, ClientResponse clientResponse, int expectedStatus, String expectedContent ) throws Exception {
+
+		assertEquals( testName + ": Did not receive status 200", expectedStatus, clientResponse.getStatus());
+		String responseContent = null;
+		try {
+			responseContent = clientResponse.getEntity(String.class);
+		} catch ( Exception e ) {
+			fail( testName + ": parsing client response content produced an unexpected exception: " + e.getMessage() );
+		}
+
+		assertTrue( testName + ": received unexpected response", responseContent.contains( expectedContent ) );
+
 	}
 
 	/**
