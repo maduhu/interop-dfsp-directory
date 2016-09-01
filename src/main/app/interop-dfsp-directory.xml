@@ -13,7 +13,7 @@ http://www.mulesoft.org/schema/mule/apikit http://www.mulesoft.org/schema/mule/a
 http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.1.xsd">
     <http:request-config name="DFSP_Gateway_Configuration" host="${client-service.host}" port="${client-service.port}" basePath="${client-service.basePath}" doc:name="HTTP Request Configuration"/>
 
-	<!--<description>
+	<!-- <description>
         - Contains flows for handling the following api messages
             - /user/get
                 Method to query user information from the central directory gateway.  This is temporarily supported
@@ -32,13 +32,9 @@ http://www.springframework.org/schema/beans http://www.springframework.org/schem
         <logger level="INFO"
 		        message="Processing complete for post:/user/add, interopID=#[sessionVars.interopID], payload=#[payload]"
 		        category="com.l1p.interop.dfsp.directory.userAdd" doc:name="logger"/>
-        <logger level="INFO"
-                message="----------------------------------------"
-                category="com.l1p.interop.dfsp.directory.userAdd" doc:name="Logger"/>
     </flow>
 
     <flow name="post:/user/get:application/json:api-config">
-        <set-session-variable variableName="id" value="#[payload.id]" doc:name="set-id" />
         <logger level="INFO"
         		message="Processing request for post:/user/get, interopID=#[sessionVars.interopID], payload=#[payload]"
         		category="com.l1p.interop.dfsp.directory.userGet" doc:name="logger"/>
@@ -46,9 +42,6 @@ http://www.springframework.org/schema/beans http://www.springframework.org/schem
         <logger level="INFO"
         		message="Processing complete for post:/user/get, interopID=#[sessionVars.interopID], payload=#[payload]"
         		category="com.l1p.interop.dfsp.directory.userGet" doc:name="logger"/>
-        <logger level="INFO"
-                message="----------------------------------------"
-                category="com.l1p.interop.dfsp.directory.userGet" doc:name="Logger"/>
     </flow>
 
 </mule>
