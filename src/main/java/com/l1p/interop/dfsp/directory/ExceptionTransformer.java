@@ -23,7 +23,12 @@ public class ExceptionTransformer extends AbstractMessageTransformer {
     @Override
     public synchronized Object transformMessage(MuleMessage muleMessage, String outputEncoding) throws TransformerException {
         final String errorMessageId = muleMessage.getProperty( "errorMessageId", PropertyScope.SESSION );
-        final String errorMessage = muleMessage.getProperty( "errorMessage", PropertyScope.SESSION );
+        final String interopID = muleMessage.getProperty( "interopID", PropertyScope.SESSION ).toString();
+        final String rootExceptionCause = muleMessage.getExceptionPayload().getRootException().getMessage();
+        final String errorMessage = "Failed to process request for interopID=" + interopID + ": " + rootExceptionCause;
+        
+        log.warn(errorMessageId + ": " + rootExceptionCause);
+        log.warn(errorMessage);
         
         Map<String, Object> addProperty = new HashMap<String, Object>();
         addProperty.put("Content-Type", "application/json");
