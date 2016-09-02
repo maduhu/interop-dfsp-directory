@@ -47,43 +47,31 @@ http://www.springframework.org/schema/beans http://www.springframework.org/schem
         <apikit:mapping statusCode="404">
             <apikit:exception value="org.mule.module.apikit.exception.NotFoundException" />
             <set-session-variable variableName="errorMessageId" value="Resource not found" doc:name="set-errorMessageId"/>
-            <set-session-variable variableName="errorMessage" value="Failed to process request for interopID=#[interopID]: #[groovy:message.getExceptionPayload().getRootException().getMessage()]" doc:name="set-errorMessage"/>
-            <logger level="WARN" message="#[errorMessageId]: #[errorMessage]" category="com.l1p.interop.spsp.api-main" doc:name="Logger"/>
             <transformer ref="ExceptionTransformer" doc:name="ExceptionTransformer"/>
         </apikit:mapping>
         <apikit:mapping statusCode="405">
             <apikit:exception value="org.mule.module.apikit.exception.MethodNotAllowedException" />
             <set-session-variable variableName="errorMessageId" value="Method Not Allowed" doc:name="set-errorMessageId"/>
-            <set-session-variable variableName="errorMessage" value="Failed to process request for interopID=#[interopID]: #[groovy:message.getExceptionPayload().getRootException().getMessage()]" doc:name="set-errorMessage"/>
-            <logger level="WARN" message="#[errorMessageId]: #[errorMessage]" category="com.l1p.interop.spsp.api-main" doc:name="Logger"/>
             <transformer ref="ExceptionTransformer" doc:name="ExceptionTransformer"/>
         </apikit:mapping>
         <apikit:mapping statusCode="415">
             <apikit:exception value="org.mule.module.apikit.exception.UnsupportedMediaTypeException" />
             <set-session-variable variableName="errorMessageId" value="Unsupported MediaType" doc:name="set-errorMessageId"/>
-            <set-session-variable variableName="errorMessage" value="Failed to process request for interopID=#[interopID]: #[groovy:message.getExceptionPayload().getRootException().getMessage()]" doc:name="set-errorMessage"/>
-            <logger level="WARN" message="#[errorMessageId]: #[errorMessage]" category="com.l1p.interop.spsp.api-main" doc:name="Logger"/>
             <transformer ref="ExceptionTransformer" doc:name="ExceptionTransformer"/>
         </apikit:mapping>
         <apikit:mapping statusCode="406">
             <apikit:exception value="org.mule.module.apikit.exception.NotAcceptableException" />
             <set-session-variable variableName="errorMessageId" value="Not Acceptable" doc:name="set-errorMessageId"/>
-            <set-session-variable variableName="errorMessage" value="Failed to process request for interopID=#[interopID]: #[groovy:message.getExceptionPayload().getRootException().getMessage()]" doc:name="set-errorMessage"/>
-            <logger level="WARN" message="#[errorMessageId]: #[errorMessage]" category="com.l1p.interop.spsp.api-main" doc:name="Logger"/>
             <transformer ref="ExceptionTransformer" doc:name="ExceptionTransformer"/>
         </apikit:mapping>
         <apikit:mapping statusCode="400">
             <apikit:exception value="org.mule.module.apikit.exception.BadRequestException" />
             <set-session-variable variableName="errorMessageId" value="Bad request" doc:name="set-errorMessageId"/>
-            <set-session-variable variableName="errorMessage" value="Failed to process request for interopID=#[interopID]: #[groovy:message.getExceptionPayload().getRootException().getMessage()]" doc:name="set-errorMessage"/>
-            <logger level="WARN" message="#[errorMessageId]: #[errorMessage]" category="com.l1p.interop.spsp.api-main" doc:name="Logger"/>
             <transformer ref="ExceptionTransformer" doc:name="ExceptionTransformer"/>
         </apikit:mapping>
         <apikit:mapping statusCode="500">
             <apikit:exception value="org.mule.api.transformer.TransformerMessagingException" />
             <set-session-variable variableName="errorMessageId" value="Transformer Messaging Exception" doc:name="set-errorMessageId"/>
-            <set-session-variable variableName="errorMessage" value="Failed to process request for interopID=#[interopID]: #[groovy:message.getExceptionPayload().getRootException().getMessage()]" doc:name="set-errorMessage"/>
-            <logger level="WARN" message="#[errorMessageId]: #[errorMessage]" category="com.l1p.interop.spsp.api-main" doc:name="Logger"/>
             <transformer ref="ExceptionTransformer" doc:name="ExceptionTransformer"/>
         </apikit:mapping>
     </apikit:mapping-exception-strategy>
