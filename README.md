@@ -17,6 +17,7 @@ Body:
 }
 ```
 #### Resource Response: 
+Body
 ```js
 {
   "jsonrpc": "2.0",
@@ -28,23 +29,34 @@ Body:
   }
 }
 ```
+#### Resource Request: /user/get
+Body:
+```js
+{
+  "jsonrpc": "2.0",
+  "id": "45567",
+  "method": "directory.user.get",
+  "params": {
+    "userURI": "http://centraldirectory.com/griffin"
+}
+```
 
+## As a Mule Developer
 
-As a Mule Developer
-Installation and Setup
-Anypoint Studio
-# GENERATED CONTENT  Mule Application Deployment Descriptor #Mon Aug 29 17:33:24 PDT 2016 redeployment.enabled=true encoding=UTF-8 domain=default config.resources=spsp-client-proxy-api.xml,mock-spsp-client-proxy-api.xml
+### Installation and Setup
+#### Anypoint Studio
+GENERATED CONTENT  Mule Application Deployment Descriptor #Mon Aug 29 17:33:24 PDT 2016 redeployment.enabled=true encoding=UTF-8 domain=default config.resources=spsp-client-proxy-api.xml,mock-spsp-client-proxy-api.xml
+
 -DMULE_ENV=dev
-Standalone Mule ESB
-Run Application
-Test Application
-Anypoint Studio
-Run Unit Tests
-Test API with Anypoint Studio
-Verify Responses in Studio Console output
-Standalone Mule ESB 
-Run Application
-Review Server Logs for Unit Tests
-Test API with Browser at http://localhost:8081/console
-Test API with Postman at http://localhost:8081/
-Verify Responses in Server Logs
+
+#### Standalone Mule ESB
+* Run Application
+* Test Application
+* Anypoint Studio
+* Run Unit Tests
+* Test API with Anypoint Studio
+* Verify Responses in Studio Console output
+* Review Server Logs for Unit Tests
+* Test API with Browser at http://localhost:8081/console
+* Test API with Postman at http://localhost:8081/
+* Verify Responses in Server Logs
