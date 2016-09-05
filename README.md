@@ -1,11 +1,13 @@
-# l1p-interop
+# Interop-dfsp-directory
 
-This project provides an API gateway to the IST Directory Naming Service.  By submitting an URI  with a unique identifier (i.e., "userURI": "http://centraldirectory.com/griffin") to the IST Directory Naming Service, the user will receive back a response with the URI to the recieveing DSFP as well as the account holder's name and default currency the transaction will be conducted in.
+> This project provides an API gateway to the IST Directory Naming Service.  By submitting an URI  with a unique identifier (i.e., "userURI": "http://centraldirectory.com/griffin") to the IST Directory Naming Service, the user will receive back a response with the URI to the recieveing DSFP as well as the account holder's name and default currency the transaction will be conducted in.
 
-As an interop-dsfp-directory API Consumer (to be refactored):
+## As an interop-dsfp-directory API Consumer (to be refactored):
 
-Resource Request: /user/get
+### Example
+#### Resource Request: /user/get
 Body:
+```js
 {
   "jsonrpc": "2.0",
   "id": "45567",
@@ -13,8 +15,9 @@ Body:
   "params": {
     "userURI": "http://centraldirectory.com/griffin"
 }
-
-Resource Response: 
+```
+#### Resource Response: 
+```js
 {
   "jsonrpc": "2.0",
   "id": "12345",
@@ -24,7 +27,7 @@ Resource Response:
     "currency": "USD"
   }
 }
-
+```
 
 
 As a Mule Developer
