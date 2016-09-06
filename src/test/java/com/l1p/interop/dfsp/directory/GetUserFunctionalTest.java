@@ -33,7 +33,7 @@ public class GetUserFunctionalTest extends FunctionalTestCase {
 
 	private final String getUserPath="/directory/v1/user/get";
 	private final String addUserPath="/directory/v1/user/add";
-	private final String serviceHost = "http://localhost:8083";
+	private final String serviceHost = "http://localhost:8081";
 
 	protected Logger logger = LoggerFactory.getLogger(getClass());
 
