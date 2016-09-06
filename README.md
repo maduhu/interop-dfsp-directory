@@ -133,16 +133,22 @@ Body:
 ## As a Mule Developer
 
 ### Installation and Setup
+
 #### Anypoint Studio
+* [https://www.mulesoft.com/platform/studio](https://www.mulesoft.com/platform/studio)
 * Clone https://github.com/LevelOneProject/interop-dfsp-directory.git to local Git repository
 * Import into Studio as a Maven-based Mule Project with pom.xml
 * Go to Run -> Run As Configurations.  Make sure interop-dfsp-directory project is highlighted.  Go to (x)=Arguments tab and make sure that -DMULE_ENV=dev is set in the VM Arguments.
 #### Standalone Mule ESB
+* [https://developer.mulesoft.com/download-mule-esb-runtime](https://developer.mulesoft.com/download-mule-esb-runtime)
+* Add the environment variable you are testing in (dev, prod, qa, etc).  Open <Mule Installation Directory>/conf/wrapper.conf and find the GC Settings section.  Here there will be a series of wrapper.java.additional.(n) properties.  create a new one after the last one where n=x (typically 14) and assign it the next number (i.e., wrapper.java.additional.15) and assign -DMULE_ENV=dev as its value (wrapper.java.additional.15=-DMULE_ENV=dev)
 * Download the zipped project from Git
 * Copy zipped file (Mule Archived Project) to <Mule Installation Directory>/apps
 ### Run Application
 #### Anypoint Studio
+* Run As Mule Application with Maven
 #### Standalone Mule ESB
+* CD to <Mule Installation Directory>/bin -> in terminal type ./mule
 ### Test Application
 #### Anypoint Studio
 * Run Unit Tests
