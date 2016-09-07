@@ -4,7 +4,9 @@ This project provides an API gateway to the IST Directory Naming Service.  By su
 
 ## As an interop-dsfp-directory API Consumer (to be refactored):
 ### Example
-#### Resource Request: http://127.0.0.1:8083/directory/v1/user/get
+It is necessary to test this API by calling the /user/add method first inorder to populate the mock data that the /user/get method uses for responses.
+
+#### Resource Request: http://127.0.0.1:8083/directory/{version}/user/get
 Body:
 ```js
 {
@@ -58,7 +60,7 @@ Body:
 ```
 The add action is not part of the project's functional requirements.  It is a facility to allow sample data to be dynamically entered in order to test the /user/get action.
 
-#### Resource Request: http://127.0.0.1:8083/directory/v1/user/add
+#### Resource Request: http://127.0.0.1:8083/directory/{version}/user/add
 Body:
 ```js
 {
