@@ -11,6 +11,7 @@ http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/htt
 http://www.mulesoft.org/schema/mule/json http://www.mulesoft.org/schema/mule/json/current/mule-json.xsd
 http://www.mulesoft.org/schema/mule/apikit http://www.mulesoft.org/schema/mule/apikit/current/mule-apikit.xsd
 http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.1.xsd">
+    
     <spring:beans>
         <spring:bean id="AccountDataStore" name="AccountDataStore" class="com.l1p.interop.dfsp.directory.AccountDataStore" scope="singleton"/>
         <spring:bean id="AddAccountsProcessor" name="AddAccountsProcessor" class="com.l1p.interop.dfsp.directory.AddAccountsProcessor">
@@ -21,8 +22,8 @@ http://www.springframework.org/schema/beans http://www.springframework.org/schem
         </spring:bean>
     </spring:beans>
 
-	<!--<description>
-        - Contains flows for handling the following api messages
+	<!--
+    Contains flows for handling the following api messages
             - /user/get
                 Method to query user information from the central directory gateway.  This is temporarily supported
                 by a local cache of directory information that can be populated by the /user/add method
@@ -30,7 +31,7 @@ http://www.springframework.org/schema/beans http://www.springframework.org/schem
             - /user/add
                 Method to support adding account data to the gateway to support testing.  This is not an official method
                 of the DFSPDirectoryGateway API
-    </description> -->
+    -->
 
     <flow name="post:/user/add:application/json:mock-api-config">
         <json:json-to-object-transformer returnClass="java.util.Map" doc:name="json-to-object"/>

@@ -18,18 +18,13 @@ http://www.springframework.org/schema/beans http://www.springframework.org/schem
     </description>
 
     <spring:beans>
-        <spring:import resource="classpath:services-common.xml" />
-    </spring:beans>
-    
-    <spring:beans>
         <spring:bean id="ExceptionTransformer" name="ExceptionTransformer" class="com.l1p.interop.dfsp.directory.ExceptionTransformer"/>
     </spring:beans>
 
-	<http:listener-config name="api-httpListenerConfig" host="${proxy-service.host}" port="${proxy-service.port}" doc:name="HTTP Listener Configuration"/>
-    <apikit:config name="api-config" raml="directory.user.raml" consoleEnabled="true" doc:name="Router"/>
+	<apikit:config name="api-config" raml="directory.user.raml" consoleEnabled="true" doc:name="Router"/>
 
     <flow name="api-main">
-        <http:listener config-ref="api-httpListenerConfig" path="${proxy-service.basePath}*" doc:name="HTTP"/>
+        <http:listener config-ref="api-httpListenerConfig" path="${dfsp-proxy-service.basePath}*" doc:name="HTTP"/>
         <set-session-variable variableName="interopID" value="#[java.util.UUID.randomUUID()]" doc:name="set-interopID"/>
         <logger level="INFO"
                 message="Received request for interopID=#[sessionVars.interopID] at path=#[message.inboundProperties.'http.request.path']"
@@ -39,7 +34,7 @@ http://www.springframework.org/schema/beans http://www.springframework.org/schem
         <exception-strategy ref="api-apiKitGlobalExceptionMapping" doc:name="Reference Exception Strategy"/>
     </flow>
     <flow name="api-console">
-        <http:listener config-ref="api-httpListenerConfig" path="/console/*" doc:name="HTTP"/>
+        <http:listener config-ref="api-httpListenerConfig" path="${dfspConsolePath}" doc:name="HTTP"/>
         <apikit:console config-ref="api-config" doc:name="APIkit Console"/>
     </flow>
 
