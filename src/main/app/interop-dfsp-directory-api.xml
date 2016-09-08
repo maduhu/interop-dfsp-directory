@@ -25,7 +25,7 @@ http://www.springframework.org/schema/beans http://www.springframework.org/schem
         <spring:bean id="ExceptionTransformer" name="ExceptionTransformer" class="com.l1p.interop.dfsp.directory.ExceptionTransformer"/>
     </spring:beans>
 
-    <http:listener-config name="api-httpListenerConfig" host="${proxy-service.host}" port="${proxy-service.port}" doc:name="HTTP Listener Configuration"/>
+	<http:listener-config name="api-httpListenerConfig" host="${proxy-service.host}" port="${proxy-service.port}" doc:name="HTTP Listener Configuration"/>
     <apikit:config name="api-config" raml="directory.user.raml" consoleEnabled="true" doc:name="Router"/>
 
     <flow name="api-main">
@@ -33,7 +33,7 @@ http://www.springframework.org/schema/beans http://www.springframework.org/schem
         <set-session-variable variableName="interopID" value="#[java.util.UUID.randomUUID()]" doc:name="set-interopID"/>
         <logger level="INFO"
                 message="Received request for interopID=#[sessionVars.interopID] at path=#[message.inboundProperties.'http.request.path']"
-                category="com.l1p.interop.spsp.api-main" doc:name="logger"/>
+                category="com.l1p.interop.dfsp.api-main" doc:name="logger"/>
         
         <apikit:router config-ref="api-config" doc:name="APIkit Router"/>
         <exception-strategy ref="api-apiKitGlobalExceptionMapping" doc:name="Reference Exception Strategy"/>
