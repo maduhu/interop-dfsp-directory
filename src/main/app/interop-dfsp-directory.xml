@@ -23,6 +23,9 @@ http://www.springframework.org/schema/beans http://www.springframework.org/schem
                 of the DFSPDirectoryGateway API
     -->
 
+	<!-- DFSP HTTP configuration for making REST call to the mock service -->
+	<http:request-config name="DFSP_Gateway_Configuration" host="${dfsp-client-service.host}" port="${dfsp-client-service.port}" basePath="${dfsp-client-service.basePath}" doc:name="HTTP Request Configuration"/>
+
     <flow name="post:/user/add:application/json:api-config">
         <logger level="INFO"
 	        	message="Processing request for post:/user/add, interopID=#[sessionVars.interopID] payload=#[payload]"

@@ -32,7 +32,7 @@
     <dependency>
             <groupId>com.l1p.interop</groupId>
             <artifactId>interop-domain</artifactId>
-            <version>0.3.0</version>
+            <version>0.1.0</version>
             <type>zip</type>
         </dependency>
     </dependencies>
