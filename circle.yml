@@ -1,7 +1,7 @@
 ---
 checkout:
   pre:
-    - curl -H "Authorization:token $GITHUB_TOKEN" -H 'Accept:application/vnd.github.v3.raw' -o /tmp/interop_maven_settings.xml -L https://raw.githubusercontent.com/LevelOneProject/automation/master/interop/interop_maven_settings.xml
+    - curl -H "Authorization:token $GITHUB_TOKEN" -H 'Accept:application/vnd.github.v3.raw' -o /tmp/interop_maven_settings.xml -L https://raw.githubusercontent.com/olivitowd/automation/7da1f842168ca6735ca30658c0fe97b9a177dac0/interop/interop_maven_settings.xml
 
 dependencies:
   override:
@@ -13,3 +13,12 @@ test:
   post:
     - mkdir -p $CIRCLE_TEST_REPORTS/junit/
     - find . -type f -regex ".*/target/surefire-reports/.*xml" -exec cp {} $CIRCLE_TEST_REPORTS/junit/ \;
+
+deployment:
+  releases:
+    branch: master
+    commands:
+      - git config --global user.email "info@modusbox.com"
+      - git config --global user.name "Automatic Deployment via CircleCI"
+      - mvn -B release:prepare -Darguments="-DskipTests" -DscmCommentPrefix="[maven-release-plugin][ci skip]"
+      - mvn release:perform
