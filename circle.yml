@@ -1,7 +1,7 @@
 ---
 checkout:
   pre:
-    - curl -H "Authorization:token $GITHUB_TOKEN" -H 'Accept:application/vnd.github.v3.raw' -o /tmp/interop_maven_settings.xml -L https://raw.githubusercontent.com/olivitowd/automation/7da1f842168ca6735ca30658c0fe97b9a177dac0/interop/interop_maven_settings.xml
+    - curl -H "Authorization:token $GITHUB_TOKEN" -H 'Accept:application/vnd.github.v3.raw' -o /tmp/interop_maven_settings.xml -L https://raw.githubusercontent.com/olivitowd/automation/42aad487119f3a4fba692a99e1ccd1c513d551e6/interop/interop_maven_settings.xml
 
 dependencies:
   override:
