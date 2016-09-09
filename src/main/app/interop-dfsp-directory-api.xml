@@ -23,10 +23,10 @@ http://www.springframework.org/schema/beans http://www.springframework.org/schem
 	</spring:beans>
 
     <spring:beans>
-        <spring:bean id="ExceptionTransformer" name="ExceptionTransformer" class="com.l1p.interop.dfsp.directory.ExceptionTransformer"/>
+        <spring:bean id="ExceptionTransformer" name="ExceptionTransformer" class="com.l1p.interop.L1PExceptionTransformer"/>
     </spring:beans>
 
-	<apikit:config name="api-config" raml="directory.user.raml" consoleEnabled="true" doc:name="Router" consolePath="${dfspConsolePath}"/>
+	<apikit:config name="api-config" raml="directory.user.raml" consoleEnabled="false" doc:name="Router" />
 
     <flow name="api-main">
         <http:listener config-ref="api-httpListenerConfig" path="${dfsp-proxy-service.basePath}*" doc:name="HTTP"/>
