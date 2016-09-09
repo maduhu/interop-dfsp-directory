@@ -10,7 +10,7 @@
 
 	<groupId>com.l1p.interop.dfsp</groupId>
 	<artifactId>interop-dfsp-directory</artifactId>
-	<version>0.3.4-SNAPSHOT</version>
+	<version>0.3.3-SNAPSHOT</version>
 	<packaging>mule</packaging>
 	<name>Mule DFSP Directory Gateway</name>
 
