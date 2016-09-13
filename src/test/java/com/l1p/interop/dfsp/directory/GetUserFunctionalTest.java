@@ -106,9 +106,6 @@ public class GetUserFunctionalTest extends FunctionalTestCase {
 		clientResponse = postRequest( getUserPath, validRequest4);
 		verifyGetUserResponse( "validRequest4", clientResponse, 200, "id4", "Walter Mitty", "http://receivingdfsp.com/mitty_12345", "ARS" );
 
-
-		//TODO: make the code below use verifyL1PErrorResponse and finish implementing that method
-
 		//test retrieving info for a missing account
 		paramMap.put( "userURI", "userdata.com/missing" );
 		final String missingAccountRequest = new JsonRpcRequest( "id5", "directory.user.get", paramMap ).toJSONString();
@@ -117,12 +114,19 @@ public class GetUserFunctionalTest extends FunctionalTestCase {
 		String expectedMissingAccountContent = "Account not found for userURI=userdata.com/missing";
 		String missingAccountResponseContent = missingAccountResponse.getEntity( String.class );
 		assertTrue( "Response for missingAccount did not contain expected text '" + expectedMissingAccountContent + "': " + missingAccountResponseContent, missingAccountResponseContent != null && missingAccountResponseContent.contains( expectedMissingAccountContent ));
+		
+		//test with empty params
+		paramMap.clear();
+		final String badRequest = new JsonRpcRequest( "id5", "directory.user.get", paramMap ).toJSONString();
+		ClientResponse responseForBadRequest = postRequest( getUserPath, badRequest);
+		//assertEquals("Server did not respond with status 400 for badRequest when presented with path " + getUserPath, 400, responseForBadRequest.getStatus() );
+		verifyL1PErrorResponse("GetUserNoParams", responseForBadRequest, 400, "500", "bad request");
 	}
 
 	/**
 	 * Utility method to verify the content of a response from a call to /directory/user/get
 	 *
-	 * @param testIdentidier - phrase than identifies the test for debugging purposes
+	 * @param testIdentifier - phrase than identifies the test for debugging purposes
 	 * @param clientResponse - ClientResponse instance to validate
 	 * @param expectedStatus - expected status code
 	 * @param expectedId - expected id value
@@ -131,16 +135,16 @@ public class GetUserFunctionalTest extends FunctionalTestCase {
 	 * @param expectedCurrency - expected currency value
      * @throws Exception
      */
-	private void verifyGetUserResponse( String testIdentidier, ClientResponse clientResponse, int expectedStatus, String expectedId, String expectedName, String expectedAccount, String expectedCurrency ) throws Exception {
+	private void verifyGetUserResponse( String testIdentifier, ClientResponse clientResponse, int expectedStatus, String expectedId, String expectedName, String expectedAccount, String expectedCurrency ) throws Exception {
 		//verify status
-		assertEquals( testIdentidier + ": Server did not respond with status " + expectedStatus, expectedStatus, clientResponse.getStatus() );
+		assertEquals( testIdentifier + ": Server did not respond with status " + expectedStatus, expectedStatus, clientResponse.getStatus() );
 
 		//read response content as string
 		String responseContent = null;
 		try {
 			responseContent = clientResponse.getEntity(String.class);
 		} catch ( Exception e ) {
-			fail( testIdentidier + ": parsing client response content produced an unexpected exception: " + e.getMessage() );
+			fail( testIdentifier + ": parsing client response content produced an unexpected exception: " + e.getMessage() );
 		}
 
 		//convert response content from JSON string to Map
@@ -149,25 +153,64 @@ public class GetUserFunctionalTest extends FunctionalTestCase {
 			// convert JSON string to Map
 			header = JsonTransformer.stringToMap(responseContent);
 		} catch( Exception e ) {
-			fail( testIdentidier + ": conversion of client response content to a map produced an unexpected exception: " + e.getMessage() );
+			fail( testIdentifier + ": conversion of client response content to a map produced an unexpected exception: " + e.getMessage() );
 		}
 
 		//validate content of map
-		assertTrue( testIdentidier + ": Header map was null", header != null );
-		assertTrue( testIdentidier + ": Size of header map was incorrect, expected 3, received " + header.size(), header.size() == 3 );
-		assertEquals( testIdentidier + ": Header map did not contain correct data for jsonrpc element", "2.0", header.get( "jsonrpc" ) );
+		assertTrue( testIdentifier + ": Header map was null", header != null );
+		assertTrue( testIdentifier + ": Size of header map was incorrect, expected 3, received " + header.size(), header.size() == 3 );
+		assertEquals( testIdentifier + ": Header map did not contain correct data for jsonrpc element", "2.0", header.get( "jsonrpc" ) );
 		//This needs discussion - there is no ID in the input, if we are arbitrarily generating it then we need to verify against that
-		//assertEquals( testIdentidier + ": Header map did not contain correct data for id element", expectedId, header.get( "id" ) );
-		Map result = (Map)header.get( "result" );
-		assertTrue( testIdentidier + ": Result map was null", result != null );
-		assertTrue( testIdentidier + ": Size of result map was incorrect, expected 3, received " + result.size(), result.size() == 3 );
-		assertEquals( testIdentidier + ": Result map did not contain correct data for name element", expectedName, result.get( "name" ) );
-		assertEquals( testIdentidier + ": Result map did not contain correct data for account element", expectedAccount, result.get( "account" ) );
-		assertEquals( testIdentidier + ": Result map did not contain correct data for currency element", expectedCurrency, result.get( "currency" ) );
+		//assertEquals( testIdentifier + ": Header map did not contain correct data for id element", expectedId, header.get( "id" ) );
+		Map<String, Object> result = (Map<String, Object>)header.get( "result" );
+		assertTrue( testIdentifier + ": Result map was null", result != null );
+		assertTrue( testIdentifier + ": Size of result map was incorrect, expected 3, received " + result.size(), result.size() == 3 );
+		assertEquals( testIdentifier + ": Result map did not contain correct data for name element", expectedName, result.get( "name" ) );
+		assertEquals( testIdentifier + ": Result map did not contain correct data for account element", expectedAccount, result.get( "account" ) );
+		assertEquals( testIdentifier + ": Result map did not contain correct data for currency element", expectedCurrency, result.get( "currency" ) );
 	}
 
+	/**
+	 * Utility method to verify the content of L1P ErrorResponse from a call to /directory/user/get
+	 *
+	 * @param testIdentifier - phrase than identifies the test for debugging purposes
+	 * @param clientResponse - ClientResponse instance to validate
+	 * @param expectedStatus - expected HTTP status code
+	 * @param expectedCode - expected error code
+	 * @param expectedMessage - expected error message
+	 * @throws Exception
+     */
 	private void verifyL1PErrorResponse( String testIdentifier, ClientResponse clientResponse, int expectedStatus, String expectedCode, String expectedMessage ) {
+		//verify status
+		assertEquals( testIdentifier + ": Server did not respond with status " + expectedStatus, expectedStatus, clientResponse.getStatus() );
 
+		//read response content as string
+		String responseContent = null;
+		try {
+			responseContent = clientResponse.getEntity(String.class);
+		} catch ( Exception e ) {
+			fail( testIdentifier + ": parsing client response content produced an unexpected exception: " + e.getMessage() );
+		}
+
+		//convert response content from JSON string to Map
+		Map<String,Object> header = null;
+		try {
+			// convert JSON string to Map
+			header = JsonTransformer.stringToMap(responseContent);
+		} catch( Exception e ) {
+			fail( testIdentifier + ": conversion of client response content to a map produced an unexpected exception: " + e.getMessage() );
+		}
+
+		//validate content of map
+		assertTrue( testIdentifier + ": Header map was null", header != null );
+		assertTrue( testIdentifier + ": Size of header map was incorrect, expected 2, received " + header.size(), (header.size() == 1 || header.size() == 2) );
+		
+		Map<String, Object> result = (Map<String, Object>)header.get( "error" );
+		assertTrue( testIdentifier + ": Result map was null", result != null );
+		assertTrue( testIdentifier + ": Size of result map was incorrect, expected 2, received " + result.size(), result.size() == 2 );
+		assertTrue( testIdentifier + ": Error id not as expected: ", result.get("id").toString().contains("Bad request") );
+		assertTrue( testIdentifier + ": Error message not as expected: ", result.get("message").toString().contains("object has missing required properties ([\"userURI\"])") );
+				
 	}
 
 	@Test
@@ -186,6 +229,15 @@ public class GetUserFunctionalTest extends FunctionalTestCase {
 		assertTrue( "Expected number of entities were not updated", responseContent != null && responseContent.contains( "Updated 4 entities") );
 	}
 	
+	/**
+	 * Utility method to verify the content of a response from a call given the criteria
+	 *
+	 * @param testName - name that identifies the test for debugging purposes
+	 * @param clientResponse - ClientResponse instance to validate
+	 * @param expectedStatus - expected status code
+	 * @param expectedContent - string expected to be present in the result
+     * @throws Exception
+     */
 	private void validateResponse( String testName, ClientResponse clientResponse, int expectedStatus, String expectedContent ) throws Exception {
 
 		assertEquals( testName + ": Did not receive status 200", expectedStatus, clientResponse.getStatus());
