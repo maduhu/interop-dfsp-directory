@@ -23,6 +23,7 @@ deployment:
       - mvn -B release:perform -Darguments="-DskipTests" -s /tmp/interop_maven_settings.xml
       
       #Merge back to develop so the latest version is shared
+      - git remote set-url origin https://$GITHUB_TOKEN@github.com/LevelOneProject/interop-dfsp-directory.git
       - git checkout -b develop origin/develop
       - git pull origin develop
       - git merge master
