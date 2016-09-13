@@ -5,12 +5,12 @@
 	<parent>
 		<groupId>com.l1p.interop</groupId>
 		<artifactId>interop-parent</artifactId>
-		<version>1.0.2</version>
+		<version>1.0.3</version>
 	</parent>
 
 	<groupId>com.l1p.interop.dfsp</groupId>
 	<artifactId>interop-dfsp-directory</artifactId>
-	<version>0.3.7-SNAPSHOT</version>
+	<version>0.3.8-SNAPSHOT</version>
 	<packaging>mule</packaging>
 	<name>Mule DFSP Directory Gateway</name>
 
