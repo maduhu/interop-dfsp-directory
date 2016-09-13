@@ -229,6 +229,15 @@ public class GetUserFunctionalTest extends FunctionalTestCase {
 		assertTrue( "Expected number of entities were not updated", responseContent != null && responseContent.contains( "Updated 4 entities") );
 	}
 	
+	/**
+	 * Utility method to verify the content of a response from a call given the criteria
+	 *
+	 * @param testName - name that identifies the test for debugging purposes
+	 * @param clientResponse - ClientResponse instance to validate
+	 * @param expectedStatus - expected status code
+	 * @param expectedContent - string expected to be present in the result
+     * @throws Exception
+     */
 	private void validateResponse( String testName, ClientResponse clientResponse, int expectedStatus, String expectedContent ) throws Exception {
 
 		assertEquals( testName + ": Did not receive status 200", expectedStatus, clientResponse.getStatus());
