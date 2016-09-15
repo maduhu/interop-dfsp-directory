@@ -39,7 +39,7 @@ http://www.springframework.org/schema/beans http://www.springframework.org/schem
         <exception-strategy ref="api-apiKitGlobalExceptionMapping" doc:name="Reference Exception Strategy"/>
     </flow>
     <flow name="api-console">
-        <http:listener config-ref="api-httpListenerConfig" path="${dfspConsolePath}" doc:name="HTTP"/>
+        <http:listener config-ref="api-httpListenerConfig" path="${dfspConsolePath}/*" doc:name="HTTP"/>
         <apikit:console config-ref="api-config" doc:name="APIkit Console"/>
     </flow>
 
