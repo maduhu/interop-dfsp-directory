@@ -210,7 +210,6 @@ public class GetUserFunctionalTest extends FunctionalTestCase {
 		assertTrue( testIdentifier + ": Size of result map was incorrect, expected 2, received " + result.size(), result.size() == 2 );
 		assertTrue( testIdentifier + ": Error id not as expected: ", result.get("id").toString().contains("Bad request") );
 		assertTrue( testIdentifier + ": Error message not as expected: ", result.get("message").toString().contains("object has missing required properties ([\"userURI\"])") );
-				
 	}
 
 	@Test
