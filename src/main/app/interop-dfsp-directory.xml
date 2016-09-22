@@ -41,7 +41,7 @@
         <metrics:snap-time config-ref="metricsConfig" snapTimeKey="user.add.stop" doc:name="SnapTime"/>
         <metrics:time config-ref="metricsConfig" beginSnapKey="user.add.start" endSnapKey="user.add.stop" category="l1p.dfsp.directory.api" metricKey="AddUserTime" doc:name="Metrics Record"/>
         <metrics:time config-ref="metricsConfig" beginSnapKey="user.add.proxy-start" endSnapKey="user.add.stop" category="l1p.dfsp.directory.api" metricKey="AddUserProxyTime" doc:name="Metrics Record"/>
-        <metrics:inc-count config-ref="metricsConfig" category="l1p.dfsp.directory.api">
+        <metrics:inc-count config-ref="metricsConfig" category="l1p.dfsp.directory.api" doc:name="metrics-count">
             <metrics:metric-keys><metrics:metric-key>AddUserRequest</metrics:metric-key></metrics:metric-keys>
         </metrics:inc-count>
     </flow>
@@ -59,7 +59,7 @@
         <metrics:snap-time config-ref="metricsConfig" snapTimeKey="user.get.stop" doc:name="SnapTime"/>
         <metrics:time config-ref="metricsConfig" beginSnapKey="user.get.start" endSnapKey="user.get.stop" category="l1p.dfsp.directory.api" metricKey="GetUserTime" doc:name="Metrics Record"/>
         <metrics:time config-ref="metricsConfig" beginSnapKey="user.get.proxy-start" endSnapKey="user.get.stop" category="l1p.dfsp.directory.api" metricKey="GetUserProxyTime" doc:name="Metrics Record"/>
-        <metrics:inc-count config-ref="metricsConfig" category="l1p.dfsp.directory.api">
+        <metrics:inc-count config-ref="metricsConfig" category="l1p.dfsp.directory.api"  doc:name="metrics-count">
             <metrics:metric-keys><metrics:metric-key>GetUserRequest</metrics:metric-key></metrics:metric-keys>
         </metrics:inc-count>
     </flow>

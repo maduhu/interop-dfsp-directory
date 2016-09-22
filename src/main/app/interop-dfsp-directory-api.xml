@@ -79,50 +79,50 @@
 
     <apikit:mapping-exception-strategy name="api-apiKitGlobalExceptionMapping">
         <apikit:mapping statusCode="404">
-            <!--<metrics:inc-count config-ref="metricsConfig" category="l1p.dfsp.directory.api.error">-->
-                <!--<metrics:metric-keys><metrics:metric-key>ResourceNotFound</metrics:metric-key></metrics:metric-keys>-->
-            <!--</metrics:inc-count>-->
             <apikit:exception value="org.mule.module.apikit.exception.NotFoundException" />
+            <metrics:inc-count config-ref="metricsConfig" category="l1p.dfsp.directory.api.error"  doc:name="metrics-count">
+                <metrics:metric-keys><metrics:metric-key>ResourceNotFound</metrics:metric-key></metrics:metric-keys>
+            </metrics:inc-count>
             <set-session-variable variableName="errorMessageId" value="Resource not found" doc:name="set-errorMessageId"/>
             <transformer ref="ExceptionTransformer" doc:name="ExceptionTransformer"/>
         </apikit:mapping>
         <apikit:mapping statusCode="405">
-            <!--<metrics:inc-count config-ref="metricsConfig" category="l1p.dfsp.directory.api.error">-->
-                <!--<metrics:metric-keys><metrics:metric-key>MethodNotAllowed</metrics:metric-key></metrics:metric-keys>-->
-            <!--</metrics:inc-count>-->
             <apikit:exception value="org.mule.module.apikit.exception.MethodNotAllowedException" />
+            <metrics:inc-count config-ref="metricsConfig" category="l1p.dfsp.directory.api.error">
+                <metrics:metric-keys><metrics:metric-key>MethodNotAllowed</metrics:metric-key></metrics:metric-keys>
+            </metrics:inc-count>
             <set-session-variable variableName="errorMessageId" value="Method Not Allowed" doc:name="set-errorMessageId"/>
             <transformer ref="ExceptionTransformer" doc:name="ExceptionTransformer"/>
         </apikit:mapping>
         <apikit:mapping statusCode="415">
-            <!--<metrics:inc-count config-ref="metricsConfig" category="l1p.dfsp.directory.api.error">-->
-                <!--<metrics:metric-keys><metrics:metric-key>UnsupportedMediaType</metrics:metric-key></metrics:metric-keys>-->
-            <!--</metrics:inc-count>-->
             <apikit:exception value="org.mule.module.apikit.exception.UnsupportedMediaTypeException" />
+            <metrics:inc-count config-ref="metricsConfig" category="l1p.dfsp.directory.api.error">
+                <metrics:metric-keys><metrics:metric-key>UnsupportedMediaType</metrics:metric-key></metrics:metric-keys>
+            </metrics:inc-count>
             <set-session-variable variableName="errorMessageId" value="Unsupported MediaType" doc:name="set-errorMessageId"/>
             <transformer ref="ExceptionTransformer" doc:name="ExceptionTransformer"/>
         </apikit:mapping>
         <apikit:mapping statusCode="406">
-            <!--<metrics:inc-count config-ref="metricsConfig" category="l1p.dfsp.directory.api.error">-->
-                <!--<metrics:metric-keys><metrics:metric-key>NotAcceptable</metrics:metric-key></metrics:metric-keys>-->
-            <!--</metrics:inc-count>-->
             <apikit:exception value="org.mule.module.apikit.exception.NotAcceptableException" />
+            <metrics:inc-count config-ref="metricsConfig" category="l1p.dfsp.directory.api.error">
+                <metrics:metric-keys><metrics:metric-key>NotAcceptable</metrics:metric-key></metrics:metric-keys>
+            </metrics:inc-count>
             <set-session-variable variableName="errorMessageId" value="Not Acceptable" doc:name="set-errorMessageId"/>
             <transformer ref="ExceptionTransformer" doc:name="ExceptionTransformer"/>
         </apikit:mapping>
         <apikit:mapping statusCode="400">
-            <!--<metrics:inc-count config-ref="metricsConfig" category="l1p.dfsp.directory.api.error">-->
-                <!--<metrics:metric-keys><metrics:metric-key>BadRequest</metrics:metric-key></metrics:metric-keys>-->
-            <!--</metrics:inc-count>-->
             <apikit:exception value="org.mule.module.apikit.exception.BadRequestException" />
+            <metrics:inc-count config-ref="metricsConfig" category="l1p.dfsp.directory.api.error">
+                <metrics:metric-keys><metrics:metric-key>BadRequest</metrics:metric-key></metrics:metric-keys>
+            </metrics:inc-count>
             <set-session-variable variableName="errorMessageId" value="Bad request" doc:name="set-errorMessageId"/>
             <transformer ref="ExceptionTransformer" doc:name="ExceptionTransformer"/>
         </apikit:mapping>
         <apikit:mapping statusCode="500">
-            <!--<metrics:inc-count config-ref="metricsConfig" category="l1p.dfsp.directory.api.error">-->
-                <!--<metrics:metric-keys><metrics:metric-key>TransformationException</metrics:metric-key></metrics:metric-keys>-->
-            <!--</metrics:inc-count>-->
             <apikit:exception value="org.mule.api.transformer.TransformerMessagingException" />
+            <metrics:inc-count config-ref="metricsConfig" category="l1p.dfsp.directory.api.error">
+                <metrics:metric-keys><metrics:metric-key>TransformationException</metrics:metric-key></metrics:metric-keys>
+            </metrics:inc-count>
             <set-session-variable variableName="errorMessageId" value="Transformer Messaging Exception" doc:name="set-errorMessageId"/>
             <transformer ref="ExceptionTransformer" doc:name="ExceptionTransformer"/>
         </apikit:mapping>
