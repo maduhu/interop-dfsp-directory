@@ -18,12 +18,12 @@ http://www.springframework.org/schema/beans http://www.springframework.org/schem
     </description>
 	
 	<!-- DFSP mock apikit HTTP configuration -->
-	<http:listener-config name="mock-dfsp-httpListenerConfig" host="${dfsp-client-service.host}" port="${dfsp-client-service.port}" doc:name="Mock-HTTP Listener Configuration"/>
+	<!--<http:listener-config name="mock-dfsp-httpListenerConfig" host="${dfsp-client-service.host}" port="${dfsp-client-service.port}" doc:name="Mock-HTTP Listener Configuration"/>-->
 	
     <apikit:config name="mock-api-config" raml="directory.user.raml" consoleEnabled="false" doc:name="Router"/>
 
     <flow name="mock-api-main">
-        <http:listener config-ref="mock-dfsp-httpListenerConfig" path="${dfsp-client-service.basePath}*" doc:name="HTTP"/>
+        <http:listener config-ref="api-httpListenerConfig" path="/mock/directory/v1/*" doc:name="HTTP"/>
         <logger level="INFO"
                 message="Received request in mock-service at path=#[message.inboundProperties.'http.request.path']"
                 category="com.l1p.interop.dfsp.mock-api-main" doc:name="logger"/>
