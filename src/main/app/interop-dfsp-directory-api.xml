@@ -63,7 +63,7 @@
 	<apikit:config name="api-config" raml="directory.user.raml" consoleEnabled="false" doc:name="Router" />
 
     <flow name="api-main">
-        <http:listener config-ref="api-httpListenerConfig" path="${dfsp-proxy-service.basePath}*" doc:name="HTTP"/>
+        <http:listener config-ref="api-httpListenerConfig" path="${dfsp-directory-gateway-service.basePath}/*" doc:name="HTTP"/>
         <set-session-variable variableName="interopID" value="#[java.util.UUID.randomUUID()]" doc:name="set-interopID"/>
         <logger level="INFO"
                 message="Received request for interopID=#[sessionVars.interopID] at path=#[message.inboundProperties.'http.request.path']"

@@ -26,7 +26,7 @@
     -->
 
 	<!-- DFSP HTTP configuration for making REST call to the mock service -->
-	<http:request-config name="DFSP_Gateway_Configuration" host="${dfsp-client-service.host}" port="${dfsp-client-service.port}" basePath="${dfsp-client-service.basePath}" doc:name="HTTP Request Configuration"/>
+	<http:request-config name="DFSP_Gateway_Configuration" host="${directory-service.host}" port="${directory-service.port}" basePath="${directory-service.basePath}" doc:name="HTTP Request Configuration"/>
 
     <flow name="post:/user/add:application/json:api-config">
         <metrics:snap-time config-ref="metricsConfig" snapTimeKey="user.add.start" doc:name="SnapTime"/>
@@ -34,7 +34,7 @@
 	        	message="Processing request for post:/user/add, interopID=#[sessionVars.interopID] payload=#[payload]"
 	        	category="com.l1p.interop.dfsp.directory.userAdd" doc:name="logger"/>
         <metrics:snap-time config-ref="metricsConfig" snapTimeKey="user.add.proxy-start" doc:name="SnapTime"/>
-        <http:request config-ref="DFSP_Gateway_Configuration" path="${addUserPath}" method="POST" doc:name="HTTP"/>
+        <http:request config-ref="DFSP_Gateway_Configuration" path="/user/add" method="POST" doc:name="HTTP"/>
         <logger level="INFO"
 		        message="Processing complete for post:/user/add, interopID=#[sessionVars.interopID], payload=#[payload]"
 		        category="com.l1p.interop.dfsp.directory.userAdd" doc:name="logger"/>
@@ -52,7 +52,7 @@
         		message="Processing request for post:/user/get, interopID=#[sessionVars.interopID], payload=#[payload]"
         		category="com.l1p.interop.dfsp.directory.userGet" doc:name="logger"/>
         <metrics:snap-time config-ref="metricsConfig" snapTimeKey="user.get.proxy-start" doc:name="SnapTime"/>
-        <http:request config-ref="DFSP_Gateway_Configuration" path="${getUserPath}" method="POST" doc:name="HTTP"/>
+        <http:request config-ref="DFSP_Gateway_Configuration" path="/user/get" method="POST" doc:name="HTTP"/>
         <logger level="INFO"
         		message="Processing complete for post:/user/get, interopID=#[sessionVars.interopID], payload=#[payload]"
         		category="com.l1p.interop.dfsp.directory.userGet" doc:name="logger"/>
