@@ -27,7 +27,7 @@
         <spring:bean id="consoleReporter" class="com.l1p.interop.mule.connector.metrics.spring.ReporterFactory" factory-method="createConsoleReporter">
             <spring:constructor-arg ref="metricRegistry"/>
         </spring:bean>
-        <spring:bean id="slf4jReporter" class="com.l1p.interop.mule.connector.metrics.spring.ReporterFactory" factory-method="createSlf4jReporter">
+        <spring:bean id="slf4jReporterWithDeltas" class="com.l1p.interop.mule.connector.metrics.spring.ReporterFactory" factory-method="createSlf4jReporterWithDeltas">
             <spring:constructor-arg ref="metricRegistry"/>
         </spring:bean>
         <spring:bean id="kafkaProducer" class="com.l1p.interop.mule.connector.metrics.reporter.MetricKafkaProducer" >
@@ -41,10 +41,17 @@
             <spring:constructor-arg value="dev"/><!-- env -->
             <spring:constructor-arg value="interop-dfsp-services"/><!-- app -->
         </spring:bean>
+        <spring:bean id="csvReporterWithDeltas" class="com.l1p.interop.mule.connector.metrics.spring.ReporterFactory" factory-method="createCsvReporterWithDeltas">
+            <spring:constructor-arg ref="metricRegistry"/>
+            <spring:constructor-arg value="MetricsTest"/><!-- directory for csv files -->
+            <spring:constructor-arg value="dev"/><!-- env -->
+            <spring:constructor-arg value="interop-dfsp-services"/><!-- app -->
+        </spring:bean>
         <util:list id="scheduledReporters">
             <!--<spring:ref bean="consoleReporter" />-->
-            <spring:ref bean="slf4jReporter" />
+            <spring:ref bean="slf4jReporterWithDeltas" />
             <spring:ref bean="kafkaReporter" />
+            <spring:ref bean="csvReporterWithDeltas" />
         </util:list>
     </spring:beans>
     <metrics:config name="metricsConfig" metricRegistry-ref="metricRegistry" reporterInterval="5" doc:name="Metrics: Metric Connector Configuration">

@@ -32,9 +32,9 @@
 		<dependency>
 			<groupId>com.l1p.interop</groupId>
 			<artifactId>interop-mule-connector-metrics</artifactId>
-			<version>1.0.17</version>
+			<version>1.0.20</version>
 		</dependency>
-    <dependency>
+    	<dependency>
             <groupId>com.l1p.interop</groupId>
             <artifactId>interop-domain</artifactId>
             <version>0.1.1</version>
