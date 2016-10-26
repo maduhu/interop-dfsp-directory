@@ -10,13 +10,13 @@
 
 	<groupId>com.l1p.interop.dfsp</groupId>
 	<artifactId>interop-dfsp-directory</artifactId>
-	<version>0.4.16-SNAPSHOT</version>
+	<version>0.4.16</version>
 	<packaging>mule</packaging>
 	<name>Mule DFSP Directory Gateway</name>
 
 	<scm>
 		<connection>scm:git:https://github.com/LevelOneProject/interop-dfsp-directory</connection>
-		<tag>HEAD</tag>
+		<tag>interop-dfsp-directory-0.4.16</tag>
 	</scm>
 
 	<properties>
