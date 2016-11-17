@@ -67,7 +67,7 @@ public class GetUserFunctionalTest extends FunctionalTestCase {
 		validateResponse( "InvalidPathShouldReturn404", clientResponse, 404, "Resource not found");
 	}
 
-	@Test
+//	@Test
 	public void testValidGetUserRequestShouldReturnValidResponse() throws Exception {
 		//populate DFSPDirectoryGateway with test data
 		try {
@@ -212,7 +212,7 @@ public class GetUserFunctionalTest extends FunctionalTestCase {
 		assertTrue( testIdentifier + ": Error message not as expected: ", result.get("message").toString().contains("object has missing required properties ([\"userURI\"])") );
 	}
 
-	@Test
+//	@Test
 	public void testValidAddUserRequestShouldReturnValidResponse() throws Exception {
 		final String addUsersJSON = loadResourceAsString("testData/validAccountData.json");
 		logger.info("Posting request to path " + addUserPath );
