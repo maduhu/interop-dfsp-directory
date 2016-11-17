@@ -1,0 +1,103 @@
+#%RAML 1.0
+title: Central Directory 
+version: v1
+baseUri: http://central-directory/
+mediaType: application/json
+securitySchemes:
+  basic:
+    description: |
+      This API supports Basic Authentication.
+    type: Basic Authentication
+    
+types: 
+  Resource:
+    type: object
+    properties: 
+      spspReceiver: string
+      
+  DFSP:
+    type: object
+    properties: 
+      name: string
+      key?: string
+      secret?: string
+    example:
+      name: dfsp1
+      key: dfsp1
+      secret: dfsp1
+      
+  IdentifierType:
+    type: object
+    properties: 
+      identifier_type: string
+      description: string
+      
+  Metadata:
+    type: object
+    properties: 
+      directory: string
+ 
+  Error:
+    type: object
+    properties: 
+      error:
+        type: ErrorDetail
+    example:
+      error: 
+        id: UserNotFound
+        message: End-User was not found
+                
+  ErrorDetail:
+    type: object
+    properties: 
+      id: string
+      message: string
+
+/:
+  get:
+    description: Returns metadata associated with the directory
+    securedBy: [null]
+    responses: 
+      200:
+        body:
+          type: Metadata
+          
+/resources:
+  get:
+    description: Get customer information by supplying and identifier and identifier type
+    securedBy: [basic]
+    queryParameters:
+      identifier-type:
+        type: string
+      identifier:
+        type: string
+    responses: 
+      200:
+        body:
+          type: Resource
+      404:
+        body:
+          type: Error
+          
+/commands:
+  /register:
+    post:
+      description: Registere DFSP to use the central directory
+      securedBy: [basic]
+      body:
+        type: DFSP
+      responses: 
+        201:
+          body:
+            type: DFSP
+            
+
+/identifier-types:
+  get:
+    description:  Get identifier types supported by the central directory
+    securedBy: [basic]
+    responses: 
+      200:
+        body:
+          type: array
+          items: IdentifierType
