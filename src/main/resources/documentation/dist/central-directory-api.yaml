@@ -1,0 +1,185 @@
+swagger: 2.0
+info:
+  version: 1.0
+  title: Central Directory
+  description:
+
+host: central-directory
+basePath: /
+securityDefinitions:
+  auth:
+    type: basic
+    x-testValue: []
+schemes:
+- http
+consumes:
+- application/json
+produces:
+- application/json
+paths:
+  /:
+    get:
+      description: Returns metadata associated with the directory
+      operationId: Unnammed Endpoint
+      produces:
+      - application/json
+      parameters: []
+      responses:
+        200:
+          description:
+          schema:
+            $ref: '#/definitions/Metadata'
+      security:
+      - auth: []
+      x-unitTests: []
+      x-operation-settings:
+        CollectParameters: false
+        AllowDynamicQueryParameters: false
+        AllowDynamicFormParameters: false
+        IsMultiContentStreaming: false
+  /resources:
+    get:
+      description: Get customer information by supplying and identifier and identifier type
+      tags:
+      - resources
+      operationId: Resources
+      produces:
+      - application/json
+      parameters:
+      - name: identifier-type
+        in: query
+        required: true
+        type: string
+      - name: identifier
+        in: query
+        required: true
+        type: string
+      responses:
+        200:
+          description:
+          schema:
+            $ref: '#/definitions/Resource'
+        404:
+          description: 'TODO: Add error message'
+      security:
+      - auth: []
+      x-unitTests: []
+      x-operation-settings:
+        CollectParameters: false
+        AllowDynamicQueryParameters: false
+        AllowDynamicFormParameters: false
+        IsMultiContentStreaming: false
+  /commands/register:
+    post:
+      description: Registere DFSP to use the central directory
+      tags:
+      - commands
+      operationId: CommandsRegister
+      produces:
+      - application/json
+      parameters:
+      - name: body
+        in: body
+        required: true
+        schema:
+          $ref: '#/definitions/DFSP'
+      responses:
+        200:
+          description:
+          schema:
+            $ref: '#/definitions/DFSP'
+      security:
+      - auth: []
+      x-unitTests: []
+      x-operation-settings:
+        CollectParameters: false
+        AllowDynamicQueryParameters: false
+        AllowDynamicFormParameters: false
+        IsMultiContentStreaming: false
+  /identifier-types:
+    get:
+      description: Get identifier types supported by the central directory
+      tags:
+      - identifier
+      operationId: IdentifierTypes
+      produces:
+      - application/json
+      parameters: []
+      responses:
+        200:
+          description:
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/IdentifierType'
+      security:
+      - auth: []
+      x-unitTests: []
+      x-operation-settings:
+        CollectParameters: false
+        AllowDynamicQueryParameters: false
+        AllowDynamicFormParameters: false
+        IsMultiContentStreaming: false
+definitions:
+  Resource:
+    title: Resource
+    type: object
+    properties:
+      spspReceiver:
+        type: string
+    required:
+    - spspReceiver
+  DFSP:
+    title: DFSP
+    type: object
+    properties:
+      name:
+        type: string
+      key:
+        type: string
+      secret:
+        type: string
+    required:
+    - name
+  IdentifierType:
+    title: IdentifierType
+    type: object
+    properties:
+      identifier_type:
+        type: string
+      description:
+        type: string
+    required:
+    - identifier_type
+    - description
+  Metadata:
+    title: Metadata
+    type: object
+    properties:
+      directory:
+        type: string
+    required:
+    - directory
+  Error:
+    title: Error
+    type: object
+    properties:
+      error:
+        $ref: '#/definitions/ErrorDetail'
+    required:
+    - error
+  ErrorDetail:
+    title: ErrorDetail
+    type: object
+    properties:
+      id:
+        type: string
+      message:
+        type: string
+    required:
+    - id
+    - message
+  Error9:
+    title: Error9
+    enum:
+    - error
