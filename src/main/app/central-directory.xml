@@ -42,7 +42,7 @@ http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/htt
         <http:request config-ref="central-directory-http-config" path="/resources" method="GET" doc:name="HTTP">
             <http:request-builder>
                 <http:query-param paramName="identifier" value="#[message.inboundProperties.'http.query.params'.identifier]"/>
-                <http:query-param paramName="identifier-type" value="#[message.inboundProperties.'http.query.params'.identifier_type]"/>
+                <http:query-param paramName="identifierType" value="#[message.inboundProperties.'http.query.params'.identifierType]"/>
                 <http:header headerName="Authorization" value="#[message.inboundProperties.authorization]"/>
             </http:request-builder>
 		    <http:success-status-code-validator values="200..599"/>
