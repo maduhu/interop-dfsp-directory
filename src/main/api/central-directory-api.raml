@@ -29,7 +29,7 @@ types:
   IdentifierType:
     type: object
     properties: 
-      identifier_type: string
+      identifierType: string
       description: string
       
   Metadata:
@@ -64,10 +64,10 @@ types:
           
 /resources:
   get:
-    description: Get customer information by supplying and identifier and identifier type
+    description: Get customer information by supplying an identifier and identifier type
     securedBy: [basic]
     queryParameters:
-      identifier-type:
+      identifierType:
         type: string
       identifier:
         type: string
