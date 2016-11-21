@@ -7,6 +7,11 @@
 http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
 http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd">
 
+    <spring:beans>
+        <spring:import resource="classpath:services-common.xml" />
+        <spring:import resource="classpath:metrics.xml" />
+    </spring:beans>
+
     <http:request-config name="central-directory-http-config" host="${central-directory.host}" port="${central-directory.port}" basePath="/" doc:name="HTTP Request Configuration">
         <http:raml-api-configuration location="central-directory-api.raml"/>
     </http:request-config>
