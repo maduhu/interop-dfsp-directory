@@ -5,26 +5,50 @@ http://www.mulesoft.org/schema/mule/apikit http://www.mulesoft.org/schema/mule/a
 http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.1.xsd">
     <apikit:config name="central-directory-api-config" raml="central-directory-api.raml" consoleEnabled="false" doc:name="Router"/>
     <flow name="central-directory-api-main">
-        <http:listener config-ref="api-httpListenerConfig" path="${directory-service.basePath}/*" doc:name="HTTP"/>
+        <http:listener config-ref="api-httpListenerConfig" path="${dfsp-directory-gateway-service.basePath}/api/*" doc:name="HTTP"/>
         <apikit:router config-ref="central-directory-api-config" doc:name="APIkit Router"/>
         <exception-strategy ref="central-directory-api-apiKitGlobalExceptionMapping" doc:name="Reference Exception Strategy"/>
     </flow>
     <flow name="central-directory-api-console">
-        <http:listener config-ref="api-httpListenerConfig" path="${directory-service.basePath}/console/*" doc:name="HTTP"/>
+        <http:listener config-ref="api-httpListenerConfig" path="${dfsp-directory-gateway-service.basePath}/console/*" doc:name="HTTP"/>
         <apikit:console config-ref="central-directory-api-config" doc:name="APIkit Console"/>
     </flow>
     <flow name="get:/:central-directory-api-config">
+        <logger level="INFO"
+                message="Processing request for get:/:central-directory-api-config"
+                category="com.l1p.interop.dfsp.directory.metadata" doc:name="logger"/>
         <flow-ref name="get-metadata" doc:name="get-metadata"/>
+        <logger level="INFO"
+                message="Processed request for get:/:central-directory-api-config"
+                category="com.l1p.interop.dfsp.directory.metadata" doc:name="logger"/>
     </flow>
     <flow name="get:/identifier-types:central-directory-api-config">
+        <logger level="INFO"
+                message="Processing request for get:/identifier-types:central-directory-api-config"
+                category="com.l1p.interop.dfsp.directory.identifier-types" doc:name="logger"/>
         <flow-ref name="get-identifier-types" doc:name="get-identifier-types"/>
+        <logger level="INFO"
+                message="Processing request for get:/identifier-types:central-directory-api-config"
+                category="com.l1p.interop.dfsp.directory.identifier-types" doc:name="logger"/>
     </flow>
     <flow name="get:/resources:central-directory-api-config">
+        <logger level="INFO"
+                message="Processing request for get:/resources:central-directory-api-config"
+                category="com.l1p.interop.dfsp.directory.resources" doc:name="logger"/>
         <flow-ref name="get-resources" doc:name="get-resources"/>
+        <logger level="INFO"
+                message="Processing request for get:/resources:central-directory-api-config"
+                category="com.l1p.interop.dfsp.directory.resources" doc:name="logger"/>
     </flow>
     <flow name="post:/commands/register:application/json:central-directory-api-config">
+        <logger level="INFO"
+                message="Processing request for post:/commands/register:application/json:central-directory-api-config, payload=#[payload]"
+                category="com.l1p.interop.dfsp.directory.register" doc:name="logger"/>
         <flow-ref name="register-dfsp" doc:name="register-dfsp"/>
         <set-property propertyName="Content-Type" value="application/json" doc:name="Property"/>
+        <logger level="INFO"
+                message="Processing request for post:/commands/register:application/json:central-directory-api-config"
+                category="com.l1p.interop.dfsp.directory.resgister" doc:name="logger"/>
     </flow>
     <apikit:mapping-exception-strategy name="central-directory-api-apiKitGlobalExceptionMapping">
         <apikit:mapping statusCode="404">
