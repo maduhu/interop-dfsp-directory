@@ -1,0 +1,39 @@
+#%RAML 1.0
+title: Directory User Registration 
+version: v1
+baseUri: http://user-registration/
+mediaType: application/json
+    
+types: 
+  User:
+    type: object
+    properties: 
+      url: string
+      number?: string
+
+/:
+  get:
+    description: Returns metadata associated with the directory
+    responses: 
+      200:
+          
+/users:
+  post:
+    description: Demo Create a user
+    body:
+      type: object
+      properties:
+        url: string
+    responses:
+      201:
+        body:
+          type: User
+  /{number}:
+    get:
+      description: Look up User
+      responses:
+        200:
+          body:
+            type: User
+        
+         
