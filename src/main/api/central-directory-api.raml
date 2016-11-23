@@ -52,6 +52,20 @@ types:
     properties: 
       id: string
       message: string
+      validationErrors?:
+        type: array
+        items: ValidationError
+
+  ValidationError:
+    type: object
+    properties: 
+      message: string
+      params: 
+        type: object
+        properties: 
+          key: string
+          value?: string
+          child?: string
 
 /:
   get:
