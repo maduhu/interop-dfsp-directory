@@ -31,7 +31,7 @@ http://www.springframework.org/schema/beans http://www.springframework.org/schem
     <flow name="get:/users/{number}:user-registration-api-config">
         <http:request config-ref="user-registration-http-config" path="/users/{number}" method="GET" doc:name="HTTP">
             <http:request-builder>
-                <http:uri-param paramName="number" value="#[message.inboundProperties.'http.uri.params'.number"/>
+                <http:uri-param paramName="number" value="#[message.inboundProperties.'http.uri.params'.number]"/>
             </http:request-builder>
 		    <http:success-status-code-validator values="200..599"/>
         </http:request>
