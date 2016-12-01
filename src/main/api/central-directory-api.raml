@@ -1,7 +1,7 @@
 #%RAML 1.0
 title: Central Directory 
 version: v1
-baseUri: https://central-directory/
+baseUri: http://central-directory/
 mediaType: application/json
 securitySchemes:
   basic:
@@ -29,7 +29,7 @@ types:
   IdentifierType:
     type: object
     properties: 
-      identifier_type: string
+      identifierType: string
       description: string
       
   Metadata:
@@ -52,6 +52,20 @@ types:
     properties: 
       id: string
       message: string
+      validationErrors?:
+        type: array
+        items: ValidationError
+
+  ValidationError:
+    type: object
+    properties: 
+      message: string
+      params: 
+        type: object
+        properties: 
+          key: string
+          value?: string
+          child?: string
 
 /:
   get:
@@ -64,14 +78,14 @@ types:
           
 /resources:
   get:
-    description: Get customer information by supplying and identifier and identifier type
+    description: Get customer information by supplying an identifier and identifier type
     securedBy: [basic]
     queryParameters:
-      identifier-type:
+      identifierType:
         type: string
       identifier:
-        type: string
-    responses: 
+        type: number
+    responses:
       200:
         body:
           type: Resource
@@ -83,17 +97,18 @@ types:
   /register:
     post:
       description: Registere DFSP to use the central directory
+      securedBy: [basic]
       body:
         type: DFSP
       responses: 
         201:
           body:
             type: DFSP
-            
 
-/identifer-types:
+/identifier-types:
   get:
     description:  Get identifier types supported by the central directory
+    securedBy: [basic]
     responses: 
       200:
         body:

@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:http="http://www.mulesoft.org/schema/mule/http" xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
+	xmlns:spring="http://www.springframework.org/schema/beans" 
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-current.xsd
+http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd">
+
+    <spring:beans>
+        <spring:import resource="classpath:services-common.xml" />
+        <spring:import resource="classpath:metrics.xml" />
+    </spring:beans>
+
+    <http:request-config name="central-directory-http-config" host="${central-directory.host}" port="${central-directory.port}" basePath="/" doc:name="HTTP Request Configuration">
+        <http:raml-api-configuration location="central-directory-api.raml"/>
+    </http:request-config>
+
+    <sub-flow name="register-dfsp">
+        <http:request config-ref="central-directory-http-config" path="/commands/register" method="POST" doc:name="HTTP">
+            <http:request-builder>
+                <http:header headerName="Authorization" value="#[message.inboundProperties.authorization]"/>
+            </http:request-builder>
+		    <http:success-status-code-validator values="200..599"/>
+        </http:request>
+        <set-property propertyName="http.status" value="#[message.inboundProperties.'http.status']"/>
+    </sub-flow>
+    
+    <sub-flow name="get-identifier-types">
+        <http:request config-ref="central-directory-http-config" path="/identifier-types" method="GET" doc:name="HTTP">
+            <http:request-builder>
+                <http:header headerName="Authorization" value="#[message.inboundProperties.authorization]"/>
+            </http:request-builder>
+		    <http:success-status-code-validator values="200..599"/>
+        </http:request>
+        <set-property propertyName="http.status" value="#[message.inboundProperties.'http.status']"/>
+    </sub-flow>
+
+    <sub-flow name="get-metadata">
+        <http:request config-ref="central-directory-http-config" path="/" method="GET" doc:name="HTTP">
+		    <http:success-status-code-validator values="200..599"/>
+        </http:request>
+        <set-property propertyName="http.status" value="#[message.inboundProperties.'http.status']"/>
+    </sub-flow>
+
+    <sub-flow name="get-resources">
+        <http:request config-ref="central-directory-http-config" path="/resources" method="GET" doc:name="HTTP">
+            <http:request-builder>
+                <http:query-param paramName="identifier" value="#[message.inboundProperties.'http.query.params'.identifier]"/>
+                <http:query-param paramName="identifierType" value="#[message.inboundProperties.'http.query.params'.identifierType]"/>
+                <http:header headerName="Authorization" value="#[message.inboundProperties.authorization]"/>
+            </http:request-builder>
+		    <http:success-status-code-validator values="200..599"/>
+        </http:request>
+        <set-property propertyName="http.status" value="#[message.inboundProperties.'http.status']"/>
+    </sub-flow>
+
+</mule>
