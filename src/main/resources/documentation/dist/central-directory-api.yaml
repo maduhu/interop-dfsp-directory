@@ -4,8 +4,9 @@ info:
   title: Central Directory
   description:
 
-host: central-directory
-basePath: /
+#host: central-directory
+
+basePath: /directory/v1
 securityDefinitions:
   auth:
     type: basic

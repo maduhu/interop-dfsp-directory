@@ -26,7 +26,7 @@
     -->
 
 	<!-- DFSP HTTP configuration for making REST call to the mock service -->
-	<http:request-config name="DFSP_Gateway_Configuration" host="${directory-service.host}" port="${directory-service.port}" basePath="${directory-service.basePath}" doc:name="HTTP Request Configuration"/>
+	<http:request-config protocol="HTTP" name="DFSP_Gateway_Configuration" host="${directory-service.host}" port="${directory-service.port}" basePath="${directory-service.basePath}" doc:name="HTTP Request Configuration"/>
 
     <flow name="post:/user/add:application/json:api-config">
         <metrics:snap-time config-ref="metricsConfig" snapTimeKey="user.add.start" doc:name="SnapTime"/>

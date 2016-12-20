@@ -12,7 +12,7 @@ http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/htt
         <spring:import resource="classpath:metrics.xml" />
     </spring:beans>
 
-    <http:request-config name="central-directory-http-config" host="${central-directory.host}" port="${central-directory.port}" basePath="/" doc:name="HTTP Request Configuration">
+    <http:request-config protocol="HTTP" name="central-directory-http-config" host="${central-directory.host}" port="${central-directory.port}" basePath="/" doc:name="HTTP Request Configuration">
         <http:raml-api-configuration location="central-directory-api.raml"/>
     </http:request-config>
 
