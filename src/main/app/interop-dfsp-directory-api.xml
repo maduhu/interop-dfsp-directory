@@ -35,9 +35,9 @@
 
     <flow name="api-main">
         <http:listener config-ref="api-httpListenerConfig" path="${dfsp-directory-gateway-service.basePath}/*" doc:name="HTTP"/>
-        <set-session-variable variableName="interopID" value="#[java.util.UUID.randomUUID()]" doc:name="set-interopID"/>
+        <set-session-variable variableName="traceID" value="#[(message.inboundProperties.'http.traceID' == empty) ? java.util.UUID.randomUUID() : message.inboundProperties.'http.query.traceID']" doc:name="set-traceID"/>
         <logger level="INFO"
-                message="Received request for interopID=#[sessionVars.interopID] at path=#[message.inboundProperties.'http.request.path']"
+                message="Received request for traceID=#[sessionVars.traceID] at path=#[message.inboundProperties.'http.request.path']"
                 category="com.l1p.interop.dfsp.api-main" doc:name="logger"/>
         
         <apikit:router config-ref="api-config" doc:name="APIkit Router"/>

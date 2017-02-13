@@ -20,7 +20,7 @@
 	</scm>
 
 	<properties>
-		<interop-common-version>1.0.7</interop-common-version>
+		<interop-common-version>1.0.17</interop-common-version>
 	</properties>
 
 	<dependencies>

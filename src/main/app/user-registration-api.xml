@@ -6,15 +6,15 @@ http://www.springframework.org/schema/beans http://www.springframework.org/schem
     
     <apikit:config name="user-registration-api-config" raml="user-registration-api.raml" consoleEnabled="false" doc:name="Router"/>
 
-    <http:request-config name="user-registration-http-config" host="${user-registration.host}" port="${user-registration.port}" basePath="/" doc:name="HTTP Request Configuration">
+    <http:request-config name="user-registration-http-config" host="${user-registration.host}" port="${user-registration.port}" protocol="HTTP" basePath="/" doc:name="HTTP Request Configuration">
         <http:raml-api-configuration location="user-registration-api.raml"/>
     </http:request-config>
     
     <flow name="user-registration-api-main">
         <http:listener config-ref="api-httpListenerConfig" path="${dfsp-directory-gateway-service.basePath}/user-registration/*" doc:name="HTTP"/>
-        <set-session-variable variableName="interopID" value="#[java.util.UUID.randomUUID()]" doc:name="set-interopID"/>
+        <set-session-variable variableName="traceID" value="#[(message.inboundProperties.'http.traceID' == empty) ? java.util.UUID.randomUUID() : message.inboundProperties.'http.query.traceID']" doc:name="set-traceID"/>
         <logger level="INFO"
-                message="Received request for interopID=#[sessionVars.interopID] at path=#[message.inboundProperties.'http.request.path']"
+                message="Received request for traceID=#[sessionVars.traceID] at path=#[message.inboundProperties.'http.request.path']"
                 category="com.l1p.interop.dfsp.api-main" doc:name="logger"/>
         <apikit:router config-ref="user-registration-api-config" doc:name="APIkit Router"/>
         <exception-strategy ref="user-registration-api-apiKitGlobalExceptionMapping" doc:name="Reference Exception Strategy"/>

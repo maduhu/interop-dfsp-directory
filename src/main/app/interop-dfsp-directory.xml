@@ -26,17 +26,17 @@
     -->
 
 	<!-- DFSP HTTP configuration for making REST call to the mock service -->
-	<http:request-config name="DFSP_Gateway_Configuration" host="${directory-service.host}" port="${directory-service.port}" basePath="${directory-service.basePath}" doc:name="HTTP Request Configuration"/>
+	<http:request-config name="DFSP_Gateway_Configuration" host="${directory-service.host}" port="${directory-service.port}" protocol="HTTP" basePath="${directory-service.basePath}" doc:name="HTTP Request Configuration"/>
 
     <flow name="post:/user/add:application/json:api-config">
         <metrics:snap-time config-ref="metricsConfig" snapTimeKey="user.add.start" doc:name="SnapTime"/>
         <logger level="INFO"
-	        	message="Processing request for post:/user/add, interopID=#[sessionVars.interopID] payload=#[payload]"
+	        	message="Processing request for post:/user/add, traceID=#[sessionVars.traceID] payload=#[payload]"
 	        	category="com.l1p.interop.dfsp.directory.userAdd" doc:name="logger"/>
         <metrics:snap-time config-ref="metricsConfig" snapTimeKey="user.add.proxy-start" doc:name="SnapTime"/>
         <http:request config-ref="DFSP_Gateway_Configuration" path="/user/add" method="POST" doc:name="HTTP"/>
         <logger level="INFO"
-		        message="Processing complete for post:/user/add, interopID=#[sessionVars.interopID], payload=#[payload]"
+		        message="Processing complete for post:/user/add, traceID=#[sessionVars.traceID], payload=#[payload]"
 		        category="com.l1p.interop.dfsp.directory.userAdd" doc:name="logger"/>
         <metrics:snap-time config-ref="metricsConfig" snapTimeKey="user.add.stop" doc:name="SnapTime"/>
         <metrics:time config-ref="metricsConfig" beginSnapKey="user.add.start" endSnapKey="user.add.stop" category="l1p.dfsp.directory.api" metricKey="AddUserTime" doc:name="Metrics Record"/>
@@ -49,12 +49,12 @@
     <flow name="post:/user/get:application/json:api-config">
         <metrics:snap-time config-ref="metricsConfig" snapTimeKey="user.get.start" doc:name="SnapTime"/>
         <logger level="INFO"
-        		message="Processing request for post:/user/get, interopID=#[sessionVars.interopID], payload=#[payload]"
+        		message="Processing request for post:/user/get, traceID=#[sessionVars.traceID], payload=#[payload]"
         		category="com.l1p.interop.dfsp.directory.userGet" doc:name="logger"/>
         <metrics:snap-time config-ref="metricsConfig" snapTimeKey="user.get.proxy-start" doc:name="SnapTime"/>
         <http:request config-ref="DFSP_Gateway_Configuration" path="/user/get" method="POST" doc:name="HTTP"/>
         <logger level="INFO"
-        		message="Processing complete for post:/user/get, interopID=#[sessionVars.interopID], payload=#[payload]"
+        		message="Processing complete for post:/user/get, traceID=#[sessionVars.traceID], payload=#[payload]"
         		category="com.l1p.interop.dfsp.directory.userGet" doc:name="logger"/>
         <metrics:snap-time config-ref="metricsConfig" snapTimeKey="user.get.stop" doc:name="SnapTime"/>
         <metrics:time config-ref="metricsConfig" beginSnapKey="user.get.start" endSnapKey="user.get.stop" category="l1p.dfsp.directory.api" metricKey="GetUserTime" doc:name="Metrics Record"/>
