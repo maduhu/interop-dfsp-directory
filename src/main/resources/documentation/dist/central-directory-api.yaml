@@ -47,7 +47,7 @@ paths:
       produces:
       - application/json
       parameters:
-      - name: identifier-type
+      - name: identifierType
         in: query
         required: true
         type: string
