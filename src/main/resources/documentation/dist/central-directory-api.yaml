@@ -1,8 +1,8 @@
-swagger: 2.0
+swagger: '2.0'
 info:
-  version: 1.0
+  version: '1.0'
   title: Central Directory
-  description:
+  description: "Central Directory"
 
 #host: central-directory
 
@@ -21,23 +21,17 @@ paths:
   /:
     get:
       description: Returns metadata associated with the directory
-      operationId: Unnammed Endpoint
       produces:
       - application/json
       parameters: []
       responses:
         200:
-          description:
+          description: ""
           schema:
             $ref: '#/definitions/Metadata'
       security:
       - auth: []
-      x-unitTests: []
-      x-operation-settings:
-        CollectParameters: false
-        AllowDynamicQueryParameters: false
-        AllowDynamicFormParameters: false
-        IsMultiContentStreaming: false
+
   /resources:
     get:
       description: Get customer information by supplying and identifier and identifier type
@@ -54,25 +48,22 @@ paths:
       - name: identifier
         in: query
         required: true
-        type: string
+        type: number
       responses:
         200:
-          description:
+          description: ""
           schema:
             $ref: '#/definitions/Resource'
         404:
-          description: 'TODO: Add error message'
+          description: 'Information not found based on the combination'
+          schema:
+            $ref: '#/definitions/Error'
       security:
       - auth: []
-      x-unitTests: []
-      x-operation-settings:
-        CollectParameters: false
-        AllowDynamicQueryParameters: false
-        AllowDynamicFormParameters: false
-        IsMultiContentStreaming: false
+
   /commands/register:
     post:
-      description: Registere DFSP to use the central directory
+      description: Register DFSP to use the central directory
       tags:
       - commands
       operationId: CommandsRegister
@@ -85,42 +76,30 @@ paths:
         schema:
           $ref: '#/definitions/DFSP'
       responses:
-        200:
-          description:
+        201:
+          description: "Registered"
           schema:
             $ref: '#/definitions/DFSP'
       security:
       - auth: []
-      x-unitTests: []
-      x-operation-settings:
-        CollectParameters: false
-        AllowDynamicQueryParameters: false
-        AllowDynamicFormParameters: false
-        IsMultiContentStreaming: false
+
   /identifier-types:
     get:
       description: Get identifier types supported by the central directory
       tags:
       - identifier
       operationId: IdentifierTypes
-      produces:
-      - application/json
       parameters: []
       responses:
         200:
-          description:
+          description: ""
           schema:
             type: array
             items:
               $ref: '#/definitions/IdentifierType'
       security:
       - auth: []
-      x-unitTests: []
-      x-operation-settings:
-        CollectParameters: false
-        AllowDynamicQueryParameters: false
-        AllowDynamicFormParameters: false
-        IsMultiContentStreaming: false
+
 definitions:
   Resource:
     title: Resource
@@ -177,10 +156,34 @@ definitions:
         type: string
       message:
         type: string
+      validationErrors:
+        type: array
+        items:
+          $ref: '#/definitions/ValidationError'
     required:
     - id
     - message
-  Error9:
-    title: Error9
-    enum:
-    - error
+  
+  ValidationError:
+    title: ValidationError
+    type: object
+    properties:
+      message:
+        type: string
+      params:
+        $ref: '#/definitions/Params'
+    required:
+    - message
+    - params
+  Params:
+    title: params
+    type: object
+    properties:
+      key:
+        type: string
+      value:
+        type: string
+      child:
+        type: string
+    required:
+    - key
