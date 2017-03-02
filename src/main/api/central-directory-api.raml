@@ -5,8 +5,7 @@ baseUri: http://central-directory/
 mediaType: application/json
 securitySchemes:
   basic:
-    description: |
-      This API supports Basic Authentication.
+    description: This API supports Basic Authentication.
     type: Basic Authentication
     
 types: 
@@ -96,7 +95,7 @@ types:
 /commands:
   /register:
     post:
-      description: Registere DFSP to use the central directory
+      description: Register DFSP to use the central directory
       securedBy: [basic]
       body:
         type: DFSP
