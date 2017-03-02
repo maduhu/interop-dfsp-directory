@@ -17,7 +17,7 @@ public class JsonRpcResponseTest {
 
     @Test
     /**
-     * This test proves the response creates a JSON String that is convertable back to a Map structure containing
+     * This test proves the response creates a JSON String that is convertible back to a Map structure containing
      * the correct data.
      */
     public void responseShouldBeConvertableToJSON() throws Exception {
