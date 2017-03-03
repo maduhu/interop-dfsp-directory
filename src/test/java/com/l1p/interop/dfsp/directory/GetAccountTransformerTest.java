@@ -1,26 +1,29 @@
 package com.l1p.interop.dfsp.directory;
 
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.fail;
+
 import java.util.HashMap;
 import java.util.Map;
+
 import org.codehaus.jettison.json.JSONObject;
 import org.junit.Test;
+import org.mule.api.MuleEvent;
+import org.mule.api.MuleMessage;
 import org.mule.api.transport.PropertyScope;
-import com.l1p.interop.TestMuleMessageImpl;
+import org.mule.component.SimpleCallableJavaComponentTestCase;
 
-
-public class GetAccountTransformerTest {
+public class GetAccountTransformerTest extends SimpleCallableJavaComponentTestCase {
 	
 	@Test
 	public void testWithUriAndAccunt() throws Exception {
 
 		/* Prepare inbound message. */
-		TestMuleMessageImpl muleMessage = new TestMuleMessageImpl();
+		Object payload = buildTransformerData("userURI", "userURI");
+		MuleEvent event = getTestEvent(payload, muleContext);
+		MuleMessage muleMessage = event.getMessage();
         muleMessage.setProperty("id", "some name", PropertyScope.SESSION);
-        
-        Object payload = buildTransformerData("userURI", "userURI");
-        muleMessage.setPayload(payload);
         
         GetAccountTransformer transformer = new GetAccountTransformer( createStoreData("userURI") );
         String response = (String) transformer.transformMessage(muleMessage, "UTF-8");
@@ -38,17 +41,15 @@ public class GetAccountTransformerTest {
 	public void testWithUriAndNoAccount() throws Exception {
 
 		/* Prepare inbound message. */
-		TestMuleMessageImpl muleMessage = new TestMuleMessageImpl();
+		Object payload = buildTransformerData("userURI", "userURI");
+		MuleEvent event = getTestEvent(payload, muleContext);
+		MuleMessage muleMessage = event.getMessage();
         muleMessage.setProperty("id", "some name", PropertyScope.SESSION);
-        
-        Object payload = buildTransformerData("userURI", "userURI");
-        muleMessage.setPayload(payload);
         
         GetAccountTransformer transformer = new GetAccountTransformer( createStoreData("userURIX") );
         String response = (String) transformer.transformMessage(muleMessage, "UTF-8");
 
-        JSONObject jObject  = new JSONObject(response); // json
-        
+        JSONObject jObject  = new JSONObject(response); // json response
         
         JSONObject data;
 		try {
@@ -66,17 +67,16 @@ public class GetAccountTransformerTest {
 	public void testWithNoUriWithAccount() throws Exception {
 
 		/* Prepare inbound message. */
-		TestMuleMessageImpl muleMessage = new TestMuleMessageImpl();
+		Object payload = buildTransformerData("userURIx", "userURIx");
+		MuleEvent event = getTestEvent(payload, muleContext);
+		MuleMessage muleMessage = event.getMessage();
+		
         muleMessage.setProperty("id", "some name", PropertyScope.SESSION);
-        
-        Object payload = buildTransformerData("userURIx", "userURIx");
-        muleMessage.setPayload(payload);
         
         GetAccountTransformer transformer = new GetAccountTransformer( createStoreData("userURI") );
         String response = (String) transformer.transformMessage(muleMessage, "UTF-8");
 
         JSONObject jObject  = new JSONObject(response); // json
-        
         
         JSONObject data;
 		try {
