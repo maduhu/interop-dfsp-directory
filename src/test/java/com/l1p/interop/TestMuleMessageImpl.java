@@ -91,10 +91,12 @@ public class TestMuleMessageImpl implements MuleMessage {
 
 	@Override
 	public void setProperty(String key, Object value, PropertyScope scope) {
-		// TODO Auto-generated method stub
-		if (scope.equals(PropertyScope.SESSION)) this.propertyMapSession.put(key, value);
-		else if (scope.equals(PropertyScope.APPLICATION)) this.propertyMapApplication.put(key, value);
-		else if (scope.equals(PropertyScope.INVOCATION)) this.propertyMapInvocation.put(key, value);
+		if (scope.equals(PropertyScope.SESSION)) 
+			this.propertyMapSession.put(key, value);
+		else if (scope.equals(PropertyScope.APPLICATION)) 
+			this.propertyMapApplication.put(key, value);
+		else if (scope.equals(PropertyScope.INVOCATION)) 
+			this.propertyMapInvocation.put(key, value);
 	}
 
 	@Override
