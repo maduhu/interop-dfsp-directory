@@ -1,5 +1,6 @@
 package com.l1p.interop;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -24,6 +25,9 @@ public class TestMuleMessageImpl implements MuleMessage {
 	 * 
 	 */
 	private static final long serialVersionUID = -1185596438176080087L;
+	private Map<String, Object> propertyMapSession = new HashMap<String, Object>();
+	private Map<String, Object> propertyMapApplication = new HashMap<String, Object>();
+	private Map<String, Object> propertyMapInvocation = new HashMap<String, Object>();
 
 	@Override
 	public void addProperties(Map<String, Object> properties) {
@@ -88,7 +92,9 @@ public class TestMuleMessageImpl implements MuleMessage {
 	@Override
 	public void setProperty(String key, Object value, PropertyScope scope) {
 		// TODO Auto-generated method stub
-
+		if (scope.equals(PropertyScope.SESSION)) this.propertyMapSession.put(key, value);
+		else if (scope.equals(PropertyScope.APPLICATION)) this.propertyMapApplication.put(key, value);
+		else if (scope.equals(PropertyScope.INVOCATION)) this.propertyMapInvocation.put(key, value);
 	}
 
 	@Override
@@ -231,8 +237,14 @@ public class TestMuleMessageImpl implements MuleMessage {
 
 	@Override
 	public <T> T getProperty(String name, PropertyScope scope, T defaultValue) {
-		// TODO Auto-generated method stub
-		return null;
+		if (scope.equals(PropertyScope.SESSION)) 
+			return (T) this.propertyMapSession.get(name);
+		else if (scope.equals(PropertyScope.APPLICATION)) 
+			return (T) this.propertyMapApplication.get(name);
+		else if (scope.equals(PropertyScope.INVOCATION)) 
+			return (T) this.propertyMapInvocation.get(name);
+		else
+			return defaultValue;
 	}
 
 	@Override
