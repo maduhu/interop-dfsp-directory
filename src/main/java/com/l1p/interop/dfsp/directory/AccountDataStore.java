@@ -30,13 +30,13 @@ public class AccountDataStore {
 
 	private void validateAccountFields(Map<String, String> account) {
 		if (account.get("name") == null) {
-			throw new RuntimeException("Required field \"name\" not found in account data");
+			throw new ValidateAccountException("Required field \"name\" not found in account data");
 		} else if (account.get("account") == null) {
-			throw new RuntimeException("Required field \"account\" not found in account data");
+			throw new ValidateAccountException("Required field \"account\" not found in account data");
 		} else if (account.get("currency") == null) {
-			throw new RuntimeException("Required field \"currency\" not found in account data");
+			throw new ValidateAccountException("Required field \"currency\" not found in account data");
 		} else if (account.size() != 3) {
-			throw new RuntimeException(
+			throw new ValidateAccountException(
 					"Account data contains unexpected number of fields, expected 3, contains " + account.size());
 		}
 	}

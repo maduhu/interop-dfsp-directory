@@ -8,7 +8,9 @@ types:
   User:
     type: object
     properties: 
-      url: string
+      url:
+        type: string
+        pattern: ^((http(s?))\:\/\/)?((([a-zA-Z0-9_\-]{2,}\.)+[a-zA-Z]{2,})|((?:(?:25[0-5]|2[0-4]\d|[01]\d\d|\d?\d)( ?(\.?\d)\.)){4}))(:[a-zA-Z0-9]+)?(\/[a-zA-Z0-9\-\._\?\,\'\/\\\+&amp;%\$#\=~]*)?$
       number?: string
 
 /:
@@ -23,7 +25,9 @@ types:
     body:
       type: object
       properties:
-        url: string
+        url:
+          type: string
+          pattern: ^((http(s?))\:\/\/)?((([a-zA-Z0-9_\-]{2,}\.)+[a-zA-Z]{2,})|((?:(?:25[0-5]|2[0-4]\d|[01]\d\d|\d?\d)( ?(\.?\d)\.)){4}))(:[a-zA-Z0-9]+)?(\/[a-zA-Z0-9\-\._\?\,\'\/\\\+&amp;%\$#\=~]*)?$
     responses:
       201:
         body:
@@ -35,5 +39,3 @@ types:
         200:
           body:
             type: User
-        
-         

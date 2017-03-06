@@ -8,11 +8,11 @@
       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
       xmlns:metrics="http://www.mulesoft.org/schema/mule/metrics"
       xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
-        http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd
-        http://www.mulesoft.org/schema/mule/metrics http://www.mulesoft.org/schema/mule/metrics/current/mule-metrics.xsd
-        http://www.mulesoft.org/schema/mule/json http://www.mulesoft.org/schema/mule/json/current/mule-json.xsd
-        http://www.mulesoft.org/schema/mule/apikit http://www.mulesoft.org/schema/mule/apikit/current/mule-apikit.xsd
-        http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.1.xsd">
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd
+http://www.mulesoft.org/schema/mule/metrics http://www.mulesoft.org/schema/mule/metrics/current/mule-metrics.xsd
+http://www.mulesoft.org/schema/mule/json http://www.mulesoft.org/schema/mule/json/current/mule-json.xsd
+http://www.mulesoft.org/schema/mule/apikit http://www.mulesoft.org/schema/mule/apikit/current/mule-apikit.xsd
+http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.1.xsd">
     
     <!--
     Contains flows for handling the following api messages
@@ -26,7 +26,7 @@
     -->
 
 	<!-- DFSP HTTP configuration for making REST call to the mock service -->
-	<http:request-config name="DFSP_Gateway_Configuration" host="${directory-service.host}" port="${directory-service.port}" basePath="${directory-service.basePath}" doc:name="HTTP Request Configuration"/>
+	<http:request-config  name="DFSP_Gateway_Configuration" host="${directory-service.host}" port="${directory-service.port}" basePath="${directory-service.basePath}" doc:name="HTTP Request Configuration"/>
 
     <flow name="post:/user/add:application/json:api-config">
         <metrics:snap-time config-ref="metricsConfig" snapTimeKey="user.add.start" doc:name="SnapTime"/>
