@@ -60,7 +60,7 @@ public class DirectoryExceptionTransformerTest extends SimpleCallableJavaCompone
         assertTrue("Does not contain expected List", dError.getValidationErrors().containsAll(vErrorList) );
         
         assertEquals("errorID", dError.getId() );
-        assertTrue("Does not contain traceID as expected:", (dError.getMessage() ).contains( muleMessage.getProperty("traceID", PropertyScope.SESSION) ) );
+        assertTrue("Does not contain traceID as expected:", dError.getMessage().contains(muleMessage.getProperty("traceID", PropertyScope.SESSION).toString()));
         
         dError.setId(secondaryId);
         dError.setMessage(secondaryMessage);
