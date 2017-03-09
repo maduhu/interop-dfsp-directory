@@ -17,7 +17,7 @@ import org.mule.component.SimpleCallableJavaComponentTestCase;
 public class GetAccountTransformerTest extends SimpleCallableJavaComponentTestCase {
 	
 	@Test
-	public void testWithUriAndAccunt() throws Exception {
+	public void testWithUriAndAccount() throws Exception {
 
 		/* Prepare inbound message. */
 		Object payload = buildTransformerData("userURI", "userURI");

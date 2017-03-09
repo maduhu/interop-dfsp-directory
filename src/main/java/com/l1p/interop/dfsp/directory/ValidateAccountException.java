@@ -1,9 +1,5 @@
 package com.l1p.interop.dfsp.directory;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
 /**
  * This class is a wrapper on a map of Accounts
  * 
@@ -16,9 +12,11 @@ public class ValidateAccountException extends RuntimeException {
 
 	private static final long serialVersionUID = 1L;
 
+	/*
 	public ValidateAccountException(){
         super();
     }
+    */
 
     public ValidateAccountException(String message){
         super(message);

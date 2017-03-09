@@ -41,7 +41,7 @@ public class GetUserFunctionalTest extends FunctionalTestCase {
 
 	@Override
 	protected String getConfigResources() {
-		return "test-resources.xml,interop-dfsp-directory-api.xml,interop-dfsp-directory.xml,mock-interop-dfsp-directory-api.xml,mock-interop-dfsp-directory.xml";
+		return "test-resources.xml,interop-dfsp-directory.xml,mock-interop-dfsp-directory-api.xml,mock-interop-dfsp-directory.xml";
 	}
 
 	@BeforeClass
