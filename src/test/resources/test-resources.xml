@@ -14,5 +14,9 @@
 
 	<!-- Apikit HTTP configuration, referenced from domain when normally run or deployed -->
 	<http:listener-config name="api-httpListenerConfig" host="${proxy-service.host}" port="${proxy-service.port}" doc:name="HTTP Listener Configuration"/>
+	
+	<spring:beans>
+    	<spring:import resource="classpath:services-common.xml"/>
+    </spring:beans>
 		
 </mule>

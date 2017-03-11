@@ -6,7 +6,7 @@ http://www.springframework.org/schema/beans http://www.springframework.org/schem
     
     <apikit:config name="user-registration-api-config" raml="user-registration-api.raml" consoleEnabled="false" doc:name="Router"/>
 
-    <http:request-config name="user-registration-http-config" host="${user-registration.host}" port="${user-registration.port}" protocol="HTTP" basePath="/" doc:name="HTTP Request Configuration">
+    <http:request-config protocol="HTTP" name="user-registration-http-config" host="${user-registration.host}" port="${user-registration.port}" basePath="/" doc:name="HTTP Request Configuration">
         <http:raml-api-configuration location="user-registration-api.raml"/>
     </http:request-config>
     
