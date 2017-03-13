@@ -79,7 +79,7 @@ public class GetUserFunctionalTest extends FunctionalTestCase {
 			fail( "Loading test account data to interop-dfsp-directory via " + addUserPath + " produced an unexpected exception: " + e.getMessage() );
 		}
 
-		Map<String,String> paramMap = new HashMap<>();
+		Map<String,String> paramMap = new HashMap<String,String>();
 
 		logger.info("Posting events to web services");
 

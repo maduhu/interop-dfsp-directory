@@ -25,7 +25,7 @@ public class AccountDataStoreTest {
 	}
 
 	private Map<String, String> buildTestAccount(final String name) {
-		Map<String,String> accountData = new HashMap<>();
+		Map<String,String> accountData = new HashMap<String, String>();
 		accountData.put("name",name);
 		accountData.put("account",name);
 		accountData.put("currency","USD");
@@ -125,7 +125,7 @@ public class AccountDataStoreTest {
 		Map<String, String> accountData2 = buildTestAccount(userName2);
 		accountData2.put("uri", getTestURI(userName2));
 		
-		List<Map<String, String>> listOfAccounts = new ArrayList<>();
+		List<Map<String, String>> listOfAccounts = new ArrayList<Map<String,String>>();
 		listOfAccounts.add(accountData1);
 		listOfAccounts.add(accountData2);
 		
@@ -152,7 +152,7 @@ public class AccountDataStoreTest {
 		accountData1.put("uri", userName1URI);
 		accountData1.remove("account");
 		
-		List<Map<String, String>> listOfAccounts = new ArrayList<>();
+		List<Map<String, String>> listOfAccounts = new ArrayList<Map<String,String>>();
 		listOfAccounts.add(accountData1);
 		
 		RuntimeException exception = null;
