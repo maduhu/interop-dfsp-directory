@@ -6,6 +6,10 @@ dependencies:
   override:
     - "mvn dependency:resolve -s /tmp/interop_maven_settings.xml"
 
+machine:
+  java:
+    version: openjdk7
+
 test:
   override:
     - "mvn integration-test -s /tmp/interop_maven_settings.xml"
