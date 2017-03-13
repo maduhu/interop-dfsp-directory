@@ -15,6 +15,7 @@ public class DirectoryExceptionTransformer extends AbstractMessageTransformer {
   private Logger log = LoggerFactory.getLogger(this.getClass());
 
   public DirectoryExceptionTransformer() {
+	  log.debug("DirectoryExceptionTransformer's constructor");
   }
 
   public Object transformMessage(MuleMessage muleMessage, String outputEncoding) throws TransformerException {
@@ -27,7 +28,7 @@ public class DirectoryExceptionTransformer extends AbstractMessageTransformer {
     this.log.warn(errorMessageId + ": " + rootExceptionCause);
     this.log.warn(errorMessage);
     
-    DirectoryError directoryError = new DirectoryError(errorMessageId, errorMessage);
-    return directoryError;
+    return ( new DirectoryError(errorMessageId, errorMessage) );
+
   }
 }

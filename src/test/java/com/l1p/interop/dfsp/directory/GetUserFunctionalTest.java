@@ -31,9 +31,9 @@ import org.slf4j.LoggerFactory;
 
 public class GetUserFunctionalTest extends FunctionalTestCase {
 
-	private final String getUserPath="/directory/v1/user/get";
-	private final String addUserPath="/directory/v1/user/add";
-	private final String serviceHost = "http://localhost:8081";
+	private static final String getUserPath="/directory/v1/user/get";
+	private static final String addUserPath="/directory/v1/user/add";
+	private static final String serviceHost = "http://localhost:8081";
 
 	protected Logger logger = LoggerFactory.getLogger(getClass());
 
@@ -75,10 +75,11 @@ public class GetUserFunctionalTest extends FunctionalTestCase {
 			ClientResponse addUsersResponse = webService.path(addUserPath).type("application/json").post(ClientResponse.class, addUsersJSON);
 			assertEquals("Server did not respond with status 200 for addUsers when presented with path " + addUserPath, 200, addUsersResponse.getStatus());
 		} catch( Exception e ) {
+			logger.debug("Exception during populating DFSPDirectoryGateway with test data");
 			fail( "Loading test account data to interop-dfsp-directory via " + addUserPath + " produced an unexpected exception: " + e.getMessage() );
 		}
 
-		Map<String,String> paramMap = new HashMap<String,String>();
+		Map<String,String> paramMap = new HashMap<>();
 
 		logger.info("Posting events to web services");
 
@@ -144,6 +145,7 @@ public class GetUserFunctionalTest extends FunctionalTestCase {
 		try {
 			responseContent = clientResponse.getEntity(String.class);
 		} catch ( Exception e ) {
+			logger.debug("Exception during parsing client response content");
 			fail( testIdentifier + ": parsing client response content produced an unexpected exception: " + e.getMessage() );
 		}
 
@@ -153,13 +155,16 @@ public class GetUserFunctionalTest extends FunctionalTestCase {
 			// convert JSON string to Map
 			header = JsonTransformer.stringToMap(responseContent);
 		} catch( Exception e ) {
+			logger.debug("Exception during conversion of client response content");
 			fail( testIdentifier + ": conversion of client response content to a map produced an unexpected exception: " + e.getMessage() );
 		}
 
 		//validate content of map
 		assertTrue( testIdentifier + ": Header map was null", header != null );
-		assertTrue( testIdentifier + ": Size of header map was incorrect, expected 3, received " + header.size(), header.size() == 3 );
-		assertEquals( testIdentifier + ": Header map did not contain correct data for jsonrpc element", "2.0", header.get( "jsonrpc" ) );
+		if (header != null)	{
+			assertTrue( testIdentifier + ": Size of header map was incorrect, expected 3, received " + header.size(), header.size() == 3 );
+			assertEquals( testIdentifier + ": Header map did not contain correct data for jsonrpc element", "2.0", header.get( "jsonrpc" ) );
+		}
 		//This needs discussion - there is no ID in the input, if we are arbitrarily generating it then we need to verify against that
 		//assertEquals( testIdentifier + ": Header map did not contain correct data for id element", expectedId, header.get( "id" ) );
 		Map<String, Object> result = (Map<String, Object>)header.get( "result" );
@@ -189,6 +194,7 @@ public class GetUserFunctionalTest extends FunctionalTestCase {
 		try {
 			responseContent = clientResponse.getEntity(String.class);
 		} catch ( Exception e ) {
+			logger.debug("Exception during parsing of client response content");
 			fail( testIdentifier + ": parsing client response content produced an unexpected exception: " + e.getMessage() );
 		}
 
@@ -198,6 +204,7 @@ public class GetUserFunctionalTest extends FunctionalTestCase {
 			// convert JSON string to Map
 			header = JsonTransformer.stringToMap(responseContent);
 		} catch( Exception e ) {
+			logger.debug("Exception during conversion of client response content");
 			fail( testIdentifier + ": conversion of client response content to a map produced an unexpected exception: " + e.getMessage() );
 		}
 
@@ -244,6 +251,7 @@ public class GetUserFunctionalTest extends FunctionalTestCase {
 		try {
 			responseContent = clientResponse.getEntity(String.class);
 		} catch ( Exception e ) {
+			logger.debug("Exception during parsing of client response content");
 			fail( testName + ": parsing client response content produced an unexpected exception: " + e.getMessage() );
 		}
 

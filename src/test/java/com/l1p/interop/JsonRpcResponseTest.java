@@ -21,7 +21,7 @@ public class JsonRpcResponseTest {
      * the correct data.
      */
     public void responseShouldBeConvertableToJSON() throws Exception {
-        Map<String,Object> resultData = new HashMap<String,Object>();
+        Map<String,Object> resultData = new HashMap<>();
         resultData.put( "key1", "value1" );
         resultData.put( "Key2", "Value2" );
         JsonRpcResponse response = new JsonRpcResponse( "12345", resultData );
