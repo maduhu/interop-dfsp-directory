@@ -1,6 +1,6 @@
-# Interop-dfsp-directory
+# interop-dfsp-directory
 
-This project provides an API gateway to the IST Directory Naming Service.  By submitting an URI  with a unique identifier (i.e., "userURI": "http://centraldirectory.com/griffin") to the IST Directory Naming Service, the user will receive back a response with the URI to the recieveing DSFP as well as the account holder's name and default currency the transaction will be conducted in.
+This project provides an API gateway to the IST Directory Naming Service and provides resources to - "get metadata about a directory", "get customer information by providing identifier, identifierType", "Register a DFSP" and "get identifierTypes supported by the central directory"
 
 Contents:
 
@@ -13,8 +13,6 @@ Contents:
 ## Deployment
 
 Project is built using Maven and uses Circle for Continous Integration.
-
-### As a Mule Developer
 
 ### Installation and Setup
 
@@ -40,171 +38,41 @@ Project is built using Maven and uses Circle for Continous Integration.
 
 ## Configuration
 
-pom.xml and circle.yml can be found at interop-spsp-backend-services repo
-
-(Explanation of important config parameters)
+[pom.xml](./pom.xml) and [circle.yml](./circle.yml) can be found in the repo, also linked here
 
 ## API
 
-### As an interop-dsfp-directory API Consumer (to be refactored):
-### Example
-It is necessary to test this API by calling the /user/add method first inorder to populate the mock data that the /user/get method uses for responses.
+Below are the RAML and OpenAPI spec for reference
 
-#### Resource Request: http://127.0.0.1:8083/directory/{version}/user/get
-Body:
-```js
-{
-  "jsonrpc": "2.0",
-  "id": "45567",
-  "method": "directory.user.get",
-  "params": {
-    "userURI": "http://centraldirectory.com/griffin"
-}
-```
-#### Resource 200 Response: 
-Body:
-```js
-{
-  "result": {
-    "name": "Chris Griffin",
-    "account": "http://receivingdfsp.com/griffin_12345",
-    "currency": "USD"
-  },
-  "id": "",
-  "jsonrpc": "2.0"
-}
-```
-#### Resource 500 Response
-Body:
-```js
-{
-  "jsonrpc": "2.0",
-  "id": "sampleid",
-  "error": {
-    "type": "parsingerror",
-    "code": 400,
-    "errorPrint": "The request could not be read by our software.",
-    "message": "Parsing error"
-  },
-  "debug": {
-    "cause": {
-      "error": {
-        "code": 400,
-        "message": "An application generated message related to the error",
-        "errorPrint": "This is the exception message from the top level exception",
-        "type": "parsingerror"
-      }
-    },
-    "stackInfo": [
-      "Callnumber1",
-      "Callnumber2"
-    ]
-  }
-}
-```
-The add action is not part of the project's functional requirements.  It is a facility to allow sample data to be dynamically entered in order to test the /user/get action.
+This is currently hosted as a service in the URL that looks like this:  http://\<awshost:port\>/spsp/backend/v1/console/ , the OpenAPI docs and mule console details can be found [here](https://github.com/LevelOneProject/Docs/tree/master/AWS/Infrastructure/PI4-QA-Env) and [here](https://github.com/LevelOneProject/Docs/tree/master/AWS/Infrastructure/PI4-Test-Env)
 
-#### Resource Request: http://127.0.0.1:8083/directory/{version}/user/add
-Body:
-```js
-{
-  "users": [
-    {
-      "uri": "http://centraldirectory.com/griffin",
-      "name": "Chris Griffin",
-      "account": "http://receivingdfsp.com/griffin_12345",
-      "currency": "USD"
-    },
-    {
-      "uri": "http://centraldirectory.com/magoo",
-      "name": "Mr. Magoo",
-      "account": "http://receivingdfsp.com/magoo_12345",
-      "currency": "USD"
-    },
-    {
-      "uri": "http://centraldirectory.com/yosemite",
-      "name": "Yosemite Sam",
-      "account": "http://receivingdfsp.com/yosemite_12345",
-      "currency": "INR"
-    },
-    {
-      "uri": "http://centraldirectory.com/mitty",
-      "name": "Walter Mitty",
-      "account": "http://receivingdfsp.com/mitty_12345",
-      "currency": "ARS"
-    }
-  ]
-}
-```
-#### Resource 200 Response: 
-Body:
-```js
-{
-  "result": {
-    "message": "Updated 4 entities based on request"
-  },
-  "id": "3514adb5-fe14-4e40-9532-a1363b56cdc5",
-  "jsonrpc": "2.0"
-}
-```
-#### Resource 500 Response
-Body:
-```js
-{
-  "jsonrpc": "2.0",
-  "id": "sampleid",
-  "error": {
-    "type": "parsingerror",
-    "code": 400,
-    "errorPrint": "The request could not be read by our software.",
-    "message": "Parsing error"
-  },
-  "debug": {
-    "cause": {
-      "error": {
-        "code": 400,
-        "message": "An application generated message related to the error",
-        "errorPrint": "This is the exception message from the top level exception",
-        "type": "parsingerror"
-      }
-    },
-    "stackInfo": [
-      "Callnumber1",
-      "Callnumber2"
-    ]
-  }
-}
-```
+* RAML [here](./src/main/api/central-directory-api.raml)
+* OpenAPI [here](./src/main/resources/documentation/dist/central-directory-api.yaml)
 
 ## Logging
 
-Sever path to logs is: /opt/mule/mule-dfsp1/logs/interop-dfsp-directory.log
+Server path to logs is: <mule_home>/logs/interop-dfsp-directory.log for example: /opt/mule/mule-dfsp1/logs/interop-dfsp-directory.log
 
-(Explain important things about what gets logged or how to interpret the logs. Use subheaders if necessary.)
+Currently the logs are operational and include information such as TraceID and other details related to the calls or transactions such as path, method used, header information and sender/receiver details.
 
 ## Tests
+
+Java Unit Test exist for the project and include test for:
+
+* Invalid path should return 404
+* Valid get user request should return valid response
+* Valid add user request should return valide response
+* Add valid account and retrieve it
+* Add account without currency fails
+* Add account without name fails
+* Add account without account fails
+* Add account with valid data
+* Add account with invalid data fails
+* Add account fails when presented with more fields
 
 #### Anypoint Studio
 * Run Unit Tests
 * Test API with Anypoint Studio in APIKit Console
 * Verify Responses in Studio Console output
 
-#### Standalone Mule ESB
-* Review Server Logs for Unit Test results
-* Test API with Browser at [http://localhost:8081/console](http://localhost:8083/directory/v1/console/)
-* Test API with Postman at [http://localhost:8081/](http://localhost:8083/directory/v1/user/get)
-  * **Note**: make sure you have set the content type to application/json 
-* Verify Responses in Server Logs <Mule Installation Directory>/logs/*.log
-
-Java Unit Test exist for the project and include test for:
-
--Invalid path should return 404
--Valid get user request should return valid response
--Valid add user request should return valide response
--Add valid account and retrieve it
--Add account without currency fails
--Add account without name fails
--Add account without account fails
--Add account with valid data
--Add account with invalid data fails
--Add account fails when presented with more fields
+Tests are run as part of executing the Maven pom.xml as mvn clean package. Also, test can be run by running com.l1p.interop.DirectoryFunctionalTest java class as JUnit Test.
