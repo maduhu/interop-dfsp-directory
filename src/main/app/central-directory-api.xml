@@ -12,9 +12,9 @@ http://www.mulesoft.org/schema/mule/json http://www.mulesoft.org/schema/mule/jso
     </spring:beans>
     <flow name="central-directory-api-main">
         <http:listener config-ref="api-httpListenerConfig" path="${dfsp-directory-gateway-service.basePath}/*" doc:name="HTTP"/>
-        <set-session-variable variableName="traceID" value="#[(message.inboundProperties.'http.traceID' == empty) ? java.util.UUID.randomUUID() : message.inboundProperties.'http.query.traceID']" doc:name="set-traceID"/>
+        <set-session-variable variableName="TraceID" value="#[(message.inboundProperties.'http.TraceID' == empty) ? java.util.UUID.randomUUID() : message.inboundProperties.'http.query.TraceID']" doc:name="set-TraceID"/>
         <logger level="INFO"
-                message="Received request for traceID=#[sessionVars.traceID] at path=#[message.inboundProperties.'http.request.path']"
+                message="Received request for TraceID=#[sessionVars.TraceID] at path=#[message.inboundProperties.'http.request.path']"
                 category="com.l1p.interop.dfsp.api-main" doc:name="logger"/>
         <apikit:router config-ref="central-directory-api-config" doc:name="APIkit Router"/>
         <exception-strategy ref="central-directory-api-apiKitGlobalExceptionMapping" doc:name="Reference Exception Strategy"/>
