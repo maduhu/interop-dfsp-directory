@@ -53,7 +53,7 @@ This is currently hosted as a service in the URL that looks like this:  http://\
 
 Server path to logs is: <mule_home>/logs/interop-dfsp-directory.log for example: /opt/mule/mule-dfsp1/logs/interop-dfsp-directory.log
 
-Currently the logs are operational and include information such as TraceID and other details related to the calls or transactions such as path, method used, header information and sender/receiver details.
+Currently the logs are operational and include information such as TraceID and other details related to the calls or transactions such as path, method used, header information and payer/payee details.
 
 ## Tests
 
