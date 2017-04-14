@@ -27,39 +27,39 @@ http://www.mulesoft.org/schema/mule/json http://www.mulesoft.org/schema/mule/jso
 
     <flow name="get:/:central-directory-api-config">
         <logger level="INFO"
-                message="Processing request for get:/:central-directory-api-config"
+                message="Processing request for get:/:central-directory-api-config, TraceID=#[sessionVars.TraceID]"
                 category="com.l1p.interop.dfsp.directory.metadata" doc:name="logger"/>
         <flow-ref name="get-metadata" doc:name="get-metadata"/>
         <logger level="INFO"
-                message="Processed request for get:/:central-directory-api-config"
+                message="Processed request for get:/:central-directory-api-config, TraceID=#[sessionVars.TraceID]"
                 category="com.l1p.interop.dfsp.directory.metadata" doc:name="logger"/>
     </flow>
     <flow name="get:/identifier-types:central-directory-api-config">
         <logger level="INFO"
-                message="Processing request for get:/identifier-types:central-directory-api-config"
+                message="Processing request for get:/identifier-types:central-directory-api-config, TraceID=#[sessionVars.TraceID]"
                 category="com.l1p.interop.dfsp.directory.identifier-types" doc:name="logger"/>
         <flow-ref name="get-identifier-types" doc:name="get-identifier-types"/>
         <logger level="INFO"
-                message="Processing request for get:/identifier-types:central-directory-api-config"
+                message="Processing request for get:/identifier-types:central-directory-api-config, TraceID=#[sessionVars.TraceID]"
                 category="com.l1p.interop.dfsp.directory.identifier-types" doc:name="logger"/>
     </flow>
     <flow name="get:/resources:central-directory-api-config">
         <logger level="INFO"
-                message="Processing request for get:/resources:central-directory-api-config"
+                message="Processing request for get:/resources:central-directory-api-config, TraceID=#[sessionVars.TraceID]"
                 category="com.l1p.interop.dfsp.directory.resources" doc:name="logger"/>
         <flow-ref name="get-resources" doc:name="get-resources"/>
         <logger level="INFO"
-                message="Processing request for get:/resources:central-directory-api-config"
+                message="Processing request for get:/resources:central-directory-api-config, TraceID=#[sessionVars.TraceID]"
                 category="com.l1p.interop.dfsp.directory.resources" doc:name="logger"/>
     </flow>
     <flow name="post:/commands/register:application/json:central-directory-api-config">
         <logger level="INFO"
-                message="Processing request for post:/commands/register:application/json:central-directory-api-config, payload=#[payload]"
+                message="Processing request for post:/commands/register:application/json:central-directory-api-config, TraceID=#[sessionVars.TraceID]"
                 category="com.l1p.interop.dfsp.directory.register" doc:name="logger"/>
         <flow-ref name="register-dfsp" doc:name="register-dfsp"/>
         <set-property propertyName="Content-Type" value="application/json" doc:name="Property"/>
         <logger level="INFO"
-                message="Processing request for post:/commands/register:application/json:central-directory-api-config"
+                message="Processing request for post:/commands/register:application/json:central-directory-api-config, TraceID=#[sessionVars.TraceID]"
                 category="com.l1p.interop.dfsp.directory.resgister" doc:name="logger"/>
     </flow>
 
