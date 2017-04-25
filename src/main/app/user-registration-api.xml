@@ -12,9 +12,9 @@ http://www.springframework.org/schema/beans http://www.springframework.org/schem
     
     <flow name="user-registration-api-main">
         <http:listener config-ref="api-httpListenerConfig" path="${dfsp-directory-gateway-service.basePath}/user-registration/*" doc:name="HTTP"/>
-        <set-session-variable variableName="TraceID" value="#[(message.inboundProperties.'http.TraceID' == empty) ? java.util.UUID.randomUUID() : message.inboundProperties.'http.query.TraceID']" doc:name="set-TraceID"/>
+        <set-session-variable variableName="L1p-Trace-Id" value="#[(message.inboundProperties.'http.L1p-Trace-Id' == empty) ? java.util.UUID.randomUUID() : message.inboundProperties.'http.L1p-Trace-Id']" doc:name="set-L1p-Trace-Id"/>
         <logger level="INFO"
-                message="Received request for TraceID=#[sessionVars.TraceID] at path=#[message.inboundProperties.'http.request.path']"
+                message="Received request for L1p-Trace-Id=#[sessionVars.'L1p-Trace-Id'] at path=#[message.inboundProperties.'http.request.path']"
                 category="com.l1p.interop.dfsp.api-main" doc:name="logger"/>
         <apikit:router config-ref="user-registration-api-config" doc:name="APIkit Router"/>
         <exception-strategy ref="user-registration-api-apiKitGlobalExceptionMapping" doc:name="Reference Exception Strategy"/>

@@ -7,7 +7,7 @@ import java.util.Map;
 /**
  * This class is a wrapper on a map of Accounts
  * 
- * TODO: resolve possible issue with using the name Account vs User as it might
+ * Resolve possible issue with using the name Account vs User as it might
  * create issues in future URIs as well as general confusion to programmers
  *
  * Created by Bryan on 8/17/2016.

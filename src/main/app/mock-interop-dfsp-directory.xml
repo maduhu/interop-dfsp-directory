@@ -36,7 +36,7 @@ http://www.springframework.org/schema/beans http://www.springframework.org/schem
     <flow name="post:/user/add:application/json:mock-api-config">
         <json:json-to-object-transformer returnClass="java.util.Map" doc:name="json-to-object"/>
         <logger level="INFO"
-	        	message="Processing request in mock for post:/user/add, TraceID=#[sessionVars.TraceID]"
+	        	message="Processing request in mock for post:/user/add, L1p-Trace-Id=#[sessionVars.'L1p-Trace-Id']"
 	        	category="com.l1p.interop.dfsp.directory.mock-userAdd" doc:name="logger"/>
         <component doc:name="java-add-accounts"><spring-object bean="AddAccountsProcessor" /></component>
     </flow>
@@ -45,7 +45,7 @@ http://www.springframework.org/schema/beans http://www.springframework.org/schem
         <json:json-to-object-transformer returnClass="java.util.Map" doc:name="json-to-object"/>
         <!-- <set-session-variable variableName="id" value="#[payload.id]" doc:name="set-id" /> -->
         <logger level="INFO"
-        		message="Processing request in mock for post:/user/get, TraceID=#[sessionVars.TraceID]"
+        		message="Processing request in mock for post:/user/get, L1p-Trace-Id=#[sessionVars.'L1p-Trace-Id']"
         		category="com.l1p.interop.dfsp.directory.mock-userGet" doc:name="logger"/>
         <transformer ref="getAccountTransformer" doc:name="java-get-account-transformer"/>
     </flow>
