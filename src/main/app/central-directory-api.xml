@@ -10,6 +10,7 @@ http://www.mulesoft.org/schema/mule/json http://www.mulesoft.org/schema/mule/jso
     <spring:beans>
         <spring:bean id="directoryExceptionTransformer" class="com.l1p.interop.dfsp.directory.DirectoryExceptionTransformer"/>
     </spring:beans>
+    
     <flow name="central-directory-api-main">
         <http:listener config-ref="api-httpListenerConfig" path="${dfsp-directory-gateway-service.basePath}/*" doc:name="HTTP"/>
         <set-session-variable variableName="TraceID" value="#[(message.inboundProperties.'http.TraceID' == empty) ? java.util.UUID.randomUUID() : message.inboundProperties.'http.query.TraceID']" doc:name="set-TraceID"/>
@@ -19,12 +20,16 @@ http://www.mulesoft.org/schema/mule/json http://www.mulesoft.org/schema/mule/jso
         <apikit:router config-ref="central-directory-api-config" doc:name="APIkit Router"/>
         <exception-strategy ref="central-directory-api-apiKitGlobalExceptionMapping" doc:name="Reference Exception Strategy"/>
     </flow>
+    
     <flow name="central-directory-api-console">
         <http:listener config-ref="api-httpListenerConfig" path="${dfsp-directory-gateway-service.basePath}/console/*" doc:name="HTTP"/>
         <apikit:console config-ref="central-directory-api-config" doc:name="APIkit Console"/>
     </flow>
 
-
+	<flow name="get:/health:central-directory-api-config">
+        <flow-ref name="get-health" doc:name="get-health"/>
+    </flow>
+    
     <flow name="get:/:central-directory-api-config">
         <logger level="INFO"
                 message="Processing request for get:/:central-directory-api-config, TraceID=#[sessionVars.TraceID]"
