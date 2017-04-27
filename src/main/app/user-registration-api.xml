@@ -6,13 +6,13 @@ http://www.springframework.org/schema/beans http://www.springframework.org/schem
     
     <apikit:config name="user-registration-api-config" raml="user-registration-api.raml" consoleEnabled="false" doc:name="Router"/>
 
-    <http:request-config protocol="HTTP" name="user-registration-http-config" host="${user-registration.host}" port="${user-registration.port}" basePath="/" doc:name="HTTP Request Configuration">
+    <http:request-config  name="user-registration-http-config" host="${user-registration.host}" port="${user-registration.port}" basePath="/" doc:name="HTTP Request Configuration">
         <http:raml-api-configuration location="user-registration-api.raml"/>
     </http:request-config>
     
     <flow name="user-registration-api-main">
         <http:listener config-ref="api-httpListenerConfig" path="${dfsp-directory-gateway-service.basePath}/user-registration/*" doc:name="HTTP"/>
-        <set-session-variable variableName="L1p-Trace-Id" value="#[(message.inboundProperties.'http.L1p-Trace-Id' == empty) ? java.util.UUID.randomUUID() : message.inboundProperties.'http.L1p-Trace-Id']" doc:name="set-L1p-Trace-Id"/>
+        <set-session-variable variableName="L1p-Trace-Id" value="#[ (message.inboundProperties.'L1p-Trace-Id' == null) ? java.util.UUID.randomUUID() : message.inboundProperties.'L1p-Trace-Id']" doc:name="set-L1p-Trace-Id"/>
         <logger level="INFO"
                 message="Received request for L1p-Trace-Id=#[sessionVars.'L1p-Trace-Id'] at path=#[message.inboundProperties.'http.request.path']"
                 category="com.l1p.interop.dfsp.api-main" doc:name="logger"/>
