@@ -14,6 +14,13 @@ types:
     properties: 
       spspReceiver: string
       
+  HealthStatus:
+    type: object
+    properties: 
+      status:
+        type: string
+        required: true
+      
   DFSP:
     type: object
     properties: 
@@ -74,6 +81,21 @@ types:
       200:
         body:
           type: Metadata
+
+
+/health:
+  displayName: HealthCheck resource
+  description: This resource is included to provide a simple response to indicate that the API is up and running.
+  get:
+    responses: 
+      200:
+        body: 
+          application/json: 
+            type: HealthStatus
+            example: |
+              { 
+                "status" : "ok" 
+              }
           
 /resources:
   get:
