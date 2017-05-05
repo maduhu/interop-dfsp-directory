@@ -20,10 +20,10 @@ public class DirectoryExceptionTransformer extends AbstractMessageTransformer {
 
   public Object transformMessage(MuleMessage muleMessage, String outputEncoding) throws TransformerException {
     String errorMessageId = muleMessage.getProperty("errorMessageId", PropertyScope.SESSION);
-    String traceID = muleMessage.getProperty("traceID", PropertyScope.SESSION) != null ? muleMessage.getProperty("traceID", PropertyScope.SESSION).toString() : null;
+    String l1pTraceId = muleMessage.getProperty("L1p-Trace-Id", PropertyScope.SESSION) != null ? muleMessage.getProperty("L1p-Trace-Id", PropertyScope.SESSION).toString() : null;
     
     String rootExceptionCause = ( muleMessage.getExceptionPayload().getRootException().getMessage() == null ) ? null : muleMessage.getExceptionPayload().getRootException().getMessage() ;
-    String errorMessage = "Failed to process request for traceID=" + traceID + ": " + rootExceptionCause;
+    String errorMessage = "Failed to process request for L1p-Trace-Id=" + l1pTraceId + ": " + rootExceptionCause;
     
     this.log.warn(errorMessageId + ": " + rootExceptionCause);
     this.log.warn(errorMessage);

@@ -49,7 +49,7 @@ public class DirectoryExceptionTransformerTest extends SimpleCallableJavaCompone
 		
 		MuleEvent event = getTestEvent(payload, muleContext);
 		MuleMessage muleMessage = event.getMessage();
-        muleMessage.setProperty("traceID", "1cd3fa9f-e518-42d6-ae42-6c79b3b9a07c", PropertyScope.SESSION);
+        muleMessage.setProperty("L1p-Trace-Id", "1cd3fa9f-e518-42d6-ae42-6c79b3b9a07c", PropertyScope.SESSION);
         muleMessage.setProperty("errorMessageId", "errorID", PropertyScope.SESSION);
         event.getMessage().setExceptionPayload( new DefaultExceptionPayload( new Exception() ) );
         
@@ -60,12 +60,12 @@ public class DirectoryExceptionTransformerTest extends SimpleCallableJavaCompone
         assertTrue("Does not contain expected List", dError.getValidationErrors().containsAll(vErrorList) );
         
         assertEquals("errorID", dError.getId() );
-        assertTrue("Does not contain traceID as expected:", dError.getMessage().contains(muleMessage.getProperty("traceID", PropertyScope.SESSION).toString()));
+        assertTrue("Does not contain l1pTraceId as expected:", dError.getMessage().contains(muleMessage.getProperty("L1p-Trace-Id", PropertyScope.SESSION).toString()));
         
         dError.setId(secondaryId);
         dError.setMessage(secondaryMessage);
         assertEquals(secondaryId, dError.getId() );
-        assertTrue("Does not contain traceID as expected:", (dError.getMessage() ).contains( secondaryMessage ) );
+        assertTrue("Does not contain l1pTraceId as expected:", (dError.getMessage() ).contains( secondaryMessage ) );
         
 	}
 	
