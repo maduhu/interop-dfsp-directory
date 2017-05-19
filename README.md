@@ -1,4 +1,4 @@
-# interop-dfsp-directory
+# Directory Gateway
 
 This project provides an API gateway to the IST Directory Naming Service and provides resources to - "get metadata about a directory", "get customer information by providing identifier, identifierType", "Register a DFSP" and "get identifierTypes supported by the central directory"
 
