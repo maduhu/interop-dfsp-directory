@@ -56,6 +56,9 @@ http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/htt
 
     <sub-flow name="get-resources">
         <metrics:snap-time config-ref="metricsConfig" snapTimeKey="get-resources.start" doc:name="SnapTime"/>
+        <logger level="INFO"
+                message="Posting request to http://${central-directory.host}:${central-directory.port}/resources with query parameters- identifierType: #[message.inboundProperties.'http.query.params'.identifierType]; identifier: #[message.inboundProperties.'http.query.params'.identifier]; "
+                category="com.l1p.interop.dfsp.central-directory" doc:name="logger"/>
         <http:request config-ref="central-directory-http-config" path="/resources" method="GET" doc:name="HTTP">
             <http:request-builder>
                 <http:query-param paramName="identifier" value="#[message.inboundProperties.'http.query.params'.identifier]"/>
@@ -64,6 +67,9 @@ http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/htt
             </http:request-builder>
 		    <http:success-status-code-validator values="200..599"/>
         </http:request>
+        <logger level="INFO"
+                message="Reponse from /resources: #[message.payloadAs(java.lang.String)] "
+                category="com.l1p.interop.dfsp.central-directory" doc:name="logger"/>
         <set-property propertyName="http.status" value="#[message.inboundProperties.'http.status']" doc:name="Property"/>
         <metrics:snap-time config-ref="metricsConfig" snapTimeKey="get-resources.stop" doc:name="SnapTime"/>
         <metrics:time config-ref="metricsConfig" beginSnapKey="get-resources.start" endSnapKey="get-resources.stop" category="l1p.dfsp.directory.api" metricKey="GetResourcesTime" doc:name="Metrics Record"/>
