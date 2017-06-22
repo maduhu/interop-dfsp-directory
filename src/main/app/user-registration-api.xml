@@ -39,11 +39,17 @@ http://www.springframework.org/schema/beans http://www.springframework.org/schem
         <set-property propertyName="Content-Type" value="application/json" doc:name="Property"/>
     </flow>
     <flow name="post:/users:application/json:user-registration-api-config">
+    	<logger level="INFO"
+                message="Proxying request for L1p-Trace-Id=#[sessionVars.'L1p-Trace-Id'] to host=${user-registration.host}:${user-registration.port}/users payload=#[message.payloadAs(java.lang.String)]"
+                category="com.l1p.interop.dfsp.api-main" doc:name="logger"/>
         <http:request config-ref="user-registration-http-config" path="/users" method="POST" doc:name="HTTP">
 		    <http:success-status-code-validator values="200..599"/>
         </http:request>
         <set-property propertyName="http.status" value="#[message.inboundProperties.'http.status']" doc:name="Property"/>
         <set-property propertyName="Content-Type" value="application/json" doc:name="Property"/>
+        <logger level="INFO"
+                message="Returning response for L1p-Trace-Id=#[sessionVars.'L1p-Trace-Id'], http.status=#[message.inboundProperties.'http.status']: #[payload]"
+                category="com.l1p.interop.dfsp.api-main" doc:name="logger"/>
     </flow>
     <apikit:mapping-exception-strategy name="user-registration-api-apiKitGlobalExceptionMapping">
         <apikit:mapping statusCode="404">
