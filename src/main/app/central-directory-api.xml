@@ -7,12 +7,21 @@ http://www.mulesoft.org/schema/mule/json http://www.mulesoft.org/schema/mule/jso
 
     <apikit:config name="central-directory-api-config" raml="central-directory-api.raml" consoleEnabled="false" doc:name="Router"/>
 
-    <spring:beans>
+    <!-- <spring:beans>
         <spring:bean id="directoryExceptionTransformer" class="com.l1p.interop.dfsp.directory.DirectoryExceptionTransformer"/>
+    </spring:beans> -->
+    
+    <spring:beans>
+        <spring:import resource="classpath:services-common.xml" />
+        <spring:import resource="classpath:metrics.xml" />
+    </spring:beans>
+
+    <spring:beans>
+        <spring:bean id="ExceptionTransformer" name="ExceptionTransformer" class="com.l1p.interop.L1PExceptionTransformer"/>
     </spring:beans>
     
     <flow name="central-directory-api-main">
-        <http:listener config-ref="api-httpListenerConfig" path="${dfsp-directory-gateway-service.basePath}/*" doc:name="HTTP"/>
+        <http:listener config-ref="api-httpListenerConfig" path="${central-dir-gateway-service.basePath}/*" doc:name="HTTP"/>
         <set-session-variable variableName="L1p-Trace-Id" value="#[ (message.inboundProperties.'L1p-Trace-Id' == null) ? java.util.UUID.randomUUID() : message.inboundProperties.'L1p-Trace-Id']" doc:name="set-L1p-Trace-Id"/>
         <logger level="INFO"
                 message="Received request for L1p-Trace-Id=#[sessionVars.'L1p-Trace-Id'] at path=#[message.inboundProperties.'http.request.path']"
@@ -26,47 +35,7 @@ http://www.mulesoft.org/schema/mule/json http://www.mulesoft.org/schema/mule/jso
         <apikit:console config-ref="central-directory-api-config" doc:name="APIkit Console"/>
     </flow>
 
-	<flow name="get:/health:central-directory-api-config">
-        <flow-ref name="get-health" doc:name="get-health"/>
-    </flow>
-    
-    <flow name="get:/:central-directory-api-config">
-        <logger level="INFO"
-                message="Processing request for get:/:central-directory-api-config, L1p-Trace-Id=#[sessionVars.'L1p-Trace-Id']"
-                category="com.l1p.interop.dfsp.directory.metadata" doc:name="logger"/>
-        <flow-ref name="get-metadata" doc:name="get-metadata"/>
-        <logger level="INFO"
-                message="Processed request for get:/:central-directory-api-config, L1p-Trace-Id=#[sessionVars.'L1p-Trace-Id']"
-                category="com.l1p.interop.dfsp.directory.metadata" doc:name="logger"/>
-    </flow>
-    <flow name="get:/identifier-types:central-directory-api-config">
-        <logger level="INFO"
-                message="Processing request for get:/identifier-types:central-directory-api-config, L1p-Trace-Id=#[sessionVars.'L1p-Trace-Id']"
-                category="com.l1p.interop.dfsp.directory.identifier-types" doc:name="logger"/>
-        <flow-ref name="get-identifier-types" doc:name="get-identifier-types"/>
-        <logger level="INFO"
-                message="Processing request for get:/identifier-types:central-directory-api-config, L1p-Trace-Id=#[sessionVars.'L1p-Trace-Id']"
-                category="com.l1p.interop.dfsp.directory.identifier-types" doc:name="logger"/>
-    </flow>
-    <flow name="get:/resources:central-directory-api-config">
-        <logger level="INFO"
-                message="Processing request for get:/resources:central-directory-api-config, L1p-Trace-Id=#[sessionVars.'L1p-Trace-Id']"
-                category="com.l1p.interop.dfsp.directory.resources" doc:name="logger"/>
-        <flow-ref name="get-resources" doc:name="get-resources"/>
-        <logger level="INFO"
-                message="Processing request for get:/resources:central-directory-api-config, L1p-Trace-Id=#[sessionVars.'L1p-Trace-Id']"
-                category="com.l1p.interop.dfsp.directory.resources" doc:name="logger"/>
-    </flow>
-    <flow name="post:/commands/register:application/json:central-directory-api-config">
-        <logger level="INFO"
-                message="Processing request for post:/commands/register:application/json:central-directory-api-config, L1p-Trace-Id=#[sessionVars.'L1p-Trace-Id']"
-                category="com.l1p.interop.dfsp.directory.register" doc:name="logger"/>
-        <flow-ref name="register-dfsp" doc:name="register-dfsp"/>
-        <set-property propertyName="Content-Type" value="application/json" doc:name="Property"/>
-        <logger level="INFO"
-                message="Processing request for post:/commands/register:application/json:central-directory-api-config, L1p-Trace-Id=#[sessionVars.'L1p-Trace-Id']"
-                category="com.l1p.interop.dfsp.directory.resgister" doc:name="logger"/>
-    </flow>
+	
 
     <apikit:mapping-exception-strategy name="central-directory-api-apiKitGlobalExceptionMapping">
         <apikit:mapping statusCode="404">
@@ -102,7 +71,7 @@ http://www.mulesoft.org/schema/mule/json http://www.mulesoft.org/schema/mule/jso
     </apikit:mapping-exception-strategy>
     
     <sub-flow name="create-exception-payload">
-	    <transformer ref="directoryExceptionTransformer" doc:name="ExceptionTransformer"/>
+	    <!-- <transformer ref="directoryExceptionTransformer" doc:name="ExceptionTransformer"/> -->
 	    <json:object-to-json-transformer doc:name="Object to JSON"/>
     </sub-flow>
     
