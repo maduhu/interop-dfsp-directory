@@ -1,20 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<mule xmlns:http="http://www.mulesoft.org/schema/mule/http" xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
+<mule xmlns:json="http://www.mulesoft.org/schema/mule/json" xmlns:http="http://www.mulesoft.org/schema/mule/http" xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
 	xmlns:spring="http://www.springframework.org/schema/beans"
     xmlns:metrics="http://www.mulesoft.org/schema/mule/metrics"
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-current.xsd
+	xsi:schemaLocation="http://www.mulesoft.org/schema/mule/json http://www.mulesoft.org/schema/mule/json/current/mule-json.xsd http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-current.xsd
 http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
 http://www.mulesoft.org/schema/mule/metrics http://www.mulesoft.org/schema/mule/metrics/current/mule-metrics.xsd
 http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd">
 
-    <spring:beans>
-        <spring:import resource="classpath:services-common.xml" />
-        <spring:import resource="classpath:metrics.xml" />
-    </spring:beans>
+    
 
-    <http:request-config name="central-directory-http-config" host="${central-dir.host}" port="${central-dir-api.port}"  basePath="${central-dir-api.basepath}" doc:name="HTTP Request Configuration">
+    <http:request-config name="central-directory-http-config" host="${central-dir.host}" port="${central-dir-api.port}"  doc:name="HTTP Request Configuration">
         <http:raml-api-configuration location="central-directory-api.raml"/>
     </http:request-config>
     
@@ -24,12 +21,13 @@ http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/htt
     
     <flow name="get:/:central-directory-api-config">
         <logger level="INFO"
-                message="Processing request for get:/:central-directory-api-config, L1p-Trace-Id=#[sessionVars.'L1p-Trace-Id']"
+                message="Sending request for central-directory-api get:/:central-directory-api-config, L1p-Trace-Id=#[sessionVars.'L1p-Trace-Id']"
                 category="com.l1p.interop.dfsp.directory.metadata" doc:name="logger"/>
         <metrics:snap-time config-ref="metricsConfig" snapTimeKey="get-metadata.start" doc:name="SnapTime"/>
         <http:request config-ref="central-directory-http-config" path="/" method="GET" doc:name="HTTP">
 		    <http:success-status-code-validator values="200..599"/>
         </http:request>
+        <json:object-to-json-transformer />
         <set-property propertyName="http.status" value="#[message.inboundProperties.'http.status']" doc:name="Property"/>
         <metrics:snap-time config-ref="metricsConfig" snapTimeKey="get-metadata.stop" doc:name="SnapTime"/>
         <metrics:time config-ref="metricsConfig" beginSnapKey="get-metadata.start" endSnapKey="get-metadata.stop" category="l1p.dfsp.directory.api" metricKey="GetMetaDataTime" doc:name="Metrics Record"/>
@@ -40,7 +38,7 @@ http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/htt
     
     <flow name="post:/commands/register:application/json:central-directory-api-config">
         <logger level="INFO"
-                message="Processing request for post:/commands/register:application/json:central-directory-api-config, L1p-Trace-Id=#[sessionVars.'L1p-Trace-Id']"
+                message="Sending request to central-dir-api /commands/register method:post"
                 category="com.l1p.interop.dfsp.directory.register" doc:name="logger"/>
         <metrics:snap-time config-ref="metricsConfig" snapTimeKey="register-dfsp.start" doc:name="SnapTime"/>
         <http:request config-ref="central-directory-http-config" path="/commands/register" method="POST" doc:name="HTTP">
@@ -54,7 +52,7 @@ http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/htt
         <metrics:time config-ref="metricsConfig" beginSnapKey="register-dfsp.start" endSnapKey="register-dfsp.stop" category="l1p.dfsp.directory.api" metricKey="RegisterDfspTime" doc:name="Metrics Record"/>
         <set-property propertyName="Content-Type" value="application/json" doc:name="Property"/>
         <logger level="INFO"
-                message="Returning call for post:/commands/register:application/json:central-directory-api-config, L1p-Trace-Id=#[sessionVars.'L1p-Trace-Id'] Response: #[payload]"
+                message="Returning call for post:/commands/register L1p-Trace-Id=#[sessionVars.'L1p-Trace-Id'] Response: #[message.payloadAs(java.lang.String)]"
                 category="com.l1p.interop.dfsp.directory.resgister" doc:name="logger"/>
     </flow>
     

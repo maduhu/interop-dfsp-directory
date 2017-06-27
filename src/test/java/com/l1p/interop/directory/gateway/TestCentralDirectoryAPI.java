@@ -25,7 +25,7 @@ public class TestCentralDirectoryAPI extends FunctionalTestCase {
 
 	@Override
 	protected String getConfigResources() {
-		return "test-resources.xml,scheme-adapter-api.xml,scheme-adapter.xml";
+		return "test-resources.xml,central-directory-api.xml,central-directory.xml";
 	}
 
 	@BeforeClass
@@ -39,12 +39,14 @@ public class TestCentralDirectoryAPI extends FunctionalTestCase {
 		String centralDirAddDFSPMockResponse = loadResourceAsString("test_data/centralDirAddDFSPMockResponse.json");
 		mockCentralDirectory.stubFor(post(urlMatching("/commands/register"))
 				.willReturn(aResponse().withBody(centralDirAddDFSPMockResponse)));
-
+		
+		String centralDirAddDFSPRequest = loadResourceAsString("test_data/centralDirAddDFSPRequest.json");
 		given()
 			.contentType("application/json")
-			.queryParam("receiver", "localhost:8090/scheme/adapter/v1/receivers/123456").
-		when()
-			.post("http://localhost:8088/directory/gateway/v1/commads/register")
+			.auth().basic("dfsp1", "dfsp1")
+			.body(centralDirAddDFSPRequest)
+		.when()
+			.post("http://localhost:8088/directory/gateway/v1/commands/register")
 		.then()
 			.statusCode(200)
 			.body("name",equalTo("The first DFSP"))

@@ -31,7 +31,7 @@ http://www.mulesoft.org/schema/mule/json http://www.mulesoft.org/schema/mule/jso
     </flow>
     
     <flow name="central-directory-api-console">
-        <http:listener config-ref="api-httpListenerConfig" path="${dfsp-directory-gateway-service.basePath}/console/*" doc:name="HTTP"/>
+        <http:listener config-ref="api-httpListenerConfig" path="${central-dir-gateway-service.basePath}/console/*" doc:name="HTTP"/>
         <apikit:console config-ref="central-directory-api-config" doc:name="APIkit Console"/>
     </flow>
 
