@@ -43,7 +43,7 @@ public class TestCentralDirectoryAPI extends FunctionalTestCase {
 		String centralDirAddDFSPRequest = loadResourceAsString("test_data/centralDirAddDFSPRequest.json");
 		given()
 			.contentType("application/json")
-			.auth().basic("dfsp1", "dfsp1")
+			.auth().basic("admin", "admin")
 			.body(centralDirAddDFSPRequest)
 		.when()
 			.post("http://localhost:8088/directory/gateway/v1/commands/register")
@@ -51,11 +51,34 @@ public class TestCentralDirectoryAPI extends FunctionalTestCase {
 			.statusCode(200)
 			.body("name",equalTo("The first DFSP"))
 			.body("shortName", equalTo("dfsp1"))
-			.body("url", equalTo("http://url.com"))
+			.body("providerUrl", equalTo("http://url.com"))
 			.body("schemeCode", equalTo("001"))
 			.body("dfspCode", equalTo("123"))
 			.body("key", equalTo("dfsp_key"))
 			.body("secret",equalTo("dfsp_secret"));
+	}
+	
+	@Test
+	public void testAddResouce() throws Exception {
+
+		String centralDirAddResourceMockResponse = loadResourceAsString("test_data/centralDirAddResourceMockResponse.json");
+		mockCentralDirectory.stubFor(post(urlMatching("/resources"))
+				.willReturn(aResponse().withBody(centralDirAddResourceMockResponse)));
+		
+		String centralDirAddResourceRequest = loadResourceAsString("test_data/centralDirAddResourceRequest.json");
+		given()
+			.contentType("application/json")
+			.auth().basic("key", "secret")
+			.body(centralDirAddResourceRequest)
+		.when()
+			.post("http://localhost:8088/directory/gateway/v1/resources")
+		.then()
+			.statusCode(200)
+			.body("name",equalTo("The first DFSP"))
+			.body("shortName", equalTo("dfsp1"))
+			.body("providerUrl", equalTo("localhost:8088/scheme/adapter/v1"))
+			.body("preferred", equalTo(true))
+			.body("registered", equalTo(true));
 	}
 
 }

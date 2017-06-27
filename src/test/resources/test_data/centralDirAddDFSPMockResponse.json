@@ -1,7 +1,7 @@
 {
   "name": "The first DFSP",
   "shortName": "dfsp1",
-  "url": "http://url.com",
+  "providerUrl": "http://url.com",
   "schemeCode": "001",
   "dfspCode": "123",
   "key": "dfsp_key",
