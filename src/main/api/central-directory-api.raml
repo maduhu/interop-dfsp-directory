@@ -19,7 +19,39 @@ types:
         pattern: ^((http(s?))\:\/\/)?((([a-zA-Z0-9_\-]{2,}\.)+[a-zA-Z]{2,})|((?:(?:25[0-5]|2[0-4]\d|[01]\d\d|\d?\d)( ?(\.?\d)\.)){4}))(:[a-zA-Z0-9]+)?(\/[a-zA-Z0-9\-\._\?\,\'\/\\\+&amp;%\$#\=~]*)?$
       shortName: string
       preferred: string
-      registered: string  
+      registered: string
+
+  AggregateResource:
+      type: object
+      properties:
+        name: string
+        providerUrl:
+          type: string
+          pattern: ^((http(s?))\:\/\/)?((([a-zA-Z0-9_\-]{2,}\.)+[a-zA-Z]{2,})|((?:(?:25[0-5]|2[0-4]\d|[01]\d\d|\d?\d)( ?(\.?\d)\.)){4}))(:[a-zA-Z0-9]+)?(\/[a-zA-Z0-9\-\._\?\,\'\/\\\+&amp;%\$#\=~]*)?$
+        shortName: string
+        preferred: string
+        registered: string
+      
+  Receiver:
+    type: object
+    properties:
+      type:
+        enum: [ payee, invoice ]
+      account:
+        type: string
+        pattern: ^((http(s?))\:\/\/)?((([a-zA-Z0-9_\-]{2,}\.)+[a-zA-Z]{2,})|((?:(?:25[0-5]|2[0-4]\d|[01]\d\d|\d?\d)( ?(\.?\d)\.)){4}))(:[a-zA-Z0-9]+)?(\/[a-zA-Z0-9\-\._\?\,\'\/\\\+&amp;%\$#\=~]*)?$
+      currencyCode: string
+      currencySymbol: string
+      name?: string
+      imageUrl?:
+        type: string
+        pattern: ^((http(s?))\:\/\/)?((([a-zA-Z0-9_\-]{2,}\.)+[a-zA-Z]{2,})|((?:(?:25[0-5]|2[0-4]\d|[01]\d\d|\d?\d)( ?(\.?\d)\.)){4}))(:[a-zA-Z0-9]+)?(\/[a-zA-Z0-9\-\._\?\,\'\/\\\+&amp;%\$#\=~]*)?$
+      amount?:
+        type: string
+        pattern: ^[-+]?[0-9]*[.]?[0-9]+([eE][-+]?[0-9]+)?$
+      status?:
+        enum: [ paid, unpaid, cancelled ]
+      invoiceInfo?: string  
         
       
   DFSP:
@@ -147,12 +179,37 @@ types:
     queryParameters:
       identifier:
         type: string
+      identifierType:
+        type: string
     responses:
       200:
         body:
           type: array
-          items: Resource
+          items: AggregateResource
       404:
         body:
           type: Error
+          
+#/receivers:
+#    displayName: Query ( GET <receiver> )
+#    get:
+#        description: The sender queries the receiver endpoint to get information about the type of payment that can be made to this receiver
+#        queryParameters:
+#          identifier: string
+#        responses:
+#          200:
+#            body:
+#              application/json:
+#                properties:
+#                  data:
+#                    type: Receiver
+#                  fraud:
+#                    type: Fraud
+#          404:
+#            body:
+#              application/json:
+#                type: QueryErrorResponse
+#                example:
+#                    id: "InvalidReceiverIdError"
+#                    message: "Invalid receiver ID"
   
