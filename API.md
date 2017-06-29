@@ -74,8 +74,7 @@ GET http://central-directory-gateway/resources?identifier=eur:1234 HTTP/1.1
 #### Response
 ``` http
 HTTP/1.1 200 OK
-"directory_details": {
-[
+"directory_details": [
   {
     "name": "The First DFSP",
     "providerUrl": "http://dfsp/users/1",
@@ -90,8 +89,7 @@ HTTP/1.1 200 OK
     "preferred": "false",
     "registered": "false"
   }
-]
-},
+],
 "dfsp_details": {
     "type": "payee",
     "account": "ilpdemo.red.bob",
