@@ -4,7 +4,8 @@
 	xmlns:spring="http://www.springframework.org/schema/beans"
     xmlns:metrics="http://www.mulesoft.org/schema/mule/metrics"
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://www.mulesoft.org/schema/mule/json http://www.mulesoft.org/schema/mule/json/current/mule-json.xsd http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-current.xsd
+	xsi:schemaLocation="http://www.mulesoft.org/schema/mule/json http://www.mulesoft.org/schema/mule/json/current/mule-json.xsd
+http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-current.xsd
 http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
 http://www.mulesoft.org/schema/mule/metrics http://www.mulesoft.org/schema/mule/metrics/current/mule-metrics.xsd
 http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd">
@@ -16,10 +17,14 @@ http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/htt
     </http:request-config>
     
     <flow name="get:/health:central-directory-api-config">
+        <http:listener config-ref="api-httpListenerConfig" path="${central-dir-gateway-service.basePath}/health" doc:name="HTTP"/>
         <set-payload value="{ &quot;status&quot; : &quot;ok&quot; }" doc:name="Set Payload" mimeType="application/json"/>
+        <exception-strategy ref="common_Catch_Exception_Strategy" doc:name="Reference Exception Strategy"/>
     </flow>
     
     <flow name="get:/:central-directory-api-config">
+        <http:listener config-ref="api-httpListenerConfig" path="${central-dir-gateway-service.basePath}/" doc:name="HTTP"/>
+        <flow-ref name="common-Sub_Flow" doc:name="common-Sub_Flow"/>
         <logger level="INFO"
                 message="Sending request for central-directory-api get:/:central-directory-api-config, L1p-Trace-Id=#[sessionVars.'L1p-Trace-Id']"
                 category="com.l1p.interop.dfsp.directory.metadata" doc:name="logger"/>
@@ -27,16 +32,19 @@ http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/htt
         <http:request config-ref="central-directory-http-config" path="/" method="GET" doc:name="HTTP">
 		    <http:success-status-code-validator values="200..599"/>
         </http:request>
-        <json:object-to-json-transformer />
+        <json:object-to-json-transformer doc:name="Object to JSON"/>
         <set-property propertyName="http.status" value="#[message.inboundProperties.'http.status']" doc:name="Property"/>
         <metrics:snap-time config-ref="metricsConfig" snapTimeKey="get-metadata.stop" doc:name="SnapTime"/>
         <metrics:time config-ref="metricsConfig" beginSnapKey="get-metadata.start" endSnapKey="get-metadata.stop" category="l1p.dfsp.directory.api" metricKey="GetMetaDataTime" doc:name="Metrics Record"/>
         <logger level="INFO"
                 message="Returning call for get:/:central-directory-api-config, L1p-Trace-Id=#[sessionVars.'L1p-Trace-Id'] response: #[payload]"
                 category="com.l1p.interop.dfsp.directory.metadata" doc:name="logger"/>
+        <exception-strategy ref="common_Catch_Exception_Strategy" doc:name="Reference Exception Strategy"/>
     </flow>
     
     <flow name="post:/commands/register:application/json:central-directory-api-config">
+        <http:listener config-ref="api-httpListenerConfig" path="${central-dir-gateway-service.basePath}/commands/register" doc:name="HTTP"/>
+        <flow-ref name="common-Sub_Flow" doc:name="common-Sub_Flow"/>
         <logger level="INFO"
                 message="Sending request to http://${central-dir-host}:${central-dir-api.port}/commands/register method:post"
                 category="com.l1p.interop.dfsp.directory.register" doc:name="logger"/>
@@ -54,9 +62,12 @@ http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/htt
         <logger level="INFO"
                 message="Response from /commands/register L1p-Trace-Id=#[sessionVars.'L1p-Trace-Id'] Response: #[message.payloadAs(java.lang.String)]"
                 category="com.l1p.interop.dfsp.directory.resgister" doc:name="logger"/>
+        <exception-strategy ref="common_Catch_Exception_Strategy" doc:name="Reference Exception Strategy"/>
     </flow>
     
     <flow name="get:/identifier-types:central-directory-api-config">
+        <http:listener config-ref="api-httpListenerConfig" path="${central-dir-gateway-service.basePath}/identifier-types" doc:name="HTTP"/>
+        <flow-ref name="common-Sub_Flow" doc:name="common-Sub_Flow"/>
         <logger level="INFO"
                 message="Processing request for get:/identifier-types:central-directory-api-config, L1p-Trace-Id=#[sessionVars.'L1p-Trace-Id']"
                 category="com.l1p.interop.dfsp.directory.identifier-types" doc:name="logger"/>
@@ -73,9 +84,12 @@ http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/htt
         <logger level="INFO"
                 message="Returning response for get:/identifier-types:central-directory-api-config, L1p-Trace-Id=#[sessionVars.'L1p-Trace-Id'] Response: #[payload]"
                 category="com.l1p.interop.dfsp.directory.identifier-types" doc:name="logger"/>
+       	<exception-strategy ref="common_Catch_Exception_Strategy" doc:name="Reference Exception Strategy"/>
     </flow>
     
     <flow name="post:/resources:application/json:central-directory-api-config">
+        <http:listener config-ref="api-httpListenerConfig" path="/" doc:name="HTTP"/>
+    	<flow-ref name="common-Sub_Flow" doc:name="common-Sub_Flow"/>
     	<metrics:snap-time config-ref="metricsConfig" snapTimeKey="post-resources.start" doc:name="SnapTime"/>
         <logger level="INFO"
                 message="Sending request to http://${central-dir-host}:${central-dir-api.port}/resources method:post"
@@ -95,9 +109,11 @@ http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/htt
         <logger level="INFO"
                 message="Response from /resources #[message.payloadAs(java.lang.String)]"
                 category="com.l1p.interop.dfsp.directory.resources" doc:name="logger"/>
+        <exception-strategy ref="common_Catch_Exception_Strategy" doc:name="Reference Exception Strategy"/>
     </flow>
     
     <flow name="get:/resources:central-directory-api-config">
+        <flow-ref name="common-Sub_Flow" doc:name="common-Sub_Flow"/>
         <logger level="INFO"
                 message="Processing request for get:/resources:central-directory-api-config, L1p-Trace-Id=#[sessionVars.'L1p-Trace-Id']"
                 category="com.l1p.interop.dfsp.directory.resources" doc:name="logger"/>
@@ -122,9 +138,23 @@ http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/htt
         <logger level="INFO"
                 message="Processing request for get:/resources:central-directory-api-config, L1p-Trace-Id=#[sessionVars.'L1p-Trace-Id']"
                 category="com.l1p.interop.dfsp.directory.resources" doc:name="logger"/>
+        <exception-strategy ref="common_Catch_Exception_Strategy" doc:name="Reference Exception Strategy"/>
     </flow>
     
+    <sub-flow name="common-Sub_Flow">
+    	<set-session-variable variableName="L1p-Trace-Id" value="#[ (message.inboundProperties.'L1p-Trace-Id' == null) ? java.util.UUID.randomUUID() : message.inboundProperties.'L1p-Trace-Id']" doc:name="set-L1p-Trace-Id"/>
+        <logger level="INFO"
+                message="Received request for L1p-Trace-Id=#[sessionVars.'L1p-Trace-Id'] at path=#[message.inboundProperties.'http.request.path']"
+                category="com.l1p.interop.dfsp.api-main" doc:name="logger"/>
+        <object-to-string-transformer doc:name="Object to String"/>
+    </sub-flow>
     
+	<catch-exception-strategy name="common_Catch_Exception_Strategy">
+        <set-property propertyName="Content-Type" value="application/json" doc:name="Property - content-type"/>
+        <set-property propertyName="http.status" value="501" doc:name="Property - http status"/>
+		<set-session-variable variableName="errorMessageId" value="Transformer Messaging Exception" doc:name="set-errorMessageId"/>
+		<transformer ref="ExceptionTransformer" doc:name="Exception Transformer"/>
+    </catch-exception-strategy>
 
     
 </mule>
