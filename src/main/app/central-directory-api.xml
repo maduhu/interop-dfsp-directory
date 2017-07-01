@@ -22,10 +22,7 @@ http://www.mulesoft.org/schema/mule/json http://www.mulesoft.org/schema/mule/jso
     
     <flow name="central-directory-api-main">
         <http:listener config-ref="api-httpListenerConfig" path="${central-dir-gateway-service.basePath}/*" doc:name="HTTP"/>
-        <set-session-variable variableName="L1p-Trace-Id" value="#[ (message.inboundProperties.'L1p-Trace-Id' == null) ? java.util.UUID.randomUUID() : message.inboundProperties.'L1p-Trace-Id']" doc:name="set-L1p-Trace-Id"/>
-        <logger level="INFO"
-                message="Received request for L1p-Trace-Id=#[sessionVars.'L1p-Trace-Id'] at path=#[message.inboundProperties.'http.request.path']"
-                category="com.l1p.interop.dfsp.api-main" doc:name="logger"/>
+        <flow-ref name="check-and-set-L1p-Trace-Id" doc:name="check-and-set-L1p-Trace-Id"/>
         <apikit:router config-ref="central-directory-api-config" doc:name="APIkit Router"/>
         <exception-strategy ref="central-directory-api-apiKitGlobalExceptionMapping" doc:name="Reference Exception Strategy"/>
     </flow>
