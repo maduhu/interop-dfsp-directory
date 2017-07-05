@@ -1,0 +1,16 @@
+[
+  {
+    "name": "The First DFSP",
+    "providerUrl": "http://dfsp/users/1",
+    "shortName": "dsfp1",
+    "preferred": "true",
+    "registered": "true"
+  },
+  {
+    "name": "The Second DFSP",
+    "providerUrl": "http://dfsp/users/2",
+    "shortName": "dsfp2",
+    "preferred": "false",
+    "registered": "false"
+  }
+]
