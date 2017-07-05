@@ -5,20 +5,20 @@ http://www.mulesoft.org/schema/mule/apikit http://www.mulesoft.org/schema/mule/a
 http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.1.xsd
 http://www.mulesoft.org/schema/mule/json http://www.mulesoft.org/schema/mule/json/current/mule-json.xsd">
 
-    <apikit:config name="central-directory-api-config" raml="central-directory-api.raml" consoleEnabled="false" doc:name="Router"/>
+    <!-- <apikit:config name="central-directory-api-config" raml="central-directory-api.raml" consoleEnabled="false" doc:name="Router"/> -->
 
     <!-- <spring:beans>
         <spring:bean id="directoryExceptionTransformer" class="com.l1p.interop.dfsp.directory.DirectoryExceptionTransformer"/>
     </spring:beans> -->
     
-    <spring:beans>
+    <!-- <spring:beans>
         <spring:import resource="classpath:services-common.xml" />
         <spring:import resource="classpath:metrics.xml" />
     </spring:beans>
 
     <spring:beans>
         <spring:bean id="ExceptionTransformer" name="ExceptionTransformer" class="com.l1p.interop.L1PExceptionTransformer"/>
-    </spring:beans>
+    </spring:beans> -->
     
     <!-- <flow name="central-directory-api-main">
         <http:listener config-ref="api-httpListenerConfig" path="/apikit${central-dir-gateway-service.basePath}/*" doc:name="HTTP"/>
