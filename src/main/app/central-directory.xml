@@ -1,130 +1,176 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<mule xmlns:json="http://www.mulesoft.org/schema/mule/json" xmlns:http="http://www.mulesoft.org/schema/mule/http" xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
-	xmlns:spring="http://www.springframework.org/schema/beans"
-    xmlns:metrics="http://www.mulesoft.org/schema/mule/metrics"
+<mule xmlns:json="http://www.mulesoft.org/schema/mule/json" xmlns:http="http://www.mulesoft.org/schema/mule/http"
+	xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
+	xmlns:spring="http://www.springframework.org/schema/beans" xmlns:metrics="http://www.mulesoft.org/schema/mule/metrics"
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://www.mulesoft.org/schema/mule/json http://www.mulesoft.org/schema/mule/json/current/mule-json.xsd http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-current.xsd
+	xsi:schemaLocation="http://www.mulesoft.org/schema/mule/json http://www.mulesoft.org/schema/mule/json/current/mule-json.xsd
+http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-current.xsd
 http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
 http://www.mulesoft.org/schema/mule/metrics http://www.mulesoft.org/schema/mule/metrics/current/mule-metrics.xsd
 http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd">
 
-    
 
-    <http:request-config name="central-directory-http-config" host="${central-dir-host}" port="${central-dir-api.port}"  doc:name="HTTP Request Configuration">
-        <http:raml-api-configuration location="central-directory-api.raml"/>
-    </http:request-config>
-    
-    <flow name="get:/health:central-directory-api-config">
-        <set-payload value="{ &quot;status&quot; : &quot;ok&quot; }" doc:name="Set Payload" mimeType="application/json"/>
-    </flow>
-    
-    <flow name="get:/:central-directory-api-config">
-        <logger level="INFO"
-                message="Sending request for central-directory-api get:/:central-directory-api-config, L1p-Trace-Id=#[sessionVars.'L1p-Trace-Id']"
-                category="com.l1p.interop.dfsp.directory.metadata" doc:name="logger"/>
-        <metrics:snap-time config-ref="metricsConfig" snapTimeKey="get-metadata.start" doc:name="SnapTime"/>
-        <http:request config-ref="central-directory-http-config" path="/" method="GET" doc:name="HTTP">
-		    <http:success-status-code-validator values="200..599"/>
-        </http:request>
-        <json:object-to-json-transformer />
-        <set-property propertyName="http.status" value="#[message.inboundProperties.'http.status']" doc:name="Property"/>
-        <metrics:snap-time config-ref="metricsConfig" snapTimeKey="get-metadata.stop" doc:name="SnapTime"/>
-        <metrics:time config-ref="metricsConfig" beginSnapKey="get-metadata.start" endSnapKey="get-metadata.stop" category="l1p.dfsp.directory.api" metricKey="GetMetaDataTime" doc:name="Metrics Record"/>
-        <logger level="INFO"
-                message="Returning call for get:/:central-directory-api-config, L1p-Trace-Id=#[sessionVars.'L1p-Trace-Id'] response: #[payload]"
-                category="com.l1p.interop.dfsp.directory.metadata" doc:name="logger"/>
-    </flow>
-    
-    <flow name="post:/commands/register:application/json:central-directory-api-config">
-        <logger level="INFO"
-                message="Sending request to http://${central-dir-host}:${central-dir-api.port}/commands/register method:post"
-                category="com.l1p.interop.dfsp.directory.register" doc:name="logger"/>
-        <metrics:snap-time config-ref="metricsConfig" snapTimeKey="register-dfsp.start" doc:name="SnapTime"/>
-        <http:request config-ref="central-directory-http-config" path="/commands/register" method="POST" doc:name="HTTP">
-            <http:request-builder>
-                <http:header headerName="Authorization" value="#[message.inboundProperties.authorization]"/>
-            </http:request-builder>
-		    <http:success-status-code-validator values="200..599"/>
-        </http:request>
-        <set-property propertyName="http.status" value="#[message.inboundProperties.'http.status']" doc:name="Property"/>
-        <metrics:snap-time config-ref="metricsConfig" snapTimeKey="register-dfsp.stop" doc:name="SnapTime"/>
-        <metrics:time config-ref="metricsConfig" beginSnapKey="register-dfsp.start" endSnapKey="register-dfsp.stop" category="l1p.dfsp.directory.api" metricKey="RegisterDfspTime" doc:name="Metrics Record"/>
-        <set-property propertyName="Content-Type" value="application/json" doc:name="Property"/>
-        <logger level="INFO"
-                message="Response from /commands/register L1p-Trace-Id=#[sessionVars.'L1p-Trace-Id'] Response: #[message.payloadAs(java.lang.String)]"
-                category="com.l1p.interop.dfsp.directory.resgister" doc:name="logger"/>
-    </flow>
-    
-    <flow name="get:/identifier-types:central-directory-api-config">
-        <logger level="INFO"
-                message="Processing request for get:/identifier-types:central-directory-api-config, L1p-Trace-Id=#[sessionVars.'L1p-Trace-Id']"
-                category="com.l1p.interop.dfsp.directory.identifier-types" doc:name="logger"/>
-        <metrics:snap-time config-ref="metricsConfig" snapTimeKey="get-identifier-types.start" doc:name="SnapTime"/>
-        <http:request config-ref="central-directory-http-config" path="/identifier-types" method="GET" doc:name="HTTP">
-            <http:request-builder>
-                <http:header headerName="Authorization" value="#[message.inboundProperties.authorization]"/>
-            </http:request-builder>
-		    <http:success-status-code-validator values="200..599"/>
-        </http:request>
-        <metrics:snap-time config-ref="metricsConfig" snapTimeKey="get-identifier-types.stop" doc:name="SnapTime"/>
-        <metrics:time config-ref="metricsConfig" beginSnapKey="get-identifier-types.start" endSnapKey="get-identifier-types.stop" category="l1p.dfsp.directory.api" metricKey="GetIdentifierTypesTime" doc:name="Metrics Record"/>
-        <set-property propertyName="http.status" value="#[message.inboundProperties.'http.status']" doc:name="Property"/>
-        <logger level="INFO"
-                message="Returning response for get:/identifier-types:central-directory-api-config, L1p-Trace-Id=#[sessionVars.'L1p-Trace-Id'] Response: #[payload]"
-                category="com.l1p.interop.dfsp.directory.identifier-types" doc:name="logger"/>
-    </flow>
-    
-    <flow name="post:/resources:application/json:central-directory-api-config">
-    	<metrics:snap-time config-ref="metricsConfig" snapTimeKey="post-resources.start" doc:name="SnapTime"/>
-        <logger level="INFO"
-                message="Sending request to http://${central-dir-host}:${central-dir-api.port}/resources method:post"
-                category="com.l1p.interop.dfsp.directory.register" doc:name="logger"/>
-        <http:request config-ref="central-directory-http-config" path="/resources" method="POST" doc:name="HTTP">
-            <http:request-builder>
-                <http:header headerName="Authorization" value="#[message.inboundProperties.authorization]"/>
-            </http:request-builder>
-		    <http:success-status-code-validator values="200..599"/>
-        </http:request>
-        <logger level="INFO"
-                message="Reponse from /resources: #[message.payloadAs(java.lang.String)] "
-                category="com.l1p.interop.dfsp.central-directory" doc:name="logger"/>
-        <set-property propertyName="http.status" value="#[message.inboundProperties.'http.status']" doc:name="Property"/>
-        <metrics:snap-time config-ref="metricsConfig" snapTimeKey="post-resources.stop" doc:name="SnapTime"/>
-        <metrics:time config-ref="metricsConfig" beginSnapKey="post-resources.start" endSnapKey="post-resources.stop" category="l1p.dfsp.directory.api" metricKey="PostResourcesTime" doc:name="Metrics Record"/>
-        <logger level="INFO"
-                message="Response from /resources #[message.payloadAs(java.lang.String)]"
-                category="com.l1p.interop.dfsp.directory.resources" doc:name="logger"/>
-    </flow>
-    
-    <flow name="get:/resources:central-directory-api-config">
-        <logger level="INFO"
-                message="Processing request for get:/resources:central-directory-api-config, L1p-Trace-Id=#[sessionVars.'L1p-Trace-Id']"
-                category="com.l1p.interop.dfsp.directory.resources" doc:name="logger"/>
-        <metrics:snap-time config-ref="metricsConfig" snapTimeKey="get-resources.start" doc:name="SnapTime"/>
-        <logger level="INFO"
-                message="Posting request to http://${central-directory.host}:${central-directory.port}/resources with query parameters- identifierType: #[message.inboundProperties.'http.query.params'.identifierType]; identifier: #[message.inboundProperties.'http.query.params'.identifier]; "
-                category="com.l1p.interop.dfsp.central-directory" doc:name="logger"/>
-        <http:request config-ref="central-directory-http-config" path="/resources" method="GET" doc:name="HTTP">
-            <http:request-builder>
-                <http:query-param paramName="identifier" value="#[message.inboundProperties.'http.query.params'.identifier]"/>
-                <http:query-param paramName="identifierType" value="#[message.inboundProperties.'http.query.params'.identifierType]"/>
-                <http:header headerName="Authorization" value="#[message.inboundProperties.authorization]"/>
-            </http:request-builder>
-		    <http:success-status-code-validator values="200..599"/>
-        </http:request>
-        <logger level="INFO"
-                message="Reponse from /resources: #[message.payloadAs(java.lang.String)] "
-                category="com.l1p.interop.dfsp.central-directory" doc:name="logger"/>
-        <set-property propertyName="http.status" value="#[message.inboundProperties.'http.status']" doc:name="Property"/>
-        <metrics:snap-time config-ref="metricsConfig" snapTimeKey="get-resources.stop" doc:name="SnapTime"/>
-        <metrics:time config-ref="metricsConfig" beginSnapKey="get-resources.start" endSnapKey="get-resources.stop" category="l1p.dfsp.directory.api" metricKey="GetResourcesTime" doc:name="Metrics Record"/>
-        <logger level="INFO"
-                message="Processing request for get:/resources:central-directory-api-config, L1p-Trace-Id=#[sessionVars.'L1p-Trace-Id']"
-                category="com.l1p.interop.dfsp.directory.resources" doc:name="logger"/>
-    </flow>
-    
-    
 
-    
+	<http:request-config name="central-directory-http-config" host="${central-dir-host}"
+		port="${central-dir-api.port}" doc:name="HTTP Request Configuration">
+		<http:raml-api-configuration location="central-directory-api.raml" />
+	</http:request-config>
+
+	<flow name="get:/health:central-directory-api-config">
+		<set-payload value="{ &quot;status&quot; : &quot;ok&quot; }" doc:name="Set Payload"
+			mimeType="application/json" />
+	</flow>
+
+	<flow name="get:/:central-directory-api-config">
+		<logger level="INFO"
+			message="Sending request for central-directory-api get:/:central-directory-api-config, L1p-Trace-Id=#[sessionVars.'L1p-Trace-Id']"
+			category="com.l1p.interop.dfsp.directory.metadata" doc:name="logger" />
+		<metrics:snap-time config-ref="metricsConfig" snapTimeKey="get-metadata.start"
+			doc:name="SnapTime" />
+		<http:request config-ref="central-directory-http-config" path="/" method="GET"
+			doc:name="HTTP">
+			<http:success-status-code-validator values="200..599" />
+		</http:request>
+		<json:object-to-json-transformer doc:name="Object to JSON" />
+		<set-property propertyName="http.status" value="#[message.inboundProperties.'http.status']"
+			doc:name="Property" />
+		<metrics:snap-time config-ref="metricsConfig" snapTimeKey="get-metadata.stop"
+			doc:name="SnapTime" />
+		<metrics:time config-ref="metricsConfig" beginSnapKey="get-metadata.start"
+			endSnapKey="get-metadata.stop" category="l1p.dfsp.directory.api" metricKey="GetMetaDataTime"
+			doc:name="Metrics Record" />
+		<logger level="INFO"
+			message="Returning call for get:/:central-directory-api-config, L1p-Trace-Id=#[sessionVars.'L1p-Trace-Id'] response: #[payload]"
+			category="com.l1p.interop.dfsp.directory.metadata" doc:name="logger" />
+	</flow>
+
+	<flow name="post:/commands/register:application/json:central-directory-api-config">
+		<logger level="INFO"
+			message="Sending request to http://${central-dir-host}:${central-dir-api.port}/commands/register method:post"
+			category="com.l1p.interop.dfsp.directory.register" doc:name="logger" />
+		<metrics:snap-time config-ref="metricsConfig" snapTimeKey="register-dfsp.start"
+			doc:name="SnapTime" />
+		<http:request config-ref="central-directory-http-config" path="/commands/register"
+			method="POST" doc:name="HTTP">
+			<http:request-builder>
+				<http:header headerName="Authorization" value="#[message.inboundProperties.authorization]" />
+			</http:request-builder>
+			<http:success-status-code-validator values="200..599" />
+		</http:request>
+		<set-property propertyName="http.status" value="#[message.inboundProperties.'http.status']"
+			doc:name="Property" />
+		<metrics:snap-time config-ref="metricsConfig" snapTimeKey="register-dfsp.stop"
+			doc:name="SnapTime" />
+		<metrics:time config-ref="metricsConfig" beginSnapKey="register-dfsp.start"
+			endSnapKey="register-dfsp.stop" category="l1p.dfsp.directory.api" metricKey="RegisterDfspTime"
+			doc:name="Metrics Record" />
+		<set-property propertyName="Content-Type" value="application/json" doc:name="Property" />
+		<logger level="INFO"
+			message="Response from /commands/register L1p-Trace-Id=#[sessionVars.'L1p-Trace-Id'] Response: #[message.payloadAs(java.lang.String)]"
+			category="com.l1p.interop.dfsp.directory.resgister" doc:name="logger" />
+	</flow>
+
+	<flow name="get:/identifier-types:central-directory-api-config">
+		<logger level="INFO"
+			message="Processing request for get:/identifier-types:central-directory-api-config, L1p-Trace-Id=#[sessionVars.'L1p-Trace-Id']"
+			category="com.l1p.interop.dfsp.directory.identifier-types" doc:name="logger" />
+		<metrics:snap-time config-ref="metricsConfig" snapTimeKey="get-identifier-types.start"
+			doc:name="SnapTime" />
+		<http:request config-ref="central-directory-http-config" path="/identifier-types"
+			method="GET" doc:name="HTTP">
+			<http:request-builder>
+				<http:header headerName="Authorization" value="#[message.inboundProperties.authorization]" />
+			</http:request-builder>
+			<http:success-status-code-validator values="200..599" />
+		</http:request>
+		<metrics:snap-time config-ref="metricsConfig" snapTimeKey="get-identifier-types.stop"
+			doc:name="SnapTime" />
+		<metrics:time config-ref="metricsConfig" beginSnapKey="get-identifier-types.start"
+			endSnapKey="get-identifier-types.stop" category="l1p.dfsp.directory.api" metricKey="GetIdentifierTypesTime"
+			doc:name="Metrics Record" />
+		<set-property propertyName="http.status" value="#[message.inboundProperties.'http.status']"
+			doc:name="Property" />
+		<logger level="INFO"
+			message="Returning response for get:/identifier-types:central-directory-api-config, L1p-Trace-Id=#[sessionVars.'L1p-Trace-Id'] Response: #[payload]"
+			category="com.l1p.interop.dfsp.directory.identifier-types" doc:name="logger" />
+	</flow>
+
+	<flow name="post:/resources:application/json:central-directory-api-config">
+		<metrics:snap-time config-ref="metricsConfig" snapTimeKey="post-resources.start"
+			doc:name="SnapTime" />
+		<logger level="INFO"
+			message="Sending request to http://${central-dir-host}:${central-dir-api.port}/resources method:post"
+			category="com.l1p.interop.dfsp.directory.register" doc:name="logger" />
+		<http:request config-ref="central-directory-http-config" path="/resources" method="POST"
+			doc:name="HTTP">
+			<http:request-builder>
+				<http:header headerName="Authorization" value="#[message.inboundProperties.authorization]" />
+			</http:request-builder>
+			<http:success-status-code-validator values="200..599" />
+		</http:request>
+		<logger level="INFO" message="Reponse from /resources: #[message.payloadAs(java.lang.String)] "
+			category="com.l1p.interop.dfsp.central-directory" doc:name="logger" />
+		<set-property propertyName="http.status" value="#[message.inboundProperties.'http.status']"
+			doc:name="Property" />
+		<metrics:snap-time config-ref="metricsConfig" snapTimeKey="post-resources.stop"
+			doc:name="SnapTime" />
+		<metrics:time config-ref="metricsConfig" beginSnapKey="post-resources.start"
+			endSnapKey="post-resources.stop" category="l1p.dfsp.directory.api" metricKey="PostResourcesTime"
+			doc:name="Metrics Record" />
+		<logger level="INFO" message="Response from /resources #[message.payloadAs(java.lang.String)]"
+			category="com.l1p.interop.dfsp.directory.resources" doc:name="logger" />
+	</flow>
+
+	<flow name="get:/resources:central-directory-api-config">
+		<logger level="INFO"
+			message="Posting request to http://${central-directory.host}:${central-directory.port}/resources with query parameters- identifierType: #[message.inboundProperties.'http.query.params'.identifierType]; identifier: #[message.inboundProperties.'http.query.params'.identifier]; "
+			category="com.l1p.interop.dfsp.central-directory" doc:name="logger" />
+		<set-session-variable variableName="finalResponseMap" value="#[new java.util.HashMap()]"
+			doc:name="Save Final Response as a map" />
+		<set-session-variable variableName="receiverID" value="#[message.inboundProperties.'http.query.params'.identifier]"
+			doc:name="Save Final Response as a map" />
+		<http:request config-ref="central-directory-http-config" path="/resources" method="GET"
+			doc:name="HTTP">
+			<http:request-builder>
+				<http:query-param paramName="identifier"
+					value="#[message.inboundProperties.'http.query.params'.identifierType+':'+message.inboundProperties.'http.query.params'.identifier]" />
+				<http:header headerName="Authorization" value="#[message.inboundProperties.authorization]" />
+				<!--<http:query-param paramName="identifierType" value="#[message.inboundProperties.'http.query.params'.identifierType]"/> -->
+			</http:request-builder>
+			<http:success-status-code-validator values="200..599" />
+		</http:request>
+		<logger level="INFO"
+			message="Reponse from central-directory /resources: #[message.payloadAs(java.lang.String)] "
+			category="com.l1p.interop.dfsp.central-directory" doc:name="logger" />
+		<json:json-to-object-transformer returnClass="java.util.List" doc:name="JSON to Object"/>
+		<expression-transformer expression="#[sessionVars.finalResponseMap.put('dir_details',payload); payload]"/>
+		<foreach doc:name="For Each">
+			<choice doc:name="Choice">
+				<when expression="#[payload.'preferred'== true]">
+					<set-session-variable value="#[payload.'providerUrl']" variableName="providerUrl"
+						doc:name="Session Variable"></set-session-variable>
+					<logger level="INFO" message="Preferred provider url: #[payload.'providerUrl'] "
+						category="com.l1p.interop.dfsp.central-directory" doc:name="logger" />
+					<http:outbound-endpoint address="http://#[payload.'providerUrl'/receivers/sessionVars.receiverID]"
+						method="GET" exchange-pattern="request-response" doc:name="Generic" />
+		
+				</when>
+				<otherwise>
+					<logger level="INFO" message="In Otherwise payload: #[payload] " category="com.l1p.interop.dfsp.central-directory"
+						doc:name="logger" />
+				</otherwise>
+			</choice>
+		</foreach>
+		<json:object-to-json-transformer doc:name="Object to JSON"/>
+
+
+		<logger level="INFO"
+			message="Sending response, L1p-Trace-Id=#[sessionVars.'L1p-Trace-Id'] Data:#[payload]" category="com.l1p.interop.dfsp.directory.resources"
+			doc:name="logger" />
+	</flow>
+
+
+
+
 </mule>

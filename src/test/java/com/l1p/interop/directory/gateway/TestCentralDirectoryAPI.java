@@ -3,11 +3,15 @@ package com.l1p.interop.directory.gateway;
 import static com.github.tomakehurst.wiremock.client.WireMock.aResponse;
 import static com.github.tomakehurst.wiremock.client.WireMock.get;
 import static com.github.tomakehurst.wiremock.client.WireMock.post;
+import static com.github.tomakehurst.wiremock.client.WireMock.matching;
 import static com.github.tomakehurst.wiremock.client.WireMock.urlMatching;
+import static com.github.tomakehurst.wiremock.client.WireMock.urlEqualTo;
+import static com.github.tomakehurst.wiremock.client.WireMock.urlPathMatching;
 import static io.restassured.RestAssured.given;
 import static org.hamcrest.CoreMatchers.equalTo;
 
 import org.junit.BeforeClass;
+import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.Test;
 import org.mule.tck.junit4.FunctionalTestCase;
@@ -34,6 +38,7 @@ public class TestCentralDirectoryAPI extends FunctionalTestCase {
 	}
 
 	@Test
+	@Ignore
 	public void testRegisterDFSP() throws Exception {
 
 		String centralDirAddDFSPMockResponse = loadResourceAsString("test_data/centralDirAddDFSPMockResponse.json");
@@ -59,6 +64,7 @@ public class TestCentralDirectoryAPI extends FunctionalTestCase {
 	}
 	
 	@Test
+	@Ignore
 	public void testAddResouce() throws Exception {
 
 		String centralDirAddResourceMockResponse = loadResourceAsString("test_data/centralDirAddResourceMockResponse.json");
@@ -79,6 +85,24 @@ public class TestCentralDirectoryAPI extends FunctionalTestCase {
 			.body("providerUrl", equalTo("localhost:8088/scheme/adapter/v1"))
 			.body("preferred", equalTo(true))
 			.body("registered", equalTo(true));
+	}
+	
+	@Test
+	public void testGetResouce() throws Exception {
+
+		String centralDirGetResourceMockResponse = loadResourceAsString("test_data/centralDirGetResourceMockResponse.json");
+		mockCentralDirectory.stubFor(get(urlEqualTo("/resources?identifier=eur%3A123"))
+				.willReturn(aResponse().withBody(centralDirGetResourceMockResponse)));
+		
+		given()
+			.contentType("application/json")
+			.auth().basic("key", "secret")
+			.queryParam("identifier", "123")
+			.queryParam("identifierType", "eur")
+		.when()
+			.get("http://localhost:8088/directory/gateway/v1/resources")
+		.then()
+			.statusCode(200);
 	}
 
 }
