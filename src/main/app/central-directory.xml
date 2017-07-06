@@ -17,12 +17,12 @@ http://www.mulesoft.org/schema/mule/json http://www.mulesoft.org/schema/mule/jso
     </spring:beans>
 
 
-    <http:request-config name="central-directory-http-config" host="${central-dir.host}" port="${central-dir.port}"  basePath="/" doc:name="HTTP Request Configuration">
+    <http:request-config name="central-directory-http-config" host="${central-directory.host}" port="${central-directory.port}"  basePath="/" doc:name="HTTP Request Configuration">
         <http:raml-api-configuration location="central-directory-api.raml"/>
     </http:request-config>
 
     <flow name="register-dfsp">
-    	<http:listener config-ref="api-httpListenerConfig" path="${central-dir-gateway-service.basePath}/commands/register" doc:name="HTTP" allowedMethods="POST"/>
+    	<http:listener config-ref="api-httpListenerConfig" path="${dfsp-directory-gateway-service.basePath}/commands/register" doc:name="HTTP" allowedMethods="POST"/>
         <flow-ref name="common-Sub_Flow" doc:name="common-Sub_Flow"/>
         <metrics:snap-time config-ref="metricsConfig" snapTimeKey="register-dfsp.start" doc:name="SnapTime"/>
         <http:request config-ref="central-directory-http-config" path="/commands/register" method="POST" doc:name="HTTP">
@@ -38,7 +38,7 @@ http://www.mulesoft.org/schema/mule/json http://www.mulesoft.org/schema/mule/jso
     </flow>
     
     <flow name="get-identifier-types">
-    	<http:listener config-ref="api-httpListenerConfig" path="${central-dir-gateway-service.basePath}/identifier-types" doc:name="HTTP" allowedMethods="GET"/>
+    	<http:listener config-ref="api-httpListenerConfig" path="${dfsp-directory-gateway-service.basePath}/identifier-types" doc:name="HTTP" allowedMethods="GET"/>
         <flow-ref name="common-Sub_Flow" doc:name="common-Sub_Flow"/>
         <metrics:snap-time config-ref="metricsConfig" snapTimeKey="get-identifier-types.start" doc:name="SnapTime"/>
         <http:request config-ref="central-directory-http-config" path="/identifier-types" method="GET" doc:name="HTTP">
@@ -54,11 +54,12 @@ http://www.mulesoft.org/schema/mule/json http://www.mulesoft.org/schema/mule/jso
     </flow>
 
     <flow name="get-metadata">
-    	<http:listener config-ref="api-httpListenerConfig" path="${central-dir-gateway-service.basePath}/" doc:name="HTTP" allowedMethods="GET"/>
+    	<http:listener config-ref="api-httpListenerConfig" path="${dfsp-directory-gateway-service.basePath}/" doc:name="HTTP" allowedMethods="GET"/>
         <flow-ref name="common-Sub_Flow" doc:name="common-Sub_Flow"/>
         <metrics:snap-time config-ref="metricsConfig" snapTimeKey="get-metadata.start" doc:name="SnapTime"/>
+        <logger message="About to call central directory = ${central-directory-host} :: registration Host = ${central-user-registration-host}" level="INFO" doc:name="Logger"/>
         <http:request config-ref="central-directory-http-config" path="/" method="GET" doc:name="HTTP">
-		    <http:success-status-code-validator values="200..599"/>
+            <http:success-status-code-validator values="200..599"/>
         </http:request>
         <set-property propertyName="http.status" value="#[message.inboundProperties.'http.status']" doc:name="Property"/>
         <metrics:snap-time config-ref="metricsConfig" snapTimeKey="get-metadata.stop" doc:name="SnapTime"/>
@@ -67,11 +68,11 @@ http://www.mulesoft.org/schema/mule/json http://www.mulesoft.org/schema/mule/jso
     </flow>
 
     <flow name="get-resources">
-    	<http:listener config-ref="api-httpListenerConfig" path="${central-dir-gateway-service.basePath}/resources" allowedMethods="GET" doc:name="HTTP"/>
+    	<http:listener config-ref="api-httpListenerConfig" path="${dfsp-directory-gateway-service.basePath}/resources" allowedMethods="GET" doc:name="HTTP"/>
         <flow-ref name="common-Sub_Flow" doc:name="common-Sub_Flow"/>
         <metrics:snap-time config-ref="metricsConfig" snapTimeKey="get-resources.start" doc:name="SnapTime"/>
         <logger level="INFO"
-                message="Posting request to http://${central-dir.host}:${central-directory.port}/resources with query parameters- identifierType: #[message.inboundProperties.'http.query.params'.identifierType]; identifier: #[message.inboundProperties.'http.query.params'.identifier]; "
+                message="Posting request to http://${central-directory.host}:${central-directory.port}/resources with query parameters- identifierType: #[message.inboundProperties.'http.query.params'.identifierType]; identifier: #[message.inboundProperties.'http.query.params'.identifier]; "
                 category="com.l1p.interop.dfsp.central-directory" doc:name="logger"/>
         <http:request config-ref="central-directory-http-config" path="/resources" method="GET" doc:name="HTTP">
             <http:request-builder>
@@ -91,7 +92,7 @@ http://www.mulesoft.org/schema/mule/json http://www.mulesoft.org/schema/mule/jso
     </flow>
     
     <flow name="get-health">
-    	<http:listener config-ref="api-httpListenerConfig" path="${central-dir-gateway-service.basePath}/health" doc:name="HTTP" allowedMethods="GET"/>
+    	<http:listener config-ref="api-httpListenerConfig" path="${dfsp-directory-gateway-service.basePath}/health" doc:name="HTTP" allowedMethods="GET"/>
     	<set-payload value="{ &quot;status&quot; : &quot;ok&quot; }" doc:name="Set Payload" mimeType="application/json"/>
     	<exception-strategy ref="common_Catch_Exception_Strategy" doc:name="Reference Exception Strategy"/>
     </flow>

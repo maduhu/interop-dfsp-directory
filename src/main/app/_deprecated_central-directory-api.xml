@@ -5,7 +5,7 @@ http://www.mulesoft.org/schema/mule/apikit http://www.mulesoft.org/schema/mule/a
 http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.1.xsd
 http://www.mulesoft.org/schema/mule/json http://www.mulesoft.org/schema/mule/json/current/mule-json.xsd">
 
-    <apikit:config name="central-directory-api-config" raml="central-directory-api.raml" consoleEnabled="false" doc:name="Router"/>
+<!--     <apikit:config name="central-directory-api-config" raml="central-directory-api.raml" consoleEnabled="false" doc:name="Router"/> -->
 
 <!--     <spring:beans> -->
 <!--         <spring:bean id="directoryExceptionTransformer" class="com.l1p.interop.dfsp.directory.DirectoryExceptionTransformer"/> -->
