@@ -44,7 +44,6 @@ public class TestCentralDirectoryAPI extends FunctionalTestCase {
 	}
 
 	@Test
-	@Ignore
 	public void testRegisterDFSP() throws Exception {
 
 		String centralDirAddDFSPMockResponse = loadResourceAsString("test_data/centralDirAddDFSPMockResponse.json");
@@ -70,7 +69,6 @@ public class TestCentralDirectoryAPI extends FunctionalTestCase {
 	}
 	
 	@Test
-	@Ignore
 	public void testAddResouce() throws Exception {
 
 		String centralDirAddResourceMockResponse = loadResourceAsString("test_data/centralDirAddResourceMockResponse.json");
