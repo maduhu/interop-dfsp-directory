@@ -14,7 +14,11 @@ http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/htt
 
 	<http:request-config name="central-directory-http-config" host="${central-dir-host}"
 		port="${central-dir-api.port}" doc:name="HTTP Request Configuration">
-		<http:raml-api-configuration location="central-directory-api.raml" />
+		<!-- <http:raml-api-configuration location="central-directory-api.raml" /> -->
+	</http:request-config>
+
+	<http:request-config name="central-fraud-sharing-http-config" host="${central-fraud-sharing-host}"
+		port="${central-fraud-sharing-api.port}" doc:name="HTTP Request Configuration">
 	</http:request-config>
 
 	<flow name="get:/health:central-directory-api-config">
@@ -128,8 +132,10 @@ http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/htt
 			category="com.l1p.interop.dfsp.central-directory" doc:name="logger" />
 		<set-session-variable variableName="finalResponseMap" value="#[new java.util.HashMap()]"
 			doc:name="Save Final Response as a map" />
-		<set-session-variable variableName="receiverID" value="#[message.inboundProperties.'http.query.params'.identifier]"
-			doc:name="Save Final Response as a map" />
+		<set-session-variable variableName="identifierType"
+			value="#[message.inboundProperties.'http.query.params'.identifierType]" doc:name="Save identifier type" />
+		<set-session-variable variableName="receiverID"
+			value="#[message.inboundProperties.'http.query.params'.identifier]" doc:name="Save identifier" />
 		<http:request config-ref="central-directory-http-config" path="/resources" method="GET"
 			doc:name="HTTP">
 			<http:request-builder>
@@ -140,31 +146,92 @@ http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/htt
 			</http:request-builder>
 			<http:success-status-code-validator values="200..599" />
 		</http:request>
-		<logger level="INFO"
-			message="Reponse from central-directory /resources: #[message.payloadAs(java.lang.String)] "
-			category="com.l1p.interop.dfsp.central-directory" doc:name="logger" />
-		<json:json-to-object-transformer returnClass="java.util.List" doc:name="JSON to Object"/>
-		<expression-transformer expression="#[sessionVars.finalResponseMap.put('dir_details',payload); payload]"/>
-		<foreach doc:name="For Each">
-			<choice doc:name="Choice">
-				<when expression="#[payload.'preferred'== true]">
-					<set-session-variable value="#[payload.'providerUrl']" variableName="providerUrl"
-						doc:name="Session Variable"></set-session-variable>
-					<logger level="INFO" message="Preferred provider url: #[payload.'providerUrl'] "
-						category="com.l1p.interop.dfsp.central-directory" doc:name="logger" />
-					<http:outbound-endpoint address="http://#[payload.'providerUrl'/receivers/sessionVars.receiverID]"
-						method="GET" exchange-pattern="request-response" doc:name="Generic" />
-		
-				</when>
-				<otherwise>
-					<logger level="INFO" message="In Otherwise payload: #[payload] " category="com.l1p.interop.dfsp.central-directory"
-						doc:name="logger" />
-				</otherwise>
-			</choice>
-		</foreach>
-		<json:object-to-json-transformer doc:name="Object to JSON"/>
+		<choice doc:name="check if central-dir /resources is successful">
+			<when expression="#[message.inboundProperties.'http.status' == 200]">
+				<logger level="INFO"
+					message="Success Reponse from central-directory /resources: #[message.payloadAs(java.lang.String)] "
+					category="com.l1p.interop.dfsp.central-directory" doc:name="logger" />
+				<json:json-to-object-transformer returnClass="java.util.List"
+					doc:name="JSON to Object" />
+				<expression-transformer
+					expression="#[sessionVars.finalResponseMap.put('directory_details',payload); payload]"
+					doc:name="Expression" />
+				<foreach doc:name="For Each">
+					<choice doc:name="Choice">
+						<when expression="#[payload.'preferred'== true]">
+							<set-session-variable value="#[payload.'providerUrl']" variableName="providerUrl"
+								doc:name="Session Variable"></set-session-variable>
+							<logger level="INFO" message="Preferred provider url: #[payload.'providerUrl'] "
+								category="com.l1p.interop.dfsp.central-directory" doc:name="logger" />
 
+							<!-- Calling Payee DFSP API to get receiver details -->
+							<logger level="INFO"
+								message="Posting request to http://#[payload.'providerUrl']/receivers/#[sessionVars.receiverID] "
+								category="com.l1p.interop.dfsp.central-directory" doc:name="logger" />
+							<http:outbound-endpoint address="http://#[payload.'providerUrl']/receivers/#[sessionVars.receiverID]"
+								method="GET" exchange-pattern="request-response" doc:name="Generic" />
+							<choice doc:name="check if payee dfsp /receivers is successful">
+								<when expression="#[message.inboundProperties.'http.status' == 200]">
+									<logger level="INFO"
+										message="Success Reponse from payee dfsp /receivers: #[message.payloadAs(java.lang.String)] "
+										category="com.l1p.interop.dfsp.central-directory" doc:name="logger" />
+									<json:json-to-object-transformer returnClass="java.util.Map"
+										doc:name="Convert JSON Payload to Map" />
+									<expression-transformer
+										expression="#[sessionVars.finalResponseMap.put('dfsp_details',payload); payload]"
+										doc:name="Expression" />
 
+									<!-- Calling Central Fraud Sharing API -->
+									<logger level="INFO"
+										message="Posting request to http://${central-fraud-sharing-host}:${central-fraud-sharing-api.port}/score/user"
+										category="com.l1p.interop.dfsp.central-directory" doc:name="logger" />
+									<set-payload
+										value="{&quot;identifier&quot;:&quot;#[sessionVars.receiverID]&quot;,&quot;identifierType&quot;:&quot;#[sessionVars.identifierType]&quot;}"
+										doc:name="Set Payload"></set-payload>
+									<http:request config-ref="central-fraud-sharing-http-config" path="/score/user"
+										method="POST" doc:name="HTTP">
+										<http:success-status-code-validator values="200..599" />
+									</http:request>
+									<choice doc:name="check if central-fraud-share /score/user is successful">
+										<when expression="#[message.inboundProperties.'http.status' == 200]">
+											<logger level="INFO"
+												message="Success Reponse from central-fraud-share /score/user: #[message.payloadAs(java.lang.String)] "
+												category="com.l1p.interop.dfsp.central-directory" doc:name="logger" />
+											<json:json-to-object-transformer returnClass="java.util.Map"
+												doc:name="Convert JSON Payload to Map" />
+											<expression-transformer
+												expression="#[sessionVars.finalResponseMap.put('fraud_details',payload); payload]"
+												doc:name="Expression" />
+										</when>
+										<otherwise>
+											<logger level="INFO"
+												message="Failure Reponse from central-fraud-sharing /score/user: #[message.payloadAs(java.lang.String)] "
+												category="com.l1p.interop.dfsp.central-directory" doc:name="logger" />
+										</otherwise>
+									</choice>
+								</when>
+								<otherwise>
+									<logger level="INFO"
+										message="Failure Reponse from payee dfsp /receivers: #[message.payloadAs(java.lang.String)] "
+										category="com.l1p.interop.dfsp.central-directory" doc:name="logger" />
+								</otherwise>
+							</choice>
+						</when>
+						<otherwise>
+							<logger level="INFO" message="In Otherwise payload: #[payload] " category="com.l1p.interop.dfsp.central-directory"
+								doc:name="logger" />
+						</otherwise>
+					</choice>
+				</foreach>
+				<set-payload value="#[sessionVars.finalResponseMap]" doc:name="Set Payload"></set-payload>
+			</when>
+			<otherwise>
+				<logger level="INFO"
+					message="Failure Reponse from central-directory /resources: #[message.payloadAs(java.lang.String)] "
+					category="com.l1p.interop.dfsp.central-directory" doc:name="logger" />
+			</otherwise>
+		</choice>
+		<json:object-to-json-transformer doc:name="Object to JSON" />
 		<logger level="INFO"
 			message="Sending response, L1p-Trace-Id=#[sessionVars.'L1p-Trace-Id'] Data:#[payload]" category="com.l1p.interop.dfsp.directory.resources"
 			doc:name="logger" />

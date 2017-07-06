@@ -26,6 +26,12 @@ public class TestCentralDirectoryAPI extends FunctionalTestCase {
 
 	@Rule
 	public WireMockRule mockCentralDirectory = new WireMockRule(8090);
+	
+	@Rule
+	public WireMockRule mockDfspApi = new WireMockRule(8091);
+	
+	@Rule
+	public WireMockRule mockCentralFraudSharing = new WireMockRule(8092);
 
 	@Override
 	protected String getConfigResources() {
@@ -93,6 +99,15 @@ public class TestCentralDirectoryAPI extends FunctionalTestCase {
 		String centralDirGetResourceMockResponse = loadResourceAsString("test_data/centralDirGetResourceMockResponse.json");
 		mockCentralDirectory.stubFor(get(urlEqualTo("/resources?identifier=eur%3A123"))
 				.willReturn(aResponse().withBody(centralDirGetResourceMockResponse)));
+		
+		String dfspReceiverMockResponse = loadResourceAsString("test_data/dfspReceiverMockResponse.json");
+		mockDfspApi.stubFor(get(urlEqualTo("/scheme/adapter/v1/receivers/123"))
+				.willReturn(aResponse().withBody(dfspReceiverMockResponse)));
+		
+		String centralFraudSharingRequest = "{\"identifier\":\"123\",\"identifierType\":\"eur\"}";
+		String centralFraudSharingMockResponse = loadResourceAsString("test_data/centralFraudSharingMockResponse.json");
+		mockCentralFraudSharing.stubFor(post(urlEqualTo("/score/user")).withRequestBody(com.github.tomakehurst.wiremock.client.WireMock.equalTo(centralFraudSharingRequest))
+				.willReturn(aResponse().withBody(centralFraudSharingMockResponse)));
 		
 		given()
 			.contentType("application/json")
