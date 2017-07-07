@@ -128,19 +128,19 @@ http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/htt
 
 	<flow name="get:/resources:central-directory-api-config">
 		<logger level="INFO"
-			message="Posting request to http://${central-directory.host}:${central-directory.port}/resources with query parameters- identifierType: #[message.inboundProperties.'http.query.params'.identifierType]; identifier: #[message.inboundProperties.'http.query.params'.identifier]; "
+			message="Sending request to http://${central-dir-host}:${central-dir-api.port}/resources with query parameters-  identifier: #[message.inboundProperties.'http.query.params'.identifier]; "
 			category="com.l1p.interop.dfsp.central-directory" doc:name="logger" />
 		<set-session-variable variableName="finalResponseMap" value="#[new java.util.HashMap()]"
 			doc:name="Save Final Response as a map" />
 		<set-session-variable variableName="identifierType"
-			value="#[message.inboundProperties.'http.query.params'.identifierType]" doc:name="Save identifier type" />
+			value="#[message.inboundProperties.'http.query.params'.identifier.substring(0,3)]" doc:name="Save identifier type" />
 		<set-session-variable variableName="receiverID"
-			value="#[message.inboundProperties.'http.query.params'.identifier]" doc:name="Save identifier" />
+			value="#[message.inboundProperties.'http.query.params'.identifier.substring(4)]" doc:name="Save identifier" />
 		<http:request config-ref="central-directory-http-config" path="/resources" method="GET"
 			doc:name="HTTP">
 			<http:request-builder>
 				<http:query-param paramName="identifier"
-					value="#[message.inboundProperties.'http.query.params'.identifierType+':'+message.inboundProperties.'http.query.params'.identifier]" />
+					value="#[message.inboundProperties.'http.query.params'.identifier]" />
 				<http:header headerName="Authorization" value="#[message.inboundProperties.authorization]" />
 				<!--<http:query-param paramName="identifierType" value="#[message.inboundProperties.'http.query.params'.identifierType]"/> -->
 			</http:request-builder>
