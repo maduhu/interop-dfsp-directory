@@ -8,8 +8,7 @@
 http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-current.xsd
 http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
 http://www.mulesoft.org/schema/mule/metrics http://www.mulesoft.org/schema/mule/metrics/current/mule-metrics.xsd
-http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd
-http://www.mulesoft.org/schema/mule/json http://www.mulesoft.org/schema/mule/json/current/mule-json.xsd">
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd">
 
     <spring:beans>
         <spring:import resource="classpath:services-common.xml" />
@@ -18,7 +17,6 @@ http://www.mulesoft.org/schema/mule/json http://www.mulesoft.org/schema/mule/jso
     </spring:beans>
 
     <http:request-config name="central-directory-http-config" host="${central-directory.host}" port="${central-directory.port}"  basePath="/" doc:name="HTTP Request Configuration">
-        <http:raml-api-configuration location="central-directory-api.raml"/>
     </http:request-config>
 
     <flow name="register-dfsp">
@@ -45,7 +43,7 @@ http://www.mulesoft.org/schema/mule/json http://www.mulesoft.org/schema/mule/jso
             <http:request-builder>
                 <http:header headerName="Authorization" value="#[message.inboundProperties.authorization]"/>
             </http:request-builder>
-		    <http:success-status-code-validator values="200..599"/>
+            <http:success-status-code-validator values="200..599"/>
         </http:request>
         <set-property propertyName="http.status" value="#[message.inboundProperties.'http.status']" doc:name="Property"/>
         <metrics:snap-time config-ref="metricsConfig" snapTimeKey="get-identifier-types.stop" doc:name="SnapTime"/>
