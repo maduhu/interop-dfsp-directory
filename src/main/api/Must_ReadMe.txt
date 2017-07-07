@@ -11,3 +11,9 @@ So bad in fact at times that just using plain http connector without the API Kit
 It was decided in late June 2017, to remove API kit/RAML from our application as it as a performance bottleneck.
 
 At some future date, these api.xml and .raml files maybe removed.
+
+
+
+***** Important *****
+
+	*-api.xml and *.raml files have been moved to "old_api_and_raml_files" folder

@@ -23,9 +23,9 @@ http://www.mulesoft.org/schema/mule/json http://www.mulesoft.org/schema/mule/jso
     
     <flow name="get:/users/{number}:user-registration-api-config">
         <http:listener config-ref="api-httpListenerConfig" path="${dfsp-directory-gateway-service.basePath}/user-registration/users/{number}" doc:name="HTTP"/>
+        <logger message="GET /user/{number} step 0" level="INFO" doc:name="Logger"/>
         <flow-ref name="common-user-registration_Flow" doc:name="common-user-registration_Flow"/>
-        <logger message="GET /user/{number} step 1" level="INFO" doc:name="Logger"/>
-        <set-variable variableName="userNumber" value="#[message.inboundProperties.'http.request.uri'.number]" doc:name="Variable - user number"/>
+        <logger message="GET /user/{number} step 1 :: uri parameter = #[message.inboundProperties.'http.uri.params'.number]" level="INFO" doc:name="Logger"/>
         <http:request config-ref="user-registration-http-config" path="/users/{number}" method="GET" doc:name="HTTP">
             <http:request-builder>
                 <http:uri-param paramName="number" value="#[message.inboundProperties.'http.uri.params'.number]"/>
@@ -34,6 +34,7 @@ http://www.mulesoft.org/schema/mule/json http://www.mulesoft.org/schema/mule/jso
         </http:request>
         <logger message="GET /user/{number} step 2" level="INFO" doc:name="Logger"/>
         <set-property propertyName="http.status" value="#[message.inboundProperties.'http.status']" doc:name="Property"/>
+        <logger message="GET /user/{number} step 2.1" level="INFO" doc:name="Logger"/>
         <set-property propertyName="Content-Type" value="application/json" doc:name="Property"/>
         <logger message="GET /user/{number} step 3" level="INFO" doc:name="Logger"/>
         <json:object-to-json-transformer doc:name="Object to JSON"/>
