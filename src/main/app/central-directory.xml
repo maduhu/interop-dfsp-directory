@@ -4,7 +4,8 @@
 	xmlns:spring="http://www.springframework.org/schema/beans"
     xmlns:metrics="http://www.mulesoft.org/schema/mule/metrics"
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-current.xsd
+	xsi:schemaLocation="http://www.mulesoft.org/schema/mule/json http://www.mulesoft.org/schema/mule/json/current/mule-json.xsd
+http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-current.xsd
 http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
 http://www.mulesoft.org/schema/mule/metrics http://www.mulesoft.org/schema/mule/metrics/current/mule-metrics.xsd
 http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd
@@ -15,7 +16,6 @@ http://www.mulesoft.org/schema/mule/json http://www.mulesoft.org/schema/mule/jso
         <spring:import resource="classpath:metrics.xml" />
         <spring:bean id="directoryExceptionTransformer" class="com.l1p.interop.dfsp.directory.DirectoryExceptionTransformer"/>
     </spring:beans>
-
 
     <http:request-config name="central-directory-http-config" host="${central-directory.host}" port="${central-directory.port}"  basePath="/" doc:name="HTTP Request Configuration">
         <http:raml-api-configuration location="central-directory-api.raml"/>
@@ -57,10 +57,13 @@ http://www.mulesoft.org/schema/mule/json http://www.mulesoft.org/schema/mule/jso
     	<http:listener config-ref="api-httpListenerConfig" path="${dfsp-directory-gateway-service.basePath}/" doc:name="HTTP" allowedMethods="GET"/>
         <flow-ref name="common-Sub_Flow" doc:name="common-Sub_Flow"/>
         <metrics:snap-time config-ref="metricsConfig" snapTimeKey="get-metadata.start" doc:name="SnapTime"/>
-        <logger message="About to call central directory = ${central-directory-host} :: registration Host = ${central-user-registration-host}" level="INFO" doc:name="Logger"/>
+        <logger message="About to call central directory = ${central-directory-host} :: registration Host = ${central-user-registration-host}, L1p-Trace-Id=#[sessionVars.'L1p-Trace-Id']" level="INFO" doc:name="Logger"/>
         <http:request config-ref="central-directory-http-config" path="/" method="GET" doc:name="HTTP">
             <http:success-status-code-validator values="200..599"/>
         </http:request>
+        <logger level="INFO"
+                message="Reponse from /resources: #[message.payloadAs(java.lang.String)], L1p-Trace-Id=#[sessionVars.'L1p-Trace-Id']"
+                category="com.l1p.interop.dfsp.directory.resources" doc:name="logger"/>
         <set-property propertyName="http.status" value="#[message.inboundProperties.'http.status']" doc:name="Property"/>
         <metrics:snap-time config-ref="metricsConfig" snapTimeKey="get-metadata.stop" doc:name="SnapTime"/>
         <metrics:time config-ref="metricsConfig" beginSnapKey="get-metadata.start" endSnapKey="get-metadata.stop" category="l1p.dfsp.directory.api" metricKey="GetMetaDataTime" doc:name="Metrics Record"/>
@@ -72,7 +75,7 @@ http://www.mulesoft.org/schema/mule/json http://www.mulesoft.org/schema/mule/jso
         <flow-ref name="common-Sub_Flow" doc:name="common-Sub_Flow"/>
         <metrics:snap-time config-ref="metricsConfig" snapTimeKey="get-resources.start" doc:name="SnapTime"/>
         <logger level="INFO"
-                message="Posting request to http://${central-directory.host}:${central-directory.port}/resources with query parameters- identifierType: #[message.inboundProperties.'http.query.params'.identifierType]; identifier: #[message.inboundProperties.'http.query.params'.identifier]; "
+                message="Posting request to http://${central-directory.host}:${central-directory.port}/resources with L1p-Trace-Id=#[sessionVars.'L1p-Trace-Id'], identifierType: #[message.inboundProperties.'http.query.params'.identifierType]; identifier: #[message.inboundProperties.'http.query.params'.identifier]"
                 category="com.l1p.interop.dfsp.central-directory" doc:name="logger"/>
         <http:request config-ref="central-directory-http-config" path="/resources" method="GET" doc:name="HTTP">
             <http:request-builder>
@@ -83,7 +86,7 @@ http://www.mulesoft.org/schema/mule/json http://www.mulesoft.org/schema/mule/jso
 		    <http:success-status-code-validator values="200..599"/>
         </http:request>
         <logger level="INFO"
-                message="Reponse from /resources: #[message.payloadAs(java.lang.String)] "
+                message="Reponse from /resources: #[message.payloadAs(java.lang.String)], L1p-Trace-Id=#[sessionVars.'L1p-Trace-Id']"
                 category="com.l1p.interop.dfsp.central-directory" doc:name="logger"/>
         <set-property propertyName="http.status" value="#[message.inboundProperties.'http.status']" doc:name="Property"/>
         <metrics:snap-time config-ref="metricsConfig" snapTimeKey="get-resources.stop" doc:name="SnapTime"/>
@@ -104,6 +107,7 @@ http://www.mulesoft.org/schema/mule/json http://www.mulesoft.org/schema/mule/jso
                 message="Received request for L1p-Trace-Id=#[sessionVars.'L1p-Trace-Id'] at path=#[message.inboundProperties.'http.request.path']"
                 category="com.l1p.interop.dfsp.api-main" doc:name="logger"/>
         <object-to-string-transformer doc:name="Object to String"/>
+        <set-property propertyName="http.'L1p-Trace-Id'" value="#[sessionVars.'L1p-Trace-Id']" doc:name="PropertyHttpL1p-Trace-Id"/>
     </sub-flow>
     
 	<catch-exception-strategy name="common_Catch_Exception_Strategy">

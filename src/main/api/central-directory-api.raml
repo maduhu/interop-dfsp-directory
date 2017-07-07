@@ -9,28 +9,62 @@ securitySchemes:
     type: Basic Authentication
     
 types: 
+  
   Resource:
     type: object
     properties: 
-      spspReceiver: string
-      
-  HealthStatus:
-    type: object
-    properties: 
-      status:
+      name: string
+      providerUrl:
         type: string
-        required: true
+        pattern: ^((http(s?))\:\/\/)?((([a-zA-Z0-9_\-]{2,}\.)+[a-zA-Z]{2,})|((?:(?:25[0-5]|2[0-4]\d|[01]\d\d|\d?\d)( ?(\.?\d)\.)){4}))(:[a-zA-Z0-9]+)?(\/[a-zA-Z0-9\-\._\?\,\'\/\\\+&amp;%\$#\=~]*)?$
+      shortName: string
+      preferred: string
+      registered: string
+
+  AggregateResource:
+      type: object
+      properties:
+        name: string
+        providerUrl:
+          type: string
+          pattern: ^((http(s?))\:\/\/)?((([a-zA-Z0-9_\-]{2,}\.)+[a-zA-Z]{2,})|((?:(?:25[0-5]|2[0-4]\d|[01]\d\d|\d?\d)( ?(\.?\d)\.)){4}))(:[a-zA-Z0-9]+)?(\/[a-zA-Z0-9\-\._\?\,\'\/\\\+&amp;%\$#\=~]*)?$
+        shortName: string
+        preferred: string
+        registered: string
+      
+  Receiver:
+    type: object
+    properties:
+      type:
+        enum: [ payee, invoice ]
+      account:
+        type: string
+        pattern: ^((http(s?))\:\/\/)?((([a-zA-Z0-9_\-]{2,}\.)+[a-zA-Z]{2,})|((?:(?:25[0-5]|2[0-4]\d|[01]\d\d|\d?\d)( ?(\.?\d)\.)){4}))(:[a-zA-Z0-9]+)?(\/[a-zA-Z0-9\-\._\?\,\'\/\\\+&amp;%\$#\=~]*)?$
+      currencyCode: string
+      currencySymbol: string
+      name?: string
+      imageUrl?:
+        type: string
+        pattern: ^((http(s?))\:\/\/)?((([a-zA-Z0-9_\-]{2,}\.)+[a-zA-Z]{2,})|((?:(?:25[0-5]|2[0-4]\d|[01]\d\d|\d?\d)( ?(\.?\d)\.)){4}))(:[a-zA-Z0-9]+)?(\/[a-zA-Z0-9\-\._\?\,\'\/\\\+&amp;%\$#\=~]*)?$
+      amount?:
+        type: string
+        pattern: ^[-+]?[0-9]*[.]?[0-9]+([eE][-+]?[0-9]+)?$
+      status?:
+        enum: [ paid, unpaid, cancelled ]
+      invoiceInfo?: string  
+        
       
   DFSP:
     type: object
     properties: 
       name: string
+      shortName: string
+      providerUrl: string
+      schemeCode?: string
+      dfspCode?: string
       key?: string
       secret?: string
-    example:
-      name: dfsp1
-      key: dfsp1
-      secret: dfsp1
+    
       
   IdentifierType:
     type: object
@@ -42,6 +76,7 @@ types:
     type: object
     properties: 
       directory: string
+      urls: string
  
   Error:
     type: object
@@ -91,28 +126,14 @@ types:
       200:
         body: 
           application/json: 
-            type: HealthStatus
+            properties:
+              status: string
             example: |
               { 
                 "status" : "ok" 
               }
           
-/resources:
-  get:
-    description: Get customer information by supplying an identifier and identifier type
-    securedBy: [basic]
-    queryParameters:
-      identifierType:
-        type: string
-      identifier:
-        type: number
-    responses:
-      200:
-        body:
-          type: Resource
-      404:
-        body:
-          type: Error
+
           
 /commands:
   /register:
@@ -135,3 +156,60 @@ types:
         body:
           type: array
           items: IdentifierType
+          
+          
+/resources:
+  post:
+    description: create a new identifier
+    securedBy: [basic]
+    body:
+      properties:
+        identifier: string
+        preferred: string
+    responses:
+      201:
+        body:
+          type: Resource
+      404:
+        body:
+          type: Error
+  get:
+    description: Get resource information by supplying an identifier and identifier type
+    securedBy: [basic]
+    queryParameters:
+      identifier:
+        type: string
+      identifierType:
+        type: string
+    responses:
+      200:
+        body:
+          type: array
+          items: AggregateResource
+      404:
+        body:
+          type: Error
+          
+#/receivers:
+#    displayName: Query ( GET <receiver> )
+#    get:
+#        description: The sender queries the receiver endpoint to get information about the type of payment that can be made to this receiver
+#        queryParameters:
+#          identifier: string
+#        responses:
+#          200:
+#            body:
+#              application/json:
+#                properties:
+#                  data:
+#                    type: Receiver
+#                  fraud:
+#                    type: Fraud
+#          404:
+#            body:
+#              application/json:
+#                type: QueryErrorResponse
+#                example:
+#                    id: "InvalidReceiverIdError"
+#                    message: "Invalid receiver ID"
+  
