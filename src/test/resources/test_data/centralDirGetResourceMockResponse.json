@@ -1,7 +1,7 @@
 [
   {
     "name": "The First DFSP",
-    "providerUrl": "http://dfsp/users/1",
+    "providerUrl": "localhost:8091/scheme/adapter/v1",
     "shortName": "dsfp1",
     "preferred": "true",
     "registered": "true"

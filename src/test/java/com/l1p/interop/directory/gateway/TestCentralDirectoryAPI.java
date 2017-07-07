@@ -4,6 +4,7 @@ import static com.github.tomakehurst.wiremock.client.WireMock.aResponse;
 import static com.github.tomakehurst.wiremock.client.WireMock.get;
 import static com.github.tomakehurst.wiremock.client.WireMock.post;
 import static com.github.tomakehurst.wiremock.client.WireMock.urlMatching;
+import static com.github.tomakehurst.wiremock.client.WireMock.urlEqualTo;
 import static io.restassured.RestAssured.given;
 import static org.hamcrest.CoreMatchers.equalTo;
 
@@ -22,6 +23,12 @@ public class TestCentralDirectoryAPI extends FunctionalTestCase {
 
 	@Rule
 	public WireMockRule mockCentralDirectory = new WireMockRule(8090);
+	
+	@Rule
+	public WireMockRule mockDfspApi = new WireMockRule(8091);
+	
+	@Rule
+	public WireMockRule mockCentralFraudSharing = new WireMockRule(8092);
 
 	@Override
 	protected String getConfigResources() {
@@ -79,6 +86,33 @@ public class TestCentralDirectoryAPI extends FunctionalTestCase {
 			.body("providerUrl", equalTo("localhost:8088/scheme/adapter/v1"))
 			.body("preferred", equalTo(true))
 			.body("registered", equalTo(true));
+	}
+	
+	@Test
+	public void testGetResouce() throws Exception {
+
+		String centralDirGetResourceMockResponse = loadResourceAsString("test_data/centralDirGetResourceMockResponse.json");
+		mockCentralDirectory.stubFor(get(urlEqualTo("/resources?identifier=eur%3A123"))
+				.willReturn(aResponse().withBody(centralDirGetResourceMockResponse)));
+		
+		String dfspReceiverMockResponse = loadResourceAsString("test_data/dfspReceiverMockResponse.json");
+		mockDfspApi.stubFor(get(urlEqualTo("/scheme/adapter/v1/receivers/123"))
+				.willReturn(aResponse().withBody(dfspReceiverMockResponse)));
+		
+		String centralFraudSharingRequest = "{\"identifier\":\"123\",\"identifierType\":\"eur\"}";
+		String centralFraudSharingMockResponse = loadResourceAsString("test_data/centralFraudSharingMockResponse.json");
+		mockCentralFraudSharing.stubFor(post(urlEqualTo("/score/user")).withRequestBody(com.github.tomakehurst.wiremock.client.WireMock.equalTo(centralFraudSharingRequest))
+				.willReturn(aResponse().withBody(centralFraudSharingMockResponse)));
+		
+		given()
+			.contentType("application/json")
+			.auth().basic("key", "secret")
+			.queryParam("identifier", "123")
+			.queryParam("identifierType", "eur")
+		.when()
+			.get("http://localhost:8088/directory/gateway/v1/resources")
+		.then()
+			.statusCode(200);
 	}
 
 }

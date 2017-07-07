@@ -1,0 +1,9 @@
+{
+	"type": "payee",
+	"name": "Bob Dylan",
+	"account": "https://ilpdemo.red.bob:8014",
+	"currencyCode": "USD",
+	"currencySymbol": "$",
+	"imageUrl": "https://red.ilpdemo.org/api/receivers/bob/profile_pic.jpg",
+	"paymentsUrl": "http://backend.example/receivers/bob/:id"
+}
