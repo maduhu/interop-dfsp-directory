@@ -66,7 +66,7 @@ public class TestCentralDirectoryAPI extends FunctionalTestCase {
 	}
 	
 	@Test
-	public void testAddResouce() throws Exception {
+	public void testAddResource() throws Exception {
 
 		String centralDirAddResourceMockResponse = loadResourceAsString("test_data/centralDirAddResourceMockResponse.json");
 		mockCentralDirectory.stubFor(post(urlMatching("/resources"))
