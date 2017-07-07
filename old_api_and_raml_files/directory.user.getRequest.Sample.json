@@ -1,0 +1,8 @@
+{
+  "jsonrpc": "2.0",
+  "id": "45567",
+  "method": "directory.user.get",
+  "params": {
+    "userURI": "http://centraldirectory.com/griffin"
+  }
+}

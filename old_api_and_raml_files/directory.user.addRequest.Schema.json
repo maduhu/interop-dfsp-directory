@@ -1,0 +1,30 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "properties": {
+    "users": {
+      "type": "array",
+      "minItems": 1,
+      "users": {
+        "type": "object",
+        "properties": {
+          "uri": {
+            "type": "string",
+            "description": "URI of end user registered with central service"
+          },
+          "name": {
+            "type": "string",
+            "description": "User name"
+          },
+          "account": {
+            "type": "string",
+            "description": "Account #"
+          },
+          "currency": {
+            "type": "string",
+            "description": "Default currency of account"
+          }
+        }
+      }
+    }
+  }
+}

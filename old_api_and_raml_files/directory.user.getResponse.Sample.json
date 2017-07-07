@@ -1,0 +1,9 @@
+{
+  "jsonrpc": "2.0",
+  "id": "12345",
+  "result": {
+    "name": "Chris Griffin",
+    "account": "http://receivingdfsp.com/griffin_12345",
+    "currency": "USD"
+  }
+}

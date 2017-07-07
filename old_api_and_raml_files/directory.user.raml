@@ -1,11 +1,12 @@
 #%RAML 1.0
 title: Central Directory 
 version: v1
-baseUri: http://central-directory/
+baseUri: https://central-directory/
 mediaType: application/json
 securitySchemes:
   basic:
-    description: This API supports Basic Authentication.
+    description: |
+      This API supports Basic Authentication.
     type: Basic Authentication
     
 types: 
@@ -13,13 +14,6 @@ types:
     type: object
     properties: 
       spspReceiver: string
-      
-  HealthStatus:
-    type: object
-    properties: 
-      status:
-        type: string
-        required: true
       
   DFSP:
     type: object
@@ -35,7 +29,7 @@ types:
   IdentifierType:
     type: object
     properties: 
-      identifierType: string
+      identifier_type: string
       description: string
       
   Metadata:
@@ -58,20 +52,6 @@ types:
     properties: 
       id: string
       message: string
-      validationErrors?:
-        type: array
-        items: ValidationError
-
-  ValidationError:
-    type: object
-    properties: 
-      message: string
-      params: 
-        type: object
-        properties: 
-          key: string
-          value?: string
-          child?: string
 
 /:
   get:
@@ -81,32 +61,17 @@ types:
       200:
         body:
           type: Metadata
-
-
-/health:
-  displayName: HealthCheck resource
-  description: This resource is included to provide a simple response to indicate that the API is up and running.
-  get:
-    responses: 
-      200:
-        body: 
-          application/json: 
-            type: HealthStatus
-            example: |
-              { 
-                "status" : "ok" 
-              }
           
 /resources:
   get:
-    description: Get customer information by supplying an identifier and identifier type
+    description: Get customer information by supplying and identifier and identifier type
     securedBy: [basic]
     queryParameters:
-      identifierType:
+      identifier-type:
         type: string
       identifier:
-        type: number
-    responses:
+        type: string
+    responses: 
       200:
         body:
           type: Resource
@@ -117,19 +82,18 @@ types:
 /commands:
   /register:
     post:
-      description: Register DFSP to use the central directory
-      securedBy: [basic]
+      description: Registere DFSP to use the central directory
       body:
         type: DFSP
       responses: 
         201:
           body:
             type: DFSP
+            
 
-/identifier-types:
+/identifer-types:
   get:
     description:  Get identifier types supported by the central directory
-    securedBy: [basic]
     responses: 
       200:
         body:

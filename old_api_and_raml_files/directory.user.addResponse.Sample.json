@@ -1,0 +1,7 @@
+{
+  "jsonrpc": "2.0",
+  "id": "12345",
+  "result": {
+    "message":"updated 4 entities for request id=12345"
+  }
+}
