@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mule xmlns:json="http://www.mulesoft.org/schema/mule/json" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:apikit="http://www.mulesoft.org/schema/mule/apikit" xmlns:http="http://www.mulesoft.org/schema/mule/http" xmlns:spring="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd
+http://www.mulesoft.org/schema/mule/apikit http://www.mulesoft.org/schema/mule/apikit/current/mule-apikit.xsd
+http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.1.xsd
+http://www.mulesoft.org/schema/mule/json http://www.mulesoft.org/schema/mule/json/current/mule-json.xsd">
+
+<!--     <apikit:config name="central-directory-api-config" raml="central-directory-api.raml" consoleEnabled="false" doc:name="Router"/> -->
+
+<!--     <spring:beans> -->
+<!--         <spring:bean id="directoryExceptionTransformer" class="com.l1p.interop.dfsp.directory.DirectoryExceptionTransformer"/> -->
+<!--     </spring:beans> -->
+    
+<!--     <flow name="central-directory-api-main"> -->
+<!--         <http:listener config-ref="api-httpListenerConfig" path="${dfsp-directory-gateway-service.basePath}/*" doc:name="HTTP"/> -->
+<!--         <set-session-variable variableName="L1p-Trace-Id" value="#[ (message.inboundProperties.'L1p-Trace-Id' == null) ? java.util.UUID.randomUUID() : message.inboundProperties.'L1p-Trace-Id']" doc:name="set-L1p-Trace-Id"/> -->
+<!--         <logger level="INFO" -->
+<!--                 message="Received request for L1p-Trace-Id=#[sessionVars.'L1p-Trace-Id'] at path=#[message.inboundProperties.'http.request.path']" -->
+<!--                 category="com.l1p.interop.dfsp.api-main" doc:name="logger"/> -->
+<!--         <apikit:router config-ref="central-directory-api-config" doc:name="APIkit Router"/> -->
+<!--         <exception-strategy ref="central-directory-api-apiKitGlobalExceptionMapping" doc:name="Reference Exception Strategy"/> -->
+<!--     </flow> -->
+    
+<!--     <flow name="central-directory-api-console"> -->
+<!--         <http:listener config-ref="api-httpListenerConfig" path="${dfsp-directory-gateway-service.basePath}/console/*" doc:name="HTTP"/> -->
+<!--         <apikit:console config-ref="central-directory-api-config" doc:name="APIkit Console"/> -->
+<!--     </flow> -->
+
+<!-- 	<flow name="get:/health:central-directory-api-config"> -->
+<!--         <flow-ref name="get-health" doc:name="get-health"/> -->
+<!--     </flow> -->
+    
+<!--     <flow name="get:/:central-directory-api-config"> -->
+<!--         <logger level="INFO" -->
+<!--                 message="Processing request for get:/:central-directory-api-config, L1p-Trace-Id=#[sessionVars.'L1p-Trace-Id']" -->
+<!--                 category="com.l1p.interop.dfsp.directory.metadata" doc:name="logger"/> -->
+<!--         <flow-ref name="get-metadata" doc:name="get-metadata"/> -->
+<!--         <logger level="INFO" -->
+<!--                 message="Processed request for get:/:central-directory-api-config, L1p-Trace-Id=#[sessionVars.'L1p-Trace-Id']" -->
+<!--                 category="com.l1p.interop.dfsp.directory.metadata" doc:name="logger"/> -->
+<!--     </flow> -->
+<!--     <flow name="get:/identifier-types:central-directory-api-config"> -->
+<!--         <logger level="INFO" -->
+<!--                 message="Processing request for get:/identifier-types:central-directory-api-config, L1p-Trace-Id=#[sessionVars.'L1p-Trace-Id']" -->
+<!--                 category="com.l1p.interop.dfsp.directory.identifier-types" doc:name="logger"/> -->
+<!--         <flow-ref name="get-identifier-types" doc:name="get-identifier-types"/> -->
+<!--         <logger level="INFO" -->
+<!--                 message="Processing request for get:/identifier-types:central-directory-api-config, L1p-Trace-Id=#[sessionVars.'L1p-Trace-Id']" -->
+<!--                 category="com.l1p.interop.dfsp.directory.identifier-types" doc:name="logger"/> -->
+<!--     </flow> -->
+<!--     <flow name="get:/resources:central-directory-api-config"> -->
+<!--         <logger level="INFO" -->
+<!--                 message="Processing request for get:/resources:central-directory-api-config, L1p-Trace-Id=#[sessionVars.'L1p-Trace-Id']" -->
+<!--                 category="com.l1p.interop.dfsp.directory.resources" doc:name="logger"/> -->
+<!--         <flow-ref name="get-resources" doc:name="get-resources"/> -->
+<!--         <logger level="INFO" -->
+<!--                 message="Processing request for get:/resources:central-directory-api-config, L1p-Trace-Id=#[sessionVars.'L1p-Trace-Id']" -->
+<!--                 category="com.l1p.interop.dfsp.directory.resources" doc:name="logger"/> -->
+<!--     </flow> -->
+<!--     <flow name="post:/commands/register:application/json:central-directory-api-config"> -->
+<!--         <logger level="INFO" -->
+<!--                 message="Processing request for post:/commands/register:application/json:central-directory-api-config, L1p-Trace-Id=#[sessionVars.'L1p-Trace-Id']" -->
+<!--                 category="com.l1p.interop.dfsp.directory.register" doc:name="logger"/> -->
+<!--         <flow-ref name="register-dfsp" doc:name="register-dfsp"/> -->
+<!--         <set-property propertyName="Content-Type" value="application/json" doc:name="Property"/> -->
+<!--         <logger level="INFO" -->
+<!--                 message="Processing request for post:/commands/register:application/json:central-directory-api-config, L1p-Trace-Id=#[sessionVars.'L1p-Trace-Id']" -->
+<!--                 category="com.l1p.interop.dfsp.directory.resgister" doc:name="logger"/> -->
+<!--     </flow> -->
+
+<!--     <apikit:mapping-exception-strategy name="central-directory-api-apiKitGlobalExceptionMapping"> -->
+<!--         <apikit:mapping statusCode="404"> -->
+<!--             <apikit:exception value="org.mule.module.apikit.exception.NotFoundException" /> -->
+<!--             <set-property propertyName="Content-Type" value="application/json" doc:name="Property"/> -->
+<!--             <set-session-variable variableName="errorMessageId" value="Resource not found" doc:name="set-errorMessageId"/> -->
+<!--             <flow-ref name="create-exception-payload" doc:name="create-exception-payload"/> -->
+<!--         </apikit:mapping> -->
+<!--         <apikit:mapping statusCode="405"> -->
+<!--             <apikit:exception value="org.mule.module.apikit.exception.MethodNotAllowedException" /> -->
+<!--             <set-property propertyName="Content-Type" value="application/json" doc:name="Property"/> -->
+<!--             <set-session-variable variableName="errorMessageId" value="Method Not Allowed" doc:name="set-errorMessageId"/> -->
+<!--             <flow-ref name="create-exception-payload" doc:name="create-exception-payload"/> -->
+<!--         </apikit:mapping> -->
+<!--         <apikit:mapping statusCode="415"> -->
+<!--             <apikit:exception value="org.mule.module.apikit.exception.UnsupportedMediaTypeException" /> -->
+<!--             <set-property propertyName="Content-Type" value="application/json" doc:name="Property"/> -->
+<!--             <set-session-variable variableName="errorMessageId" value="Unsupported MediaType" doc:name="set-errorMessageId"/> -->
+<!--             <flow-ref name="create-exception-payload" doc:name="create-exception-payload"/> -->
+<!--         </apikit:mapping> -->
+<!--         <apikit:mapping statusCode="406"> -->
+<!--             <apikit:exception value="org.mule.module.apikit.exception.NotAcceptableException" /> -->
+<!--             <set-property propertyName="Content-Type" value="application/json" doc:name="Property"/> -->
+<!--             <set-session-variable variableName="errorMessageId" value="Not Acceptable" doc:name="set-errorMessageId"/> -->
+<!--             <flow-ref name="create-exception-payload" doc:name="create-exception-payload"/> -->
+<!--         </apikit:mapping> -->
+<!--         <apikit:mapping statusCode="400"> -->
+<!--             <apikit:exception value="org.mule.module.apikit.exception.BadRequestException" /> -->
+<!--             <set-property propertyName="Content-Type" value="application/json" doc:name="Property"/> -->
+<!--             <set-session-variable variableName="errorMessageId" value="Bad request" doc:name="set-errorMessageId"/> -->
+<!--             <flow-ref name="create-exception-payload" doc:name="create-exception-payload"/> -->
+<!--         </apikit:mapping> -->
+<!--     </apikit:mapping-exception-strategy> -->
+    
+<!--     <sub-flow name="create-exception-payload"> -->
+<!-- 	    <transformer ref="directoryExceptionTransformer" doc:name="ExceptionTransformer"/> -->
+<!-- 	    <json:object-to-json-transformer doc:name="Object to JSON"/> -->
+<!--     </sub-flow> -->
+    
+</mule>
