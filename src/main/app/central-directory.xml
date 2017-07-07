@@ -94,6 +94,7 @@ http://www.mulesoft.org/schema/mule/json http://www.mulesoft.org/schema/mule/jso
     <flow name="get-health">
     	<http:listener config-ref="api-httpListenerConfig" path="${dfsp-directory-gateway-service.basePath}/health" doc:name="HTTP" allowedMethods="GET"/>
     	<set-payload value="{ &quot;status&quot; : &quot;ok&quot; }" doc:name="Set Payload" mimeType="application/json"/>
+        <json:object-to-json-transformer doc:name="Object to JSON"/>
     	<exception-strategy ref="common_Catch_Exception_Strategy" doc:name="Reference Exception Strategy"/>
     </flow>
     
