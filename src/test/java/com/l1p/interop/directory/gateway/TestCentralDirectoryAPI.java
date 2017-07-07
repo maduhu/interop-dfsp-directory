@@ -53,7 +53,7 @@ public class TestCentralDirectoryAPI extends FunctionalTestCase {
 			.auth().basic("admin", "admin")
 			.body(centralDirAddDFSPRequest)
 		.when()
-			.post("http://localhost:8088/directory/gateway/v1/commands/register")
+			.post("http://localhost:8088/directory/v1/commands/register")
 		.then()
 			.statusCode(200)
 			.body("name",equalTo("The first DFSP"))
@@ -78,7 +78,7 @@ public class TestCentralDirectoryAPI extends FunctionalTestCase {
 			.auth().basic("key", "secret")
 			.body(centralDirAddResourceRequest)
 		.when()
-			.post("http://localhost:8088/directory/gateway/v1/resources")
+			.post("http://localhost:8088/directory/v1/resources")
 		.then()
 			.statusCode(200)
 			.body("name",equalTo("The first DFSP"))
@@ -110,7 +110,7 @@ public class TestCentralDirectoryAPI extends FunctionalTestCase {
 			.queryParam("identifier", "123")
 			.queryParam("identifierType", "eur")
 		.when()
-			.get("http://localhost:8088/directory/gateway/v1/resources")
+			.get("http://localhost:8088/directory/v1/resources")
 		.then()
 			.statusCode(200);
 	}
