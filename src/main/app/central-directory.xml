@@ -28,7 +28,7 @@ http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/htt
 		port="${central-fraud-sharing-api.port}" doc:name="HTTP Request Configuration">
 	</http:request-config>
 
-	<sub-flow name="common_Flow">
+	<sub-flow name="common-flow">
 		<!-- <custom-transformer class="com.l1p.interop.ilp.ledger.BasicAuthCredentialsTransformer" doc:name="Basic Auth Transformer"/> -->
 		<set-session-variable variableName="L1p-Trace-Id" value="#[(message.inboundProperties.'L1p-Trace-Id' == null) ? java.util.UUID.randomUUID() : message.inboundProperties.'L1p-Trace-Id']" doc:name="set-L1p-Trace-Id"/>
 		<logger level="INFO"
@@ -45,7 +45,7 @@ http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/htt
 
 	<flow name="get:/:central-directory-api-config">
 		<http:listener config-ref="api-httpListenerConfig" path="${central-dir-gateway-service.basePath}/" allowedMethods="GET" doc:name="HTTP"/>
-		<flow-ref name="common_Flow" doc:name="common_Flow"/>
+		<flow-ref name="common-flow" doc:name="common-flow"/>
 		<logger level="INFO"
 			message="Sending request for central-directory-api get:/:central-directory-api-config, L1p-Trace-Id=#[sessionVars.'L1p-Trace-Id']"
 			category="com.l1p.interop.dfsp.directory.metadata" doc:name="logger" />
@@ -71,7 +71,7 @@ http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/htt
 
 	<flow name="post:/commands/register:application/json:central-directory-api-config">
 		<http:listener config-ref="api-httpListenerConfig" path="${central-dir-gateway-service.basePath}/commands/register" allowedMethods="POST" doc:name="HTTP"/>
-		<flow-ref name="common_Flow" doc:name="common_Flow"/>
+		<flow-ref name="common-flow" doc:name="common-flow"/>
 		<logger level="INFO"
 			message="Sending request to http://${central-dir-host}:${central-dir-api.port}/commands/register method:post"
 			category="com.l1p.interop.dfsp.directory.register" doc:name="logger" />
@@ -100,7 +100,7 @@ http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/htt
 
 	<flow name="get:/identifier-types:central-directory-api-config">
 		<http:listener config-ref="api-httpListenerConfig" path="${central-dir-gateway-service.basePath}/identifier" allowedMethods="GET" doc:name="HTTP"/>
-		<flow-ref name="common_Flow" doc:name="common_Flow"/>
+		<flow-ref name="common-flow" doc:name="common-flow"/>
 		<logger level="INFO"
 			message="Processing request for get:/identifier-types:central-directory-api-config, L1p-Trace-Id=#[sessionVars.'L1p-Trace-Id']"
 			category="com.l1p.interop.dfsp.directory.identifier-types" doc:name="logger" />
@@ -128,7 +128,7 @@ http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/htt
 
 	<flow name="post:/resources:application/json:central-directory-api-config">
 		<http:listener config-ref="api-httpListenerConfig" path="${central-dir-gateway-service.basePath}/resources" allowedMethods="POST" doc:name="HTTP"/>
-		<flow-ref name="common_Flow" doc:name="common_Flow"/>
+		<flow-ref name="common-flow" doc:name="common-flow"/>
 		<metrics:snap-time config-ref="metricsConfig" snapTimeKey="post-resources.start"
 			doc:name="SnapTime" />
 		<logger level="INFO"
@@ -157,7 +157,7 @@ http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/htt
 
 	<flow name="get:/resources:central-directory-api-config">
 		<http:listener config-ref="api-httpListenerConfig" path="${central-dir-gateway-service.basePath}/resources" allowedMethods="GET" doc:name="HTTP"/>
-		<flow-ref name="common_Flow" doc:name="common_Flow"/>
+		<flow-ref name="common-flow" doc:name="common-flow"/>
 		<logger level="INFO"
 			message="Sending request to http://${central-dir-host}:${central-dir-api.port}/resources with query parameters-  identifier: #[message.inboundProperties.'http.query.params'.identifier]; "
 			category="com.l1p.interop.dfsp.central-directory" doc:name="logger" />
