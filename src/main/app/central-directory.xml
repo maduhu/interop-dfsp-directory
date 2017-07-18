@@ -214,10 +214,17 @@ http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/htt
 							<logger level="INFO"
 								message="Posting request to http://#[payload.'providerUrl']/receivers/#[sessionVars.receiverID] "
 								category="com.l1p.interop.dfsp.central-directory" doc:name="logger" />
-							<set-property propertyName="L1p-Trace-Id" value="#[sessionVars.'L1p-Trace-Id']" />
-							<http:outbound-endpoint address="http://#[payload.'providerUrl']/receivers/#[sessionVars.receiverID]"
-								method="GET" exchange-pattern="request-response" doc:name="Generic">
-							</http:outbound-endpoint>
+							<!--<http:outbound-endpoint address="http://#[payload.'providerUrl']/receivers/#[sessionVars.receiverID]"-->
+								<!--method="GET" exchange-pattern="request-response" doc:name="Generic">-->
+							<!--</http:outbound-endpoint>-->
+							<set-variable variableName="dynamicURL" value="#[new URL('http://' + payload.providerUrl + '/receivers/' + sessionVars.receiverID)]"/>
+							<http:request config-ref="central-directory-http-config" host="#[flowVars.dynamicURL.getHost()]" port="#[flowVars.dynamicURL.getPort()]" path="#[flowVars.dynamicURL.getPath()]"
+										  method="GET" doc:name="HTTP">
+								<http:request-builder>
+									<http:header headerName="L1p-Trace-Id" value="#[sessionVars.'L1p-Trace-Id']" />
+								</http:request-builder>
+								<http:success-status-code-validator values="200..599" />
+							</http:request>
 							<choice doc:name="check if payee dfsp /receivers is successful">
 								<when expression="#[message.inboundProperties.'http.status' == 200]">
 									<logger level="INFO"
