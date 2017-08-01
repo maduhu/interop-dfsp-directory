@@ -208,7 +208,7 @@ http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/htt
 					doc:name="Expression" />
 				<foreach doc:name="For Each">
 					<choice doc:name="Choice">
-						<when expression="#[payload.'preferred'== true]">
+						<when expression="#[payload.'primary'== true]">
 							<set-session-variable value="#[payload.'providerUrl']" variableName="providerUrl"
 								doc:name="Session Variable"></set-session-variable>
 							<logger level="INFO" message="Preferred provider url: #[payload.'providerUrl'] "
