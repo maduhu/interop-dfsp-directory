@@ -1,8 +1,8 @@
 # Directory Gateway
 
-This project provides an API gateway to the IST Directory Naming Service and provides resources to - "get metadata about a directory", "get customer information by providing identifier, identifierType", "Register a DFSP" and "get identifierTypes supported by the central directory"
+This project provides an API gateway to the Inter-System Trunk (IST) Directory Naming Service and provides resources to - "get metadata about a directory", "get customer information by providing identifier, identifierType", "Register a DFSP" and "get identifierTypes supported by the central directory".
 
-Contents:
+## Contents
 
 - [Deployment](#deployment)
 - [Configuration](#configuration)
@@ -57,7 +57,7 @@ Currently the logs are operational and include information such as TraceID and o
 
 ## Tests
 
-Java Unit Test exist for the project and include test for:
+Java Unit Tests exist for the project and include tests for:
 
 * Invalid path should return 404
 * Valid get user request should return valid response
