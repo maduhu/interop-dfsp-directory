@@ -221,7 +221,7 @@ http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/htt
 							<!--<http:outbound-endpoint address="http://#[payload.'providerUrl']/receivers/#[sessionVars.receiverID]"-->
 								<!--method="GET" exchange-pattern="request-response" doc:name="Generic">-->
 							<!--</http:outbound-endpoint>-->
-							<set-variable variableName="dynamicURL" value="#[new URL('http://' + payload.providerUrl + '/receivers/' + sessionVars.receiverID)]"/>
+							<set-variable variableName="dynamicURL" value="#[new URL('http://' + payload.providerUrl + '/receivers/' + sessionVars.receiverID)]" doc:name="Variable"/>
 							<metrics:snap-time config-ref="metricsConfig" snapTimeKey="get.dfsp-payee.start" doc:name="SnapTime"/>
 							<http:request config-ref="central-directory-http-config" host="#[flowVars.dynamicURL.getHost()]" port="#[flowVars.dynamicURL.getPort()]" path="#[flowVars.dynamicURL.getPath()]"
 										  method="GET" doc:name="HTTP">
@@ -244,13 +244,13 @@ http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/htt
 										doc:name="Expression" />
 
 									<!-- Calling Central Fraud Sharing API -->
-									<logger level="INFO"
-										message="Posting request to http://${central-fraud-sharing-host}:${central-fraud-sharing-api.port}/score/user"
-										category="com.l1p.interop.dfsp.central-directory" doc:name="logger" />
 									<set-payload
-										value="{&quot;identifier&quot;:&quot;#[sessionVars.receiverID]&quot;,&quot;identifierType&quot;:&quot;#[sessionVars.identifierType]&quot;}"
+										value="{&quot;identifier&quot;:&quot;#[sessionVars.identifierType]:#[sessionVars.receiverID]&quot;}"
 										doc:name="Set Payload"></set-payload>
-									<metrics:snap-time config-ref="metricsConfig" snapTimeKey="get.central-fraud-score.start" doc:name="SnapTime"/>
+                                    <logger level="INFO"
+                                            message="Posting request to http://${central-fraud-sharing-host}:${central-fraud-sharing-api.port}/score/user Payload:#[payload]"
+                                            category="com.l1p.interop.dfsp.central-directory" doc:name="logger" />
+                                    <metrics:snap-time config-ref="metricsConfig" snapTimeKey="get.central-fraud-score.start" doc:name="SnapTime"/>
 									<http:request config-ref="central-fraud-sharing-http-config" path="/score/user"
 										method="POST" doc:name="HTTP">
 										<http:request-builder>
