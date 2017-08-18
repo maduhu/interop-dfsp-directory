@@ -1,0 +1,7 @@
+{
+  "name": "The first DFSP",
+  "providerUrl": "localhost:8088/scheme/adapter/v1",
+  "shortName": "dfsp1",
+  "preferred": true,
+  "registered": true
+}
