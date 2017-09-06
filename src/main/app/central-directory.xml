@@ -221,7 +221,7 @@ http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/htt
 							<!--<http:outbound-endpoint address="http://#[payload.'providerUrl']/receivers/#[sessionVars.receiverID]"-->
 								<!--method="GET" exchange-pattern="request-response" doc:name="Generic">-->
 							<!--</http:outbound-endpoint>-->
-							<set-variable variableName="dynamicURL" value="#[new URL('http://' + payload.providerUrl + '/receivers/' + sessionVars.receiverID)]" doc:name="Variable"/>
+							<set-variable variableName="dynamicURL" value="#[new URL(payload.providerUrl + '/receivers/' + sessionVars.receiverID)]" doc:name="Variable"/>
 							<metrics:snap-time config-ref="metricsConfig" snapTimeKey="get.dfsp-payee.start" doc:name="SnapTime"/>
 							<http:request config-ref="central-directory-http-config" host="#[flowVars.dynamicURL.getHost()]" port="#[flowVars.dynamicURL.getPort()]" path="#[flowVars.dynamicURL.getPath()]"
 										  method="GET" doc:name="HTTP">
