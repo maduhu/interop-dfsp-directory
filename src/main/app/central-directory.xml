@@ -35,7 +35,7 @@ http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/htt
 			value="#[(message.inboundProperties.'L1p-Trace-Id' == null) ? java.util.UUID.randomUUID() : message.inboundProperties.'L1p-Trace-Id']"
 			doc:name="set-L1p-Trace-Id" />
 		<logger level="INFO"
-			message="Received request with L1p-Trace-Id=#[sessionVars.'L1p-Trace-Id'] at path=#[message.inboundProperties.'http.request.path'], method=#[message.inboundProperties.'http.method'], Content-Type=#[message.inboundProperties.'Content-Type']"
+			message="Received request with L1p-Trace-Id=#[sessionVars.'L1p-Trace-Id'] at path=#[message.inboundProperties.'http.request.path'], method=#[message.inboundProperties.'http.method'], Content-Type=#[message.inboundProperties.'Content-Type'], Call-Type=user-lookup"
 			category="com.l1p.interop.ilp.ledger.api-main" doc:name="logger" />
 		<object-to-string-transformer doc:name="Object to String" />
 	</sub-flow>
@@ -280,7 +280,7 @@ http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/htt
 								</when>
 								<otherwise>
 									<logger level="INFO"
-										message="Failure Reponse from payee dfsp /receivers: #[message.payloadAs(java.lang.String)] "
+										message="Failure Response from payee dfsp /receivers: #[message.payloadAs(java.lang.String)] "
 										category="com.l1p.interop.dfsp.central-directory" doc:name="logger" />
 									<json:json-to-object-transformer returnClass="java.util.Map"
 										doc:name="Convert JSON Payload to Map" />
@@ -309,7 +309,7 @@ http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/htt
 		</choice>
 		<json:object-to-json-transformer doc:name="Object to JSON" />
 		<logger level="INFO"
-			message="Sending response, L1p-Trace-Id=#[sessionVars.'L1p-Trace-Id'] Data:#[payload]" category="com.l1p.interop.dfsp.directory.resources"
+			message="Sending response, L1p-Trace-Id=#[sessionVars.'L1p-Trace-Id'], Data:#[payload], Call-Type=user-lookup" category="com.l1p.interop.dfsp.directory.resources"
 			doc:name="logger" />
 		<exception-strategy ref="interop-catch-exception-strategy" doc:name="Reference Exception Strategy" />
 	</flow>
