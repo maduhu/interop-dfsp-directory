@@ -35,7 +35,7 @@ http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/htt
 			value="#[(message.inboundProperties.'L1p-Trace-Id' == null) ? java.util.UUID.randomUUID() : message.inboundProperties.'L1p-Trace-Id']"
 			doc:name="set-L1p-Trace-Id" />
 		<logger level="INFO"
-			message="Received request with L1p-Trace-Id=#[sessionVars.'L1p-Trace-Id'] at path=#[message.inboundProperties.'http.request.path'], method=#[message.inboundProperties.'http.method'], Content-Type=#[message.inboundProperties.'Content-Type'], Call-Type=user-lookup"
+			message="Received request with L1p-Trace-Id=#[sessionVars.'L1p-Trace-Id'] at path=#[message.inboundProperties.'http.request.path'], method=#[message.inboundProperties.'http.method'], Content-Type=#[message.inboundProperties.'Content-Type']"
 			category="com.l1p.interop.ilp.ledger.api-main" doc:name="logger" />
 		<object-to-string-transformer doc:name="Object to String" />
 	</sub-flow>
@@ -174,7 +174,7 @@ http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/htt
 		<flow-ref name="common-flow" doc:name="common-flow" />
 		<metrics:snap-time config-ref="metricsConfig" snapTimeKey="get.interop-resources.start" doc:name="SnapTime"/>
 		<logger level="INFO"
-			message="Sending request to http://${central-dir-host}:${central-dir-api.port}/resources with query parameters-  identifier: #[message.inboundProperties.'http.query.params'.identifier]; "
+			message="Sending request to http://${central-dir-host}:${central-dir-api.port}/resources with query parameters-  identifier: #[message.inboundProperties.'http.query.params'.identifier]; L1p-Trace-Id=#[sessionVars.'L1p-Trace-Id'], Call-Type=user-lookup"
 			category="com.l1p.interop.dfsp.central-directory" doc:name="logger" />
 		<set-session-variable variableName="finalResponseMap" value="#[new java.util.HashMap()]"
 			doc:name="Save Final Response as a map" />
@@ -309,7 +309,7 @@ http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/htt
 		</choice>
 		<json:object-to-json-transformer doc:name="Object to JSON" />
 		<logger level="INFO"
-			message="Sending response, L1p-Trace-Id=#[sessionVars.'L1p-Trace-Id'], Data:#[payload], Call-Type=user-lookup" category="com.l1p.interop.dfsp.directory.resources"
+			message="Sending response, L1p-Trace-Id=#[sessionVars.'L1p-Trace-Id'], Data:#[payload]" category="com.l1p.interop.dfsp.directory.resources"
 			doc:name="logger" />
 		<exception-strategy ref="interop-catch-exception-strategy" doc:name="Reference Exception Strategy" />
 	</flow>
