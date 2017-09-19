@@ -169,7 +169,7 @@ http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/htt
 	</flow>
 
 	<flow name="get:/resources:central-directory-api-config">
-		<Fhttp:listener config-ref="api-httpListenerConfig" path="${central-dir-gateway-service.basePath}/resources"
+		<http:listener config-ref="api-httpListenerConfig" path="${central-dir-gateway-service.basePath}/resources"
 			allowedMethods="GET" doc:name="HTTP" />
 		<flow-ref name="common-flow" doc:name="common-flow" />
 		<metrics:snap-time config-ref="metricsConfig" snapTimeKey="get.interop-resources.start" doc:name="SnapTime"/>
