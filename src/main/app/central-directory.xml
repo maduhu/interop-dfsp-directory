@@ -221,7 +221,7 @@ http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/htt
                               value="#[message.inboundProperties.'http.query.params'.identifier.substring(4)]" doc:name="Save identifier" />
         <metrics:snap-time config-ref="metricsConfig" snapTimeKey="get.central-dir-resources.start" doc:name="SnapTime"/>
         <choice>
-            <when>
+            <when expression="#['${central-dir-env}' == 'mock']">
                 <logger level="INFO"
                         message="Sending request to http://localhost:8088/mock/directory/v1/resources with query parameters-  identifier: #[message.inboundProperties.'http.query.params'.identifier]; "
                         category="com.l1p.interop.dfsp.central-directory" doc:name="logger" />
