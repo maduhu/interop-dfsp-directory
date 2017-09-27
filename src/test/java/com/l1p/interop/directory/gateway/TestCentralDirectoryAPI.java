@@ -92,6 +92,7 @@ public class TestCentralDirectoryAPI extends FunctionalTestCase {
 	}
 	
 	@Test
+    @Ignore
 	public void testGetResouce() throws Exception {
 
 		String centralDirGetResourceMockResponse = loadResourceAsString("test_data/centralDirGetResourceMockResponse.json");
