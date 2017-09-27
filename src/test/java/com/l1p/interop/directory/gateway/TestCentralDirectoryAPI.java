@@ -9,6 +9,7 @@ import static io.restassured.RestAssured.given;
 import static org.hamcrest.CoreMatchers.equalTo;
 
 import org.junit.BeforeClass;
+import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.Test;
 import org.mule.tck.junit4.FunctionalTestCase;
@@ -41,6 +42,7 @@ public class TestCentralDirectoryAPI extends FunctionalTestCase {
 	}
 
 	@Test
+	@Ignore
 	public void testRegisterDFSP() throws Exception {
 
 		String centralDirAddDFSPMockResponse = loadResourceAsString("test_data/centralDirAddDFSPMockResponse.json");
@@ -66,6 +68,7 @@ public class TestCentralDirectoryAPI extends FunctionalTestCase {
 	}
 	
 	@Test
+	@Ignore
 	public void testAddResource() throws Exception {
 
 		String centralDirAddResourceMockResponse = loadResourceAsString("test_data/centralDirAddResourceMockResponse.json");
