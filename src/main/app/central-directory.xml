@@ -305,7 +305,7 @@ http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/htt
 
 									<!-- Calling Central Fraud Sharing API -->
 									<set-payload
-										value="{&quot;identifier&quot;:&quot;#[sessionVars.updatedIdentifier]&quot;}"
+										value="{&quot;identifier&quot;:&quot;#[sessionVars.identifierType]:#[sessionVars.receiverID]&quot;}"
 										doc:name="Set Payload"></set-payload>
                                     <logger level="INFO"
                                             message="Posting request to http://${central-fraud-sharing-host}:${central-fraud-sharing-api.port}/score/user Payload:#[payload]"
