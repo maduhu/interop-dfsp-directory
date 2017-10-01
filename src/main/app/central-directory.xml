@@ -214,7 +214,7 @@ http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/htt
 		<flow-ref name="common-flow" doc:name="common-flow" />
 		<metrics:snap-time config-ref="metricsConfig" snapTimeKey="get.interop-resources.start" doc:name="SnapTime"/>
 		<logger level="INFO"
-			message="Sending request to http://${central-dir-host}:${central-dir-api.port}/resources with query parameters-  identifier: #[message.inboundProperties.'http.query.params'.identifier]; L1p-Trace-Id=#[sessionVars.'L1p-Trace-Id'], Call-Type=user-lookup"
+			message="Sending request to http://${central-dir-host}:${central-dir-api.port}/resources with query parameters-  identifier: #[message.inboundProperties.'http.query.params'.identifier]; L1p-Trace-Id=#[sessionVars.'L1p-Trace-Id'], L1p-Call-Type=user-lookup"
 			category="com.l1p.interop.dfsp.central-directory" doc:name="logger" />
 		<set-session-variable variableName="finalResponseMap" value="#[new java.util.HashMap()]"
 			doc:name="Save Final Response as a map" />
@@ -279,7 +279,7 @@ http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/htt
 
 							<!-- Calling Payee DFSP API to get receiver details -->
 							<logger level="INFO"
-								message="Posting request to http://#[payload.'providerUrl']/receivers/#[sessionVars.receiverID] L1p-Trace-Id=#[sessionVars.'L1p-Trace-Id'], Call-Type=payee-details"
+								message="Posting request to http://#[payload.'providerUrl']/receivers/#[sessionVars.receiverID] L1p-Trace-Id=#[sessionVars.'L1p-Trace-Id'], L1p-Call-Type=payee-details"
 								category="com.l1p.interop.dfsp.central-directory" doc:name="logger" />
 							<!--<http:outbound-endpoint address="http://#[payload.'providerUrl']/receivers/#[sessionVars.receiverID]"-->
 								<!--method="GET" exchange-pattern="request-response" doc:name="Generic">-->
