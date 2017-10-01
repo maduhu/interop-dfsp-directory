@@ -19,6 +19,10 @@ http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/htt
 		<spring:bean id="ExceptionTransformer" name="ExceptionTransformer" class="com.l1p.interop.L1PExceptionTransformer" />
 	</spring:beans>
 
+    <http:request-config name="mock-central-directory-http-config" host="${mock-central-dir.host}"
+                         port="${mock-central-dir.port}" doc:name="HTTP Request Configuration">
+        <!-- <http:raml-api-configuration location="central-directory-api.raml" /> -->
+    </http:request-config>
 	<http:request-config name="central-directory-http-config" host="${central-dir-host}"
 		port="${central-dir-api.port}" doc:name="HTTP Request Configuration">
 		<!-- <http:raml-api-configuration location="central-directory-api.raml" /> -->
@@ -80,19 +84,37 @@ http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/htt
 		<http:listener config-ref="api-httpListenerConfig"
 			path="${central-dir-gateway-service.basePath}/commands/register" allowedMethods="POST" doc:name="HTTP" />
 		<flow-ref name="common-flow" doc:name="common-flow" />
-		<logger level="INFO"
-			message="Sending request to http://${central-dir-host}:${central-dir-api.port}/commands/register method:post"
-			category="com.l1p.interop.dfsp.directory.register" doc:name="logger" />
 		<metrics:snap-time config-ref="metricsConfig" snapTimeKey="register-dfsp.start"
 			doc:name="SnapTime" />
-		<http:request config-ref="central-directory-http-config" path="/commands/register"
-			method="POST" doc:name="HTTP">
-			<http:request-builder>
-				<http:header headerName="Authorization" value="#[message.inboundProperties.authorization]" />
-				<http:header headerName="L1p-Trace-Id" value="#[sessionVars.'L1p-Trace-Id']" />
-			</http:request-builder>
-			<http:success-status-code-validator values="200..599" />
-		</http:request>
+		<choice>
+			<when expression="#['${central-dir-env}' == 'mock']">
+                <logger level="INFO"
+                        message="Sending request to http://localhost:8088/mock/directory/v1/commands/register method:post"
+                        category="com.l1p.interop.dfsp.directory.register" doc:name="logger" />
+                <http:request config-ref="mock-central-directory-http-config" path="mock/directory/v1/commands/register"
+							  method="POST" doc:name="HTTP">
+					<http:request-builder>
+						<http:header headerName="Authorization" value="#[message.inboundProperties.authorization]" />
+						<http:header headerName="L1p-Trace-Id" value="#[sessionVars.'L1p-Trace-Id']" />
+					</http:request-builder>
+					<http:success-status-code-validator values="200..599" />
+				</http:request>
+			</when>
+			<otherwise>
+                <logger level="INFO"
+                        message="Sending request to http://${central-dir-host}:${central-dir-api.port}/commands/register method:post"
+                        category="com.l1p.interop.dfsp.directory.register" doc:name="logger" />
+                <http:request config-ref="central-directory-http-config" path="/commands/register"
+							  method="POST" doc:name="HTTP">
+					<http:request-builder>
+						<http:header headerName="Authorization" value="#[message.inboundProperties.authorization]" />
+						<http:header headerName="L1p-Trace-Id" value="#[sessionVars.'L1p-Trace-Id']" />
+					</http:request-builder>
+					<http:success-status-code-validator values="200..599" />
+				</http:request>
+			</otherwise>
+		</choice>
+
 		<set-property propertyName="http.status" value="#[message.inboundProperties.'http.status']"
 			doc:name="Property" />
 		<metrics:snap-time config-ref="metricsConfig" snapTimeKey="register-dfsp.stop"
@@ -137,36 +159,54 @@ http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/htt
 		<exception-strategy ref="interop-catch-exception-strategy" doc:name="Reference Exception Strategy" />
 	</flow>
 
-	<flow name="post:/resources:application/json:central-directory-api-config">
-		<http:listener config-ref="api-httpListenerConfig" path="${central-dir-gateway-service.basePath}/resources"
-			allowedMethods="POST" doc:name="HTTP" />
-		<flow-ref name="common-flow" doc:name="common-flow" />
-		<metrics:snap-time config-ref="metricsConfig" snapTimeKey="post-resources.start"
-			doc:name="SnapTime" />
-		<logger level="INFO"
-			message="Sending request to http://${central-dir-host}:${central-dir-api.port}/resources method:post payload: #[message.payloadAs(java.lang.String)]"
-			category="com.l1p.interop.dfsp.directory.register" doc:name="logger" />
-		<http:request config-ref="central-directory-http-config" path="/resources" method="POST"
-			doc:name="HTTP">
-			<http:request-builder>
-				<http:header headerName="Authorization" value="#[message.inboundProperties.authorization]" />
-				<http:header headerName="L1p-Trace-Id" value="#[sessionVars.'L1p-Trace-Id']" />
-			</http:request-builder>
-			<http:success-status-code-validator values="200..599" />
-		</http:request>
-		<logger level="INFO" message="Reponse from /resources: #[message.payloadAs(java.lang.String)] "
-			category="com.l1p.interop.dfsp.central-directory" doc:name="logger" />
-		<set-property propertyName="http.status" value="#[message.inboundProperties.'http.status']"
-			doc:name="Property" />
-		<metrics:snap-time config-ref="metricsConfig" snapTimeKey="post-resources.stop"
-			doc:name="SnapTime" />
-		<metrics:time config-ref="metricsConfig" beginSnapKey="post-resources.start"
-			endSnapKey="post-resources.stop" category="l1p.dfsp.directory.api" metricKey="PostResourcesTime"
-			doc:name="Metrics Record" />
-		<logger level="INFO" message="Response from /resources #[message.payloadAs(java.lang.String)]"
-			category="com.l1p.interop.dfsp.directory.resources" doc:name="logger" />
-		<exception-strategy ref="interop-catch-exception-strategy" doc:name="Reference Exception Strategy" />
-	</flow>
+    <flow name="post:/resources:application/json:central-directory-api-config">
+        <http:listener config-ref="api-httpListenerConfig" path="${central-dir-gateway-service.basePath}/resources"
+                       allowedMethods="POST" doc:name="HTTP" />
+        <flow-ref name="common-flow" doc:name="common-flow" />
+        <metrics:snap-time config-ref="metricsConfig" snapTimeKey="post-resources.start"
+                           doc:name="SnapTime" />
+        <choice>
+            <when expression="#['${central-dir-env}' == 'mock']">
+                <logger level="INFO"
+                        message="Sending request to http://localhost:8088/mock/directory/v1/resources method:post payload: #[message.payloadAs(java.lang.String)]"
+                        category="com.l1p.interop.dfsp.directory.register" doc:name="logger" />
+                <http:request config-ref="mock-central-directory-http-config" path="/mock/directory/v1/resources" method="POST"
+                              doc:name="HTTP">
+                    <http:request-builder>
+                        <http:header headerName="Authorization" value="#[message.inboundProperties.authorization]" />
+                        <http:header headerName="L1p-Trace-Id" value="#[sessionVars.'L1p-Trace-Id']" />
+                    </http:request-builder>
+                    <http:success-status-code-validator values="200..599" />
+                </http:request>
+            </when>
+            <otherwise>
+                <logger level="INFO"
+                        message="Sending request to http://${central-dir-host}:${central-dir-api.port}/resources method:post payload: #[message.payloadAs(java.lang.String)]"
+                        category="com.l1p.interop.dfsp.directory.register" doc:name="logger" />
+                <http:request config-ref="central-directory-http-config" path="/resources" method="POST"
+                              doc:name="HTTP">
+                    <http:request-builder>
+                        <http:header headerName="Authorization" value="#[message.inboundProperties.authorization]" />
+                        <http:header headerName="L1p-Trace-Id" value="#[sessionVars.'L1p-Trace-Id']" />
+                    </http:request-builder>
+                    <http:success-status-code-validator values="200..599" />
+                </http:request>
+            </otherwise>
+        </choice>
+
+        <logger level="INFO" message="Reponse from /resources: #[message.payloadAs(java.lang.String)] "
+                category="com.l1p.interop.dfsp.central-directory" doc:name="logger" />
+        <set-property propertyName="http.status" value="#[message.inboundProperties.'http.status']"
+                      doc:name="Property" />
+        <metrics:snap-time config-ref="metricsConfig" snapTimeKey="post-resources.stop"
+                           doc:name="SnapTime" />
+        <metrics:time config-ref="metricsConfig" beginSnapKey="post-resources.start"
+                      endSnapKey="post-resources.stop" category="l1p.dfsp.directory.api" metricKey="PostResourcesTime"
+                      doc:name="Metrics Record" />
+        <logger level="INFO" message="Response from /resources #[message.payloadAs(java.lang.String)]"
+                category="com.l1p.interop.dfsp.directory.resources" doc:name="logger" />
+        <exception-strategy ref="interop-catch-exception-strategy" doc:name="Reference Exception Strategy" />
+    </flow>
 
 	<flow name="get:/resources:central-directory-api-config">
 		<http:listener config-ref="api-httpListenerConfig" path="${central-dir-gateway-service.basePath}/resources"
@@ -178,22 +218,45 @@ http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/htt
 			category="com.l1p.interop.dfsp.central-directory" doc:name="logger" />
 		<set-session-variable variableName="finalResponseMap" value="#[new java.util.HashMap()]"
 			doc:name="Save Final Response as a map" />
-		<set-session-variable variableName="identifierType"
-			value="#[message.inboundProperties.'http.query.params'.identifier.substring(0,3)]" doc:name="Save identifier type" />
-		<set-session-variable variableName="receiverID"
-			value="#[message.inboundProperties.'http.query.params'.identifier.substring(4)]" doc:name="Save identifier" />
-		<metrics:snap-time config-ref="metricsConfig" snapTimeKey="get.central-dir-resources.start" doc:name="SnapTime"/>
-		<http:request config-ref="central-directory-http-config" path="/resources" method="GET"
-			doc:name="HTTP">
-			<http:request-builder>
-				<http:query-param paramName="identifier"
-					value="#[message.inboundProperties.'http.query.params'.identifier]" />
-				<http:header headerName="Authorization" value="#[message.inboundProperties.authorization]" />
-				<http:header headerName="L1p-Trace-Id" value="#[sessionVars.'L1p-Trace-Id']" />
-			</http:request-builder>
-			<http:success-status-code-validator values="200..599" />
-		</http:request>
-		<metrics:snap-time config-ref="metricsConfig" snapTimeKey="get.central-dir-resources.stop" doc:name="SnapTime"/>
+        <set-session-variable variableName="identifierType"
+                              value="#[message.inboundProperties.'http.query.params'.identifier.substring(0,3)]" doc:name="Save identifier type" />
+        <set-session-variable variableName="receiverID"
+                              value="#[message.inboundProperties.'http.query.params'.identifier.substring(4)]" doc:name="Save identifier" />
+        <metrics:snap-time config-ref="metricsConfig" snapTimeKey="get.central-dir-resources.start" doc:name="SnapTime"/>
+        <choice>
+            <when expression="#['${central-dir-env}' == 'mock']">
+                <logger level="INFO"
+                        message="Sending request to http://localhost:8088/mock/directory/v1/resources with query parameters-  identifier: #[message.inboundProperties.'http.query.params'.identifier]; "
+                        category="com.l1p.interop.dfsp.central-directory" doc:name="logger" />
+                <http:request config-ref="mock-central-directory-http-config" path="/mock/directory/v1/resources" method="GET"
+                              doc:name="HTTP">
+                    <http:request-builder>
+                        <http:query-param paramName="identifier"
+                                          value="#[message.inboundProperties.'http.query.params'.identifier]" />
+                        <http:header headerName="Authorization" value="#[message.inboundProperties.authorization]" />
+                        <http:header headerName="L1p-Trace-Id" value="#[sessionVars.'L1p-Trace-Id']" />
+                    </http:request-builder>
+                    <http:success-status-code-validator values="200..599" />
+                </http:request>
+            </when>
+            <otherwise>
+                <logger level="INFO"
+                        message="Sending request to http://${central-dir-host}:${central-dir-api.port}/resources with query parameters-  identifier: #[message.inboundProperties.'http.query.params'.identifier]; "
+                        category="com.l1p.interop.dfsp.central-directory" doc:name="logger" />
+                <http:request config-ref="central-directory-http-config" path="/resources" method="GET"
+                              doc:name="HTTP">
+                    <http:request-builder>
+                        <http:query-param paramName="identifier"
+                                          value="#[message.inboundProperties.'http.query.params'.identifier]" />
+                        <http:header headerName="Authorization" value="#[message.inboundProperties.authorization]" />
+                        <http:header headerName="L1p-Trace-Id" value="#[sessionVars.'L1p-Trace-Id']" />
+                    </http:request-builder>
+                    <http:success-status-code-validator values="200..599" />
+                </http:request>
+
+            </otherwise>
+        </choice>
+        <metrics:snap-time config-ref="metricsConfig" snapTimeKey="get.central-dir-resources.stop" doc:name="SnapTime"/>
 		<metrics:time config-ref="metricsConfig" beginSnapKey="get.central-dir-resources.start" endSnapKey="get.central-dir-resources.stop" category="l1p.directory-gateway.resources.api" metricKey="GetResourceCentralDirTime" doc:name="Metrics Record"/>
 		<choice doc:name="check if central-dir /resources is successful">
 			<when expression="#[message.inboundProperties.'http.status' == 200]">
